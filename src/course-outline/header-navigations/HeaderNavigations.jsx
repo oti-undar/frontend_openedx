@@ -48,17 +48,17 @@ const HeaderNavigations = ({
         placement='bottom'
         overlay={
           <Tooltip id='Ir a Sección de Examenes'>
-            Ir a Sección de Examenes
+            Ir a Sección de Examenes 2
           </Tooltip>
         }
       >
         <Button
           onClick={() =>
-            console.log('🚀 ~ file: HeaderNavigations.jsx:58 ~ Examenes:')
+            console.log('🚀 ~ file: HeaderNavigations.jsx:58 ~ Examenes 2:')
           }
           disabled={errors?.outlineIndexApi}
         >
-          Examenes
+          Examenes 2
         </Button>
       </OverlayTrigger>
 
