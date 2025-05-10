@@ -58,7 +58,7 @@ const HeaderNavigations = ({
           }
           disabled={errors?.outlineIndexApi}
         >
-          Examenes 2
+          Examenes 3
         </Button>
       </OverlayTrigger>
 
