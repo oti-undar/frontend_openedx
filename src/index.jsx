@@ -47,14 +47,6 @@ import './index.scss'
 
 const queryClient = new QueryClient()
 
-const Publica = () => {
-  return (
-    <div>
-      <h1>Publica</h1>
-    </div>
-  )
-}
-
 const App = () => {
   useEffect(() => {
     if (process.env.HOTJAR_APP_ID) {
@@ -74,7 +66,6 @@ const App = () => {
     createRoutesFromElements(
       <Route>
         <Route path='/home' element={<StudioHome />} />
-        <Route path='/publica' element={<Publica />} />
         <Route path='/libraries' element={<StudioHome />} />
         <Route path='/libraries-v1' element={<StudioHome />} />
         <Route path='/library/create' element={<CreateLibrary />} />
@@ -140,12 +131,6 @@ subscribe(APP_INIT_ERROR, error => {
   )
 })
 
-const unauthenticatedRoutes = ['/publica']
-const currentPath = window.location.pathname
-const shouldRequireAuth = !unauthenticatedRoutes.some(route =>
-  currentPath.startsWith(route)
-)
-
 initialize({
   handlers: {
     config: () => {
@@ -196,5 +181,5 @@ initialize({
     },
   },
   messages,
-  requireAuthenticatedUser: shouldRequireAuth,
+  requireAuthenticatedUser: true,
 })
