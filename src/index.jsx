@@ -55,6 +55,11 @@ const Publica = () => (
     <h1>Publica</h1>
   </div>
 );
+const Publica2 = () => (
+  <div>
+    <h1>Publica 2</h1>
+  </div>
+);
 
 const App = () => {
   useEffect(() => {
@@ -78,6 +83,7 @@ const App = () => {
         <Route path="/publica" element={<Otro />} />
         <Route path="/otro" element={<Publica />} />
         <Route path="/otro2" element={<Otro2 />} />
+        <Route path="/prueba2" element={<Publica2 />} />
         <Route path="/home" element={<StudioHome />} />
         <Route path="/libraries" element={<StudioHome />} />
         <Route path="/libraries-v1" element={<StudioHome />} />
