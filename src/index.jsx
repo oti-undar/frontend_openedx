@@ -80,9 +80,9 @@ const App = () => {
     createRoutesFromElements(
       <Route>
         <Route path="/undar" element={<UndarRoot />} />
-        <Route path="/publica" element={<Otro />} />
+        <Route path="/publica" element={<Otro2 />} />
         <Route path="/otro" element={<Publica />} />
-        <Route path="/otro2" element={<Otro2 />} />
+        <Route path="/otro2" element={<Otro />} />
         <Route path="/prueba2" element={<Publica2 />} />
         <Route path="/home" element={<StudioHome />} />
         <Route path="/libraries" element={<StudioHome />} />
