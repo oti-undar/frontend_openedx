@@ -6,46 +6,48 @@ import {
   mergeConfig,
   getConfig,
   getPath,
-} from '@edx/frontend-platform'
-import { AppProvider, ErrorPage } from '@edx/frontend-platform/react'
-import React, { useEffect } from 'react'
-import ReactDOM from 'react-dom'
+} from '@edx/frontend-platform';
+import { AppProvider, ErrorPage } from '@edx/frontend-platform/react';
+import React, { useEffect } from 'react';
+import ReactDOM from 'react-dom';
 import {
   Route,
   createRoutesFromElements,
   createBrowserRouter,
   RouterProvider,
-} from 'react-router-dom'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+} from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-import { initializeHotjar } from '@edx/frontend-enterprise-hotjar'
-import { logError } from '@edx/frontend-platform/logging'
-import messages from './i18n'
+import { initializeHotjar } from '@edx/frontend-enterprise-hotjar';
+import { logError } from '@edx/frontend-platform/logging';
+import messages from './i18n';
 
 import {
   ComponentPicker,
   CreateLibrary,
   LibraryLayout,
   PreviewChangesEmbed,
-} from './library-authoring'
-import initializeStore from './store'
-import CourseAuthoringRoutes from './CourseAuthoringRoutes'
-import Head from './head/Head'
-import { StudioHome } from './studio-home'
-import CourseRerun from './course-rerun'
+} from './library-authoring';
+import initializeStore from './store';
+import CourseAuthoringRoutes from './CourseAuthoringRoutes';
+import Head from './head/Head';
+import { StudioHome } from './studio-home';
+import CourseRerun from './course-rerun';
 import {
   TaxonomyLayout,
   TaxonomyDetailPage,
   TaxonomyListPage,
-} from './taxonomy'
-import { ContentTagsDrawer } from './content-tags-drawer'
-import AccessibilityPage from './accessibility-page'
-import { ToastProvider } from './generic/toast-context'
+} from './taxonomy';
+import { ContentTagsDrawer } from './content-tags-drawer';
+import AccessibilityPage from './accessibility-page';
+import { ToastProvider } from './generic/toast-context';
 
-import 'react-datepicker/dist/react-datepicker.css'
-import './index.scss'
+import 'react-datepicker/dist/react-datepicker.css';
+import './index.scss';
+import './tailwind.css';
+import UndarRoot from './undar';
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient();
 
 const App = () => {
   useEffect(() => {
@@ -55,58 +57,59 @@ const App = () => {
           hotjarId: process.env.HOTJAR_APP_ID,
           hotjarVersion: process.env.HOTJAR_VERSION,
           hotjarDebug: !!process.env.HOTJAR_DEBUG,
-        })
+        });
       } catch (error) {
-        logError(error)
+        logError(error);
       }
     }
-  }, [])
+  }, []);
 
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route>
-        <Route path='/home' element={<StudioHome />} />
-        <Route path='/libraries' element={<StudioHome />} />
-        <Route path='/libraries-v1' element={<StudioHome />} />
-        <Route path='/library/create' element={<CreateLibrary />} />
-        <Route path='/library/:libraryId/*' element={<LibraryLayout />} />
-        <Route path='/component-picker' element={<ComponentPicker />} />
+        <Route path="/undar" element={<UndarRoot />} />
+        <Route path="/home" element={<StudioHome />} />
+        <Route path="/libraries" element={<StudioHome />} />
+        <Route path="/libraries-v1" element={<StudioHome />} />
+        <Route path="/library/create" element={<CreateLibrary />} />
+        <Route path="/library/:libraryId/*" element={<LibraryLayout />} />
+        <Route path="/component-picker" element={<ComponentPicker />} />
         <Route
-          path='/component-picker/multiple'
-          element={<ComponentPicker componentPickerMode='multiple' />}
+          path="/component-picker/multiple"
+          element={<ComponentPicker componentPickerMode="multiple" />}
         />
         <Route
-          path='/legacy/preview-changes/:usageKey'
+          path="/legacy/preview-changes/:usageKey"
           element={<PreviewChangesEmbed />}
         />
-        <Route path='/course/:courseId/*' element={<CourseAuthoringRoutes />} />
-        <Route path='/course_rerun/:courseId' element={<CourseRerun />} />
+        <Route path="/course/:courseId/*" element={<CourseAuthoringRoutes />} />
+        <Route path="/course_rerun/:courseId" element={<CourseRerun />} />
         {getConfig().ENABLE_ACCESSIBILITY_PAGE === 'true' && (
-          <Route path='/accessibility' element={<AccessibilityPage />} />
+          <Route path="/accessibility" element={<AccessibilityPage />} />
         )}
         {getConfig().ENABLE_TAGGING_TAXONOMY_PAGES === 'true' && (
           <>
-            <Route path='/taxonomies' element={<TaxonomyLayout />}>
+            <Route path="/taxonomies" element={<TaxonomyLayout />}>
               <Route index element={<TaxonomyListPage />} />
             </Route>
-            <Route path='/taxonomy' element={<TaxonomyLayout />}>
+            <Route path="/taxonomy" element={<TaxonomyLayout />}>
               <Route
-                path='/taxonomy/:taxonomyId'
+                path="/taxonomy/:taxonomyId"
                 element={<TaxonomyDetailPage />}
               />
             </Route>
             <Route
-              path='/tagging/components/widget/:contentId'
+              path="/tagging/components/widget/:contentId"
               element={<ContentTagsDrawer />}
             />
           </>
         )}
-      </Route>
+      </Route>,
     ),
     {
       basename: getPath(getConfig().PUBLIC_PATH),
-    }
-  )
+    },
+  );
 
   return (
     <AppProvider store={initializeStore()} wrapWithRouter={false}>
@@ -117,19 +120,19 @@ const App = () => {
         </QueryClientProvider>
       </ToastProvider>
     </AppProvider>
-  )
-}
+  );
+};
 
 subscribe(APP_READY, () => {
-  ReactDOM.render(<App />, document.getElementById('root'))
-})
+  ReactDOM.render(<App />, document.getElementById('root'));
+});
 
 subscribe(APP_INIT_ERROR, error => {
   ReactDOM.render(
     <ErrorPage message={error.message} />,
-    document.getElementById('root')
-  )
-})
+    document.getElementById('root'),
+  );
+});
 
 initialize({
   handlers: {
@@ -160,8 +163,8 @@ initialize({
           ENABLE_UNIT_PAGE: process.env.ENABLE_UNIT_PAGE || 'false',
           ENABLE_ASSETS_PAGE: process.env.ENABLE_ASSETS_PAGE || 'false',
           ENABLE_VIDEO_UPLOAD_PAGE_LINK_IN_CONTENT_DROPDOWN:
-            process.env.ENABLE_VIDEO_UPLOAD_PAGE_LINK_IN_CONTENT_DROPDOWN ||
-            'false',
+            process.env.ENABLE_VIDEO_UPLOAD_PAGE_LINK_IN_CONTENT_DROPDOWN
+            || 'false',
           ENABLE_CERTIFICATE_PAGE:
             process.env.ENABLE_CERTIFICATE_PAGE || 'false',
           ENABLE_TAGGING_TAXONOMY_PAGES:
@@ -176,10 +179,10 @@ initialize({
             process.env.LIBRARY_SUPPORTED_BLOCKS || 'problem,video,html'
           ).split(','),
         },
-        'CourseAuthoringConfig'
-      )
+        'CourseAuthoringConfig',
+      );
     },
   },
   messages,
   requireAuthenticatedUser: true,
-})
+});
