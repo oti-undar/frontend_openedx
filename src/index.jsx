@@ -46,6 +46,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import './index.scss';
 import './tailwind.css';
 import UndarRoot from './undar';
+import Otro from './undar/otro';
 
 const queryClient = new QueryClient();
 
@@ -75,6 +76,7 @@ const App = () => {
       <Route>
         <Route path="/undar" element={<UndarRoot />} />
         <Route path="/publica" element={<Publica />} />
+        <Route path="/otro" element={<Otro />} />
         <Route path="/home" element={<StudioHome />} />
         <Route path="/libraries" element={<StudioHome />} />
         <Route path="/libraries-v1" element={<StudioHome />} />
