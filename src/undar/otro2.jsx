@@ -1,5 +1,4 @@
 import React from 'react';
-import '../tailwind.css';
 
 const Otro2 = () => (
   <h1 className="text-3xl text-green-500 bg-red-500">otro 2</h1>

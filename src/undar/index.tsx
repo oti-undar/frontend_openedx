@@ -6,4 +6,8 @@ const UndarRoot = () => (
   </div>
 );
 
+UndarRoot.defaultProps = {};
+
+UndarRoot.propTypes = {};
+
 export default UndarRoot;

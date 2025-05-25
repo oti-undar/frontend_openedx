@@ -50,17 +50,6 @@ import Otro2 from './undar/otro2';
 
 const queryClient = new QueryClient();
 
-const Publica = () => (
-  <div>
-    <h1>Publica</h1>
-  </div>
-);
-const Publica2 = () => (
-  <div>
-    <h1>Publica 2</h1>
-  </div>
-);
-
 const App = () => {
   useEffect(() => {
     if (process.env.HOTJAR_APP_ID) {
@@ -80,10 +69,8 @@ const App = () => {
     createRoutesFromElements(
       <Route>
         <Route path="/undar" element={<UndarRoot />} />
-        <Route path="/publica" element={<Otro2 />} />
-        <Route path="/otro" element={<Publica />} />
-        <Route path="/otro2" element={<Otro />} />
-        <Route path="/prueba2" element={<Publica2 />} />
+        <Route path="/otro" element={<Otro />} />
+        <Route path="/otro2" element={<Otro2 />} />
         <Route path="/home" element={<StudioHome />} />
         <Route path="/libraries" element={<StudioHome />} />
         <Route path="/libraries-v1" element={<StudioHome />} />
