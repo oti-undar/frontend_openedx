@@ -44,9 +44,9 @@ import { ToastProvider } from './generic/toast-context';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import './index.scss';
-import './tailwind.css';
 import UndarRoot from './undar';
 import Otro from './undar/otro';
+import Otro2 from './undar/otro2';
 
 const queryClient = new QueryClient();
 
@@ -77,6 +77,7 @@ const App = () => {
         <Route path="/undar" element={<UndarRoot />} />
         <Route path="/publica" element={<Publica />} />
         <Route path="/otro" element={<Otro />} />
+        <Route path="/otro2" element={<Otro2 />} />
         <Route path="/home" element={<StudioHome />} />
         <Route path="/libraries" element={<StudioHome />} />
         <Route path="/libraries-v1" element={<StudioHome />} />
