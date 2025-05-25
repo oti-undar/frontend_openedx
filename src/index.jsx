@@ -49,6 +49,12 @@ import UndarRoot from './undar';
 
 const queryClient = new QueryClient();
 
+const Publica = () => (
+  <div>
+    <h1>Publica</h1>
+  </div>
+);
+
 const App = () => {
   useEffect(() => {
     if (process.env.HOTJAR_APP_ID) {
@@ -68,6 +74,7 @@ const App = () => {
     createRoutesFromElements(
       <Route>
         <Route path="/undar" element={<UndarRoot />} />
+        <Route path="/publica" element={<Publica />} />
         <Route path="/home" element={<StudioHome />} />
         <Route path="/libraries" element={<StudioHome />} />
         <Route path="/libraries-v1" element={<StudioHome />} />
