@@ -8,6 +8,6 @@
         "*": ["*"]
       }
     },
-    "include": ["*.js", ".eslintrc.js", "src/**/*", "plugins/**/*", "postcss.config.mjs"],
+    "include": ["*.js", ".eslintrc.js", "src/**/*", "plugins/**/*"],
     "exclude": ["dist", "node_modules"]
 }

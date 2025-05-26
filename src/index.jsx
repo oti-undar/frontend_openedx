@@ -44,7 +44,7 @@ import { ToastProvider } from './generic/toast-context';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import UndarRoot from './undar';
-import './tailwind.css';
+import './index.scss';
 
 const queryClient = new QueryClient();
 
