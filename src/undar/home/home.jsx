@@ -3,12 +3,13 @@ import { FaChevronRight } from 'react-icons/fa';
 import SplitText from '../../TextAnimations/SplitText/SplitText';
 import GradientText from '../../TextAnimations/GradientText/GradientText';
 import BackgroundCubos from './components/background/background-cubos';
+import logo from './undar.png';
 
 const Home = () => (
   <div className="h-dvh w-dvw flex flex-col justify-center items-center gap-10">
     <BackgroundCubos />
     <img
-      src="/undar.png"
+      src={logo}
       width={200}
       alt="Logo"
       className="animate-fade-up animate-ease-in-out"
