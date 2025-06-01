@@ -43,8 +43,8 @@ import AccessibilityPage from './accessibility-page';
 import { ToastProvider } from './generic/toast-context';
 
 import 'react-datepicker/dist/react-datepicker.css';
-import UndarRoot from './undar';
 import './index.scss';
+import Home from './undar/home/home';
 
 const queryClient = new QueryClient();
 
@@ -66,8 +66,8 @@ const App = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route>
-        <Route path="/undar" element={<UndarRoot />} />
-        <Route path="/home" element={<StudioHome />} />
+        <Route path="/home" element={<Home />} />
+        {/* <Route path="/home" element={<StudioHome />} />
         <Route path="/libraries" element={<StudioHome />} />
         <Route path="/libraries-v1" element={<StudioHome />} />
         <Route path="/library/create" element={<CreateLibrary />} />
@@ -102,7 +102,7 @@ const App = () => {
               element={<ContentTagsDrawer />}
             />
           </>
-        )}
+        )} */}
       </Route>,
     ),
     {
