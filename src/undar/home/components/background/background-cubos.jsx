@@ -1,25 +1,25 @@
-import React from 'react';
-import './style.css';
+import React from 'react'
+import './style.css'
 
 const BackgroundCubos = () => (
-  <div className="area">
-    <ul className="circles">
-      <li />
-      <li />
-      <li />
-      <li />
-      <li />
-      <li />
-      <li />
-      <li />
-      <li />
-      <li />
+  <div className='area'>
+    <ul className='circles'>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
     </ul>
   </div>
-);
+)
 
-BackgroundCubos.defaultProps = {};
+BackgroundCubos.defaultProps = {}
 
-BackgroundCubos.propTypes = {};
+BackgroundCubos.propTypes = {}
 
-export default BackgroundCubos;
+export default BackgroundCubos

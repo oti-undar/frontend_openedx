@@ -20,31 +20,23 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { initializeHotjar } from '@edx/frontend-enterprise-hotjar';
 import { logError } from '@edx/frontend-platform/logging';
-import messages from './i18n';
-
-import {
-  ComponentPicker,
-  CreateLibrary,
-  LibraryLayout,
-  PreviewChangesEmbed,
-} from './library-authoring';
-import initializeStore from './store';
-import CourseAuthoringRoutes from './CourseAuthoringRoutes';
-import Head from './head/Head';
-import { StudioHome } from './studio-home';
-import CourseRerun from './course-rerun';
-import {
-  TaxonomyLayout,
-  TaxonomyDetailPage,
-  TaxonomyListPage,
-} from './taxonomy';
-import { ContentTagsDrawer } from './content-tags-drawer';
-import AccessibilityPage from './accessibility-page';
-import { ToastProvider } from './generic/toast-context';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import './index.scss';
+import Layout from './undar/dashboard/layaout/layaout';
+import CrearExamen from './undar/dashboard/crear-examen/crear-examen';
+import TestearExamen from './undar/dashboard/testear-examen/testear-examen';
+import RankingTiempoReal from './undar/dashboard/ranking-tiempo-real/ranking-tiempo-real';
+import RankingFinalExamen from './undar/dashboard/ranking-final-examen/ranking-final-examen';
+import Examenes from './undar/dashboard/examenes/examenes';
+import Cursos from './undar/dashboard/cursos/cursos';
+import Rubricas from './undar/dashboard/rubricas/rubricas';
 import Home from './undar/home/home';
+import { ToastProvider } from './generic/toast-context';
+import Head from './head/Head';
+import initializeStore from './store';
+import messages from './i18n';
+import Dashboard from './undar/dashboard/dashboard/dashboard';
 
 const queryClient = new QueryClient();
 
@@ -67,42 +59,16 @@ const App = () => {
     createRoutesFromElements(
       <Route>
         <Route path="/home" element={<Home />} />
-        {/* <Route path="/home" element={<StudioHome />} />
-        <Route path="/libraries" element={<StudioHome />} />
-        <Route path="/libraries-v1" element={<StudioHome />} />
-        <Route path="/library/create" element={<CreateLibrary />} />
-        <Route path="/library/:libraryId/*" element={<LibraryLayout />} />
-        <Route path="/component-picker" element={<ComponentPicker />} />
-        <Route
-          path="/component-picker/multiple"
-          element={<ComponentPicker componentPickerMode="multiple" />}
-        />
-        <Route
-          path="/legacy/preview-changes/:usageKey"
-          element={<PreviewChangesEmbed />}
-        />
-        <Route path="/course/:courseId/*" element={<CourseAuthoringRoutes />} />
-        <Route path="/course_rerun/:courseId" element={<CourseRerun />} />
-        {getConfig().ENABLE_ACCESSIBILITY_PAGE === 'true' && (
-          <Route path="/accessibility" element={<AccessibilityPage />} />
-        )}
-        {getConfig().ENABLE_TAGGING_TAXONOMY_PAGES === 'true' && (
-          <>
-            <Route path="/taxonomies" element={<TaxonomyLayout />}>
-              <Route index element={<TaxonomyListPage />} />
-            </Route>
-            <Route path="/taxonomy" element={<TaxonomyLayout />}>
-              <Route
-                path="/taxonomy/:taxonomyId"
-                element={<TaxonomyDetailPage />}
-              />
-            </Route>
-            <Route
-              path="/tagging/components/widget/:contentId"
-              element={<ContentTagsDrawer />}
-            />
-          </>
-        )} */}
+        <Route element={<Layout />}>
+          <Route path="/crear-examen" element={<CrearExamen />} />
+          <Route path="/testear-examen/:id" element={<TestearExamen />} />
+          <Route path="/ranking-tiempo-real" element={<RankingTiempoReal />} />
+          <Route path="/ranking-final-examen" element={<RankingFinalExamen />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/examenes" element={<Examenes />} />
+          <Route path="/cursos" element={<Cursos />} />
+          <Route path="/rubricas" element={<Rubricas />} />
+        </Route>
       </Route>,
     ),
     {
