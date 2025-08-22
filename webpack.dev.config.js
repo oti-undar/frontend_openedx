@@ -14,4 +14,12 @@ const config = createConfig('webpack-dev', {
   },
 });
 
+// Agregar regla para que fullySpecified sea false en .mjs
+config.module.rules.push({
+  test: /\.m?js$/,
+  resolve: {
+    fullySpecified: false,
+  },
+});
+
 module.exports = config;
