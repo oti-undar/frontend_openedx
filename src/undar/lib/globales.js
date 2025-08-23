@@ -6,6 +6,7 @@ try {
   getConfig = () => ({ STUDIO_BASE_URL: 'http://localhost' });
 }
 export const API_URL = () => `${getConfig().STUDIO_BASE_URL}:3000`;
+export { getConfig };
 
 export const keysLocalStorage = {
   usuario: 'usuario',
