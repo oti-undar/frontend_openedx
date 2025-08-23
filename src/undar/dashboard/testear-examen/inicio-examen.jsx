@@ -47,19 +47,19 @@ const InicioExamen = ({ test, setExamenActual }) => {
             {test.img && (
               <img
                 className='max-w-[80%] max-h-[400px] rounded-xl'
-                src={`${API_URL}${test.img}`}
+                src={`${API_URL()}${test.img}`}
                 alt='Imagen de prueba'
               />
             )}
             {test.video && (
               <video className='max-w-[80%] max-h-[400px] rounded-xl' controls>
-                <source src={`${API_URL}${test.video}`} type='video/mp4' />
+                <source src={`${API_URL()}${test.video}`} type='video/mp4' />
                 Tu navegador no soporta el video.
               </video>
             )}
             {test.audio && (
               <audio className='max-w-[80%] max-h-[400px] rounded-xl' controls>
-                <source src={`${API_URL}${test.audio}`} type='audio/mp3' />
+                <source src={`${API_URL()}${test.audio}`} type='audio/mp3' />
                 Tu navegador no soporta el audio.
               </audio>
             )}

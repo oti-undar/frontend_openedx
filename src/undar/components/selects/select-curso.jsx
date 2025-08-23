@@ -14,7 +14,7 @@ const SelectCurso = () => {
   useEffect(() => {
     fetchData({
       method: 'GET',
-      url: `${API_URL}/curso?${qs.stringify({
+      url: `${API_URL()}/curso?${qs.stringify({
         user_id,
       })}`,
     })

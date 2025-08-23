@@ -43,7 +43,7 @@ const FormCreateRubricaAnalitica = () => {
 
     fetchData({
       method: 'POST',
-      url: `${API_URL}/rubrica/analitica`,
+      url: `${API_URL()}/rubrica/analitica`,
       data,
       msgSuccess: 'Rúbrica creada correctamente',
       onSuccess: () => {

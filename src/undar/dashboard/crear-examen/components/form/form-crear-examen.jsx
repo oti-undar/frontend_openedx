@@ -40,7 +40,7 @@ const FormCrearExamen = () => {
 
     fetchData({
       method: 'POST',
-      url: `${API_URL}/examen`,
+      url: `${API_URL()}/examen`,
       data: formData,
       headers: {
         'Content-Type': 'multipart/form-data',

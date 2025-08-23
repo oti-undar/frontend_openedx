@@ -7,7 +7,7 @@ export const useGetStates = () => {
   useEffect(() => {
     fetchData({
       method: 'GET',
-      url: `${API_URL}/state`,
+      url: `${API_URL()}/state`,
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

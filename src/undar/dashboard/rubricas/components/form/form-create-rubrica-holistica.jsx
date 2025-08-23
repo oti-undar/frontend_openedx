@@ -34,7 +34,7 @@ const FormCreateRubricaHolistica = () => {
 
     fetchData({
       method: 'POST',
-      url: `${API_URL}/rubrica/holistica`,
+      url: `${API_URL()}/rubrica/holistica`,
       data,
       msgSuccess: 'Rúbrica creada correctamente',
       onSuccess: () => {

@@ -31,21 +31,21 @@ const Pregunta = ({ onChangeRespuestaId, pregunta }) => {
               {alternativa.img && (
                 <img
                   className='max-w-[500px] max-h-[400px] rounded-xl'
-                  src={`${API_URL}${alternativa.img}`}
+                  src={`${API_URL()}${alternativa.img}`}
                   alt='Imagen de prueba'
                 />
               )}
               {alternativa.video && (
                 <video
                   className='max-w-[500px] max-h-[400px] rounded-xl'
-                  src={`${API_URL}${alternativa.video}`}
+                  src={`${API_URL()}${alternativa.video}`}
                   alt='Video de prueba'
                 />
               )}
               {alternativa.audio && (
                 <audio
                   className='max-w-[500px] max-h-[400px] rounded-xl'
-                  src={`${API_URL}${alternativa.audio}`}
+                  src={`${API_URL()}${alternativa.audio}`}
                   alt='Audio de prueba'
                 />
               )}
@@ -58,21 +58,21 @@ const Pregunta = ({ onChangeRespuestaId, pregunta }) => {
             {pregunta.img && (
               <img
                 className='max-w-[500px] max-h-[400px] rounded-xl'
-                src={`${API_URL}${pregunta.img}`}
+                src={`${API_URL()}${pregunta.img}`}
                 alt='Imagen de prueba'
               />
             )}
             {pregunta.video && (
               <video
                 className='max-w-[500px] max-h-[400px] rounded-xl'
-                src={`${API_URL}${pregunta.video}`}
+                src={`${API_URL()}${pregunta.video}`}
                 alt='Video de prueba'
               />
             )}
             {pregunta.audio && (
               <audio
                 className='max-w-[500px] max-h-[400px] rounded-xl'
-                src={`${API_URL}${pregunta.audio}`}
+                src={`${API_URL()}${pregunta.audio}`}
                 alt='Audio de prueba'
               />
             )}

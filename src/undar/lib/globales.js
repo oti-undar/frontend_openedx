@@ -5,13 +5,7 @@ try {
 } catch {
   getConfig = () => ({ STUDIO_BASE_URL: 'http://localhost:3000' });
 }
-export const API_URL = getConfig().STUDIO_BASE_URL;
-// eslint-disable-next-line no-console
-console.log('🚀 ~ file: globales.js:9 ~ getConfig():', getConfig());
-// eslint-disable-next-line no-console
-console.log('🚀 ~ file: globales.js:9 ~ getConfig:', getConfig);
-// eslint-disable-next-line no-console
-console.log('🚀 ~ file: globales.js:12 ~ API_URL:', API_URL);
+export const API_URL = () => `${getConfig().STUDIO_BASE_URL}:3000`;
 
 export const keysLocalStorage = {
   usuario: 'usuario',

@@ -15,7 +15,7 @@ const TableRubricasHolisticas = forwardRef((props, ref) => {
   useEffect(() => {
     fetchData({
       method: 'GET',
-      url: `${API_URL}/rubrica/holistica?${qs.stringify({
+      url: `${API_URL()}/rubrica/holistica?${qs.stringify({
         user_id,
       })}`,
     })

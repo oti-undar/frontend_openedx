@@ -18,7 +18,7 @@ const TestearExamen = () => {
   useEffect(() => {
     fetchData({
       method: 'GET',
-      url: `${API_URL}/examen/${examen_id}?${qs.stringify({
+      url: `${API_URL()}/examen/${examen_id}?${qs.stringify({
         user_id,
         filters: { state: { name: 'Disponible' } },
       })}`,

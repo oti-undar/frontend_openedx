@@ -15,7 +15,7 @@ const TableExamenes = forwardRef((props, ref) => {
   useEffect(() => {
     fetchData({
       method: 'GET',
-      url: `${API_URL}/examen?${qs.stringify({
+      url: `${API_URL()}/examen?${qs.stringify({
         user_id,
       })}`,
     })

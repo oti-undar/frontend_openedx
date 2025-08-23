@@ -15,7 +15,7 @@ const SelectRubrica = ({ tipoRubrica, onChange }) => {
   useEffect(() => {
     fetchData({
       method: 'GET',
-      url: `${API_URL}/rubrica/${tipoRubrica}?${qs.stringify({
+      url: `${API_URL()}/rubrica/${tipoRubrica}?${qs.stringify({
         user_id,
       })}`,
     })
