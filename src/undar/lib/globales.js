@@ -3,7 +3,7 @@ try {
   // eslint-disable-next-line global-require
   ({ getConfig } = require('@edx/frontend-platform'));
 } catch {
-  getConfig = () => ({ STUDIO_BASE_URL: 'http://localhost:3000' });
+  getConfig = () => ({ STUDIO_BASE_URL: 'http://localhost' });
 }
 export const API_URL = () => `${getConfig().STUDIO_BASE_URL}:3000`;
 
