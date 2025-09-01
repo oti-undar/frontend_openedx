@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import TableListaExamen from './components/table/table-lista-examen'
 import { PiStudentFill } from 'react-icons/pi'
 import { MdWorkHistory } from 'react-icons/md'
@@ -8,23 +8,35 @@ import { FaAddressBook } from 'react-icons/fa'
 import TableExamenesConstruccion from './components/table/table-examenes-construccion'
 import TableTitle from '../../components/tables/table-title'
 import { exportAGGridDataToJSON } from '../../utils/ag-grid'
-import { useSessionStorage } from '../../hooks/useSessionStorage'
 import useFetchData from '../../hooks/useFetchData'
 import { API_URL, states } from '../../lib/globales'
 import qs from 'qs'
+import { getUserAuth } from '../../utils/api-openEdx'
 
 const Dashboard = () => {
   const listaExamenRef = useRef()
   const examenesConstruccionRef = useRef()
 
-  const [usuario] = useSessionStorage('usuario')
-  const user_id = usuario.id
+  const user_id = getUserAuth().userId
 
   const { response, isloading, fetchData } = useFetchData()
+  const { response: cursos, fetchData: fetchCursos } = useFetchData()
+
+  const [reFetchExamenes, setReFetchExamenes] = useState(0)
+
   useEffect(() => {
     fetchData({
       method: 'GET',
       url: `${API_URL()}/examen?${qs.stringify({
+        user_id,
+      })}`,
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reFetchExamenes])
+  useEffect(() => {
+    fetchCursos({
+      method: 'GET',
+      url: `${API_URL()}/curso?${qs.stringify({
         user_id,
       })}`,
     })
@@ -45,25 +57,34 @@ const Dashboard = () => {
       <div className='flex gap-8 justify-between'>
         <CardResumeDashboard
           title='Exámenes realizados'
-          description={response?.length ?? 0}
+          description={
+            response?.filter(exam => exam.state?.name === states.Finalizado)
+              ?.length ?? 0
+          }
           icon={<MdWorkHistory size={70} className='text-lime-500' />}
         />
         <CardResumeDashboard
           title='Exámenes en construcción'
           description={
-            response?.filter(exam => exam.state.name === states.Activo)
+            response?.filter(exam => exam.state?.name === states.Activo)
               ?.length ?? 0
           }
           icon={<GrTest size={60} className='text-lime-500' />}
         />
         <CardResumeDashboard
           title='Total de Alumnos inscritos'
-          description='100'
+          description={
+            cursos?.reduce(
+              (acc, curso) =>
+                acc + curso.usuarios.filter(user => !user.is_instructor).length,
+              0
+            ) ?? 0
+          }
           icon={<PiStudentFill size={70} className='text-lime-500' />}
         />
         <CardResumeDashboard
           title='Cursos asignados'
-          description='10'
+          description={cursos?.length ?? 0}
           icon={<FaAddressBook size={60} className='text-lime-500' />}
         />
       </div>
@@ -77,7 +98,7 @@ const Dashboard = () => {
             ref={listaExamenRef}
             isloading={isloading}
             data={response?.filter(
-              exam => exam.state.name === states.Finalizado
+              exam => exam.state?.name === states.Finalizado
             )}
           />
         </TableTitle>
@@ -87,9 +108,10 @@ const Dashboard = () => {
           onExport={exportarExamenesConstruccion}
         >
           <TableExamenesConstruccion
+            setReFetchExamenes={setReFetchExamenes}
             ref={examenesConstruccionRef}
             isloading={isloading}
-            data={response?.filter(exam => exam.state.name === states.Activo)}
+            data={response?.filter(exam => exam.state?.name === states.Activo)}
           />
         </TableTitle>
       </div>

@@ -2,11 +2,13 @@ import React from 'react'
 import ButtonSidenav from '../button/button-sidenav'
 import GradientText from '../../../../../TextAnimations/GradientText/GradientText'
 import logo from '../../../../home/undar.png'
-import { MdLeaderboard, MdSpaceDashboard } from 'react-icons/md'
+import { MdSpaceDashboard } from 'react-icons/md'
 import { IoDocumentText } from 'react-icons/io5'
 import { FaBook } from 'react-icons/fa'
 import { useNavigate } from 'react-router'
 import { FaChartSimple } from 'react-icons/fa6'
+import { useActualizarData } from '../../../../hooks/use-actualizar-data'
+import ButtonPrimary from '../../../../components/buttons/button-primary'
 
 const links = [
   {
@@ -28,6 +30,8 @@ const links = [
 
 const Sidenav = () => {
   const navigate = useNavigate()
+  const { actualizarData, isloading } = useActualizarData()
+
   return (
     <div className='h-full flex flex-col justify-center items-center gap-20 p-8 pr-2 relative animate-fade-right animate-ease-in-out'>
       <div className='absolute top-8 flex flex-col items-center gap-4'>
@@ -46,6 +50,13 @@ const Sidenav = () => {
           <FaChartSimple className='text-purple-600/60 text-xl' />
           Crear Rúbricas
         </ButtonSidenav>
+        <ButtonPrimary
+          disabled={isloading}
+          size='small'
+          onClick={actualizarData}
+        >
+          {isloading ? 'Sincronizando...' : 'Sincronizar'}
+        </ButtonPrimary>
       </div>
       <div className='flex flex-col gap-2'>
         {links.map(link => (

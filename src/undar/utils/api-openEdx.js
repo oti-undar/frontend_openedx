@@ -1,14 +1,15 @@
-let getAuthenticatedUser;
+let getAuthenticatedUser
 try {
-  // eslint-disable-next-line global-require
-  ({ getAuthenticatedUser } = require('@edx/frontend-platform/auth'));
+  // eslint-disable-next-line no-undef
+  ;({ getAuthenticatedUser } = require('@edx/frontend-platform/auth'))
 } catch {
-  getAuthenticatedUser = () => ({ id: 'xxx' });
+  getAuthenticatedUser = () => ({
+    userId: 4,
+  })
 }
 
-export async function getUserId() {
-  const data = getAuthenticatedUser();
-  console.log('🚀 ~ file: api-openEdx.js:5 ~ data:', data);
+export function getUserAuth() {
+  const data = getAuthenticatedUser()
 
-  return data;
+  return data
 }

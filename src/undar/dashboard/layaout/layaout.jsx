@@ -1,11 +1,8 @@
 import React from 'react'
 import { Outlet } from 'react-router'
 import Sidenav from './components/sidenav/sidenav'
-import { useSessionStorage } from '../../hooks/useSessionStorage'
 
 const Layout = () => {
-  useSessionStorage('usuario', { id: '123e4567-e89b-12d3-a456-426614174000' })
-
   return (
     <div className='h-dvh w-dvw flex justify-center items-center'>
       <div className='absolute top-0 z-[-2] h-screen w-screen bg-white bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]'></div>

@@ -1,13 +1,12 @@
 import { Tooltip } from 'antd'
 import React from 'react'
-import { FaFileExport } from 'react-icons/fa'
 import { GrRadialSelected } from 'react-icons/gr'
 import { PiExportBold } from 'react-icons/pi'
 
 const useColumnsCursos = () => [
   {
     headerName: 'Curso',
-    field: 'curso',
+    field: 'name',
     minWidth: 200,
     filter: true,
     flex: 2,

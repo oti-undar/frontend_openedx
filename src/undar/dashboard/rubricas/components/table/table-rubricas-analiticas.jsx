@@ -4,12 +4,11 @@ import TableAgGrid from '../../../../components/tables/table-agGrid'
 import useFetchData from '../../../../hooks/useFetchData'
 import { API_URL } from '../../../../lib/globales'
 import qs from 'qs'
-import { useSessionStorage } from '../../../../hooks/useSessionStorage'
 import useColumnsRubricasAnaliticas from './columns-rubricas-analiticas'
+import { getUserAuth } from '../../../../utils/api-openEdx'
 
 const TableRubricasAnaliticas = forwardRef((props, ref) => {
-  const [usuario] = useSessionStorage('usuario')
-  const user_id = usuario.id
+  const user_id = getUserAuth().userId
 
   const { response: data, isloading, fetchData } = useFetchData()
   useEffect(() => {

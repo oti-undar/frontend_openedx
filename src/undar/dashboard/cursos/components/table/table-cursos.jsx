@@ -1,55 +1,34 @@
-import React, { forwardRef } from 'react'
+import React, { forwardRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import useColumnsCursos from './columns-cursos'
 import TableAgGrid from '../../../../components/tables/table-agGrid'
+import useFetchData from '../../../../hooks/useFetchData'
+import { API_URL } from '../../../../lib/globales'
+import qs from 'qs'
+import { getUserAuth } from '../../../../utils/api-openEdx'
 
-const data = [
-  {
-    curso: 'Curso 1',
-  },
-  {
-    curso: 'Curso 2',
-  },
-  {
-    curso: 'Curso 3',
-  },
-  {
-    curso: 'Curso 4',
-  },
-  {
-    curso: 'Curso 5',
-  },
-  {
-    curso: 'Curso 6',
-  },
-  {
-    curso: 'Curso 7',
-  },
-  {
-    curso: 'Curso 8',
-  },
-  {
-    curso: 'Curso 9',
-  },
-  {
-    curso: 'Curso 10',
-  },
-  {
-    curso: 'Curso 11',
-  },
-  {
-    curso: 'Curso 12',
-  },
-]
+const TableCursos = forwardRef((props, ref) => {
+  const user_id = getUserAuth().userId
 
-const TableCursos = forwardRef((props, ref) => (
-  <TableAgGrid
-    {...props}
-    ref={ref}
-    rowData={data}
-    columnDefs={useColumnsCursos()}
-  />
-))
+  const { response: cursos, fetchData: fetchCursos } = useFetchData()
+  useEffect(() => {
+    fetchCursos({
+      method: 'GET',
+      url: `${API_URL()}/curso?${qs.stringify({
+        user_id,
+      })}`,
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+  return (
+    <TableAgGrid
+      {...props}
+      ref={ref}
+      rowData={cursos}
+      columnDefs={useColumnsCursos()}
+    />
+  )
+})
 
 TableCursos.defaultProps = {
   className: '',

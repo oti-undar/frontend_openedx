@@ -6,7 +6,13 @@ import { FaCircleChevronRight } from 'react-icons/fa6'
 import Counter from './components/counter/counter'
 import Pregunta from './pregunta'
 
-const MostrarPregunta = ({ pregunta, examenActual, setExamenActual }) => {
+const MostrarPregunta = ({
+  pregunta,
+  examenActual,
+  setExamenActual,
+  onFinalizarPregunta,
+  onFinalizarExamen,
+}) => {
   const preguntas_no_resueltas = examenActual.preguntas.filter(
     pregunta_aux =>
       !examenActual.preguntas_resueltas
@@ -15,20 +21,21 @@ const MostrarPregunta = ({ pregunta, examenActual, setExamenActual }) => {
   )
 
   function handleFinalizarExamen() {
-    const respuestas = [
-      ...examenActual.preguntas_resueltas,
-      {
-        id: pregunta.id,
-        respuesta_id: examenActual.pregunta_actual.respuesta_id,
-      },
-    ]
-    console.log('🚀 ~ file: mostrar-pregunta.jsx:48 ~ respuestas:', respuestas)
+    onFinalizarPregunta?.({
+      respuesta_id: examenActual.pregunta_actual.respuesta_id,
+    })
+    onFinalizarExamen?.()
     setExamenActual(null)
   }
 
   function handleSiguientePregunta() {
     const siguiente = preguntas_no_resueltas[0]
     if (!siguiente) return handleFinalizarExamen()
+
+    onFinalizarPregunta?.({
+      siguiente,
+      respuesta_id: examenActual.pregunta_actual.respuesta_id,
+    })
 
     setExamenActual(prev => ({
       ...prev,
@@ -104,6 +111,7 @@ MostrarPregunta.propTypes = {
   pregunta: PropTypes.object.isRequired,
   examenActual: PropTypes.object.isRequired,
   setExamenActual: PropTypes.func.isRequired,
+  onFinalizarPregunta: PropTypes.func,
 }
 
 export default MostrarPregunta

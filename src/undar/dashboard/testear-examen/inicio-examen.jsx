@@ -4,7 +4,7 @@ import { FaHourglassStart } from 'react-icons/fa'
 import PropTypes from 'prop-types'
 import { API_URL } from '../../lib/globales.js'
 
-const InicioExamen = ({ test, setExamenActual }) => {
+const InicioExamen = ({ test, setExamenActual, onInitExamen }) => {
   const primeraPregunta = test.preguntas[0]
 
   return (
@@ -24,8 +24,9 @@ const InicioExamen = ({ test, setExamenActual }) => {
           <div className='mt-8 animate-fade-up animate-delay-[1500ms] animate-ease-in-out'>
             <ButtonPrimary
               className='animate-bounce animate-ease-in-out'
-              onClick={() =>
-                setExamenActual({
+              onClick={() => {
+                setExamenActual(prev => ({
+                  ...prev,
                   fin_examen: null,
                   pregunta_actual: {
                     ...primeraPregunta,
@@ -34,8 +35,9 @@ const InicioExamen = ({ test, setExamenActual }) => {
                   },
                   preguntas_resueltas: [],
                   preguntas: test.preguntas,
-                })
-              }
+                }))
+                onInitExamen?.()
+              }}
             >
               <FaHourglassStart />
               Iniciar Examen
@@ -75,6 +77,7 @@ InicioExamen.defaultProps = {}
 InicioExamen.propTypes = {
   test: PropTypes.object.isRequired,
   setExamenActual: PropTypes.func.isRequired,
+  onInitExamen: PropTypes.func,
 }
 
 export default InicioExamen

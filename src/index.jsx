@@ -37,6 +37,9 @@ import Head from './head/Head';
 import initializeStore from './store';
 import messages from './i18n';
 import Dashboard from './undar/dashboard/dashboard/dashboard';
+import LayoutGeneral from './undar/components/layout/layout-general';
+import RealizarExamen from './undar/dashboard/realizar-examen/realizar-examen';
+import ExamenTerminado from './undar/dashboard/realizar-examen/examen-terminado';
 
 const queryClient = new QueryClient();
 
@@ -58,17 +61,27 @@ const App = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route>
-        <Route path="/home" element={<Home />} />
-        <Route element={<Layout />}>
-          <Route path="/crear-examen" element={<CrearExamen />} />
-          <Route path="/testear-examen/:id" element={<TestearExamen />} />
-          <Route path="/ranking-tiempo-real" element={<RankingTiempoReal />} />
-          <Route path="/ranking-final-examen" element={<RankingFinalExamen />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/examenes" element={<Examenes />} />
-          <Route path="/cursos" element={<Cursos />} />
-          <Route path="/rubricas" element={<Rubricas />} />
+        <Route element={<LayoutGeneral />}>
+          <Route path="/" element={<Home />} />
+          <Route element={<Layout />}>
+            <Route path="/crear-examen" element={<CrearExamen />} />
+            <Route path="/testear-examen/:id" element={<TestearExamen />} />
+            <Route
+              path="/ranking-tiempo-real"
+              element={<RankingTiempoReal />}
+            />
+            <Route
+              path="/ranking-final-examen"
+              element={<RankingFinalExamen />}
+            />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/examenes" element={<Examenes />} />
+            <Route path="/cursos" element={<Cursos />} />
+            <Route path="/rubricas" element={<Rubricas />} />
+          </Route>
         </Route>
+        <Route path="/realizar-examen/:id" element={<RealizarExamen />} />
+        <Route path="/examen-terminado" element={<ExamenTerminado />} />
       </Route>,
     ),
     {

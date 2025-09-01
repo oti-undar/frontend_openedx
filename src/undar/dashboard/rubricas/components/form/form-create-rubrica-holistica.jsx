@@ -7,19 +7,20 @@ import ButtonPrimary from '../../../../components/buttons/button-primary'
 import useFetchData from '../../../../hooks/useFetchData'
 import { API_URL, tipoNivelDelogro } from '../../../../lib/globales'
 import { useNavigate } from 'react-router'
-import { useSessionStorage } from '../../../../hooks/useSessionStorage'
 import { LuLoaderCircle } from 'react-icons/lu'
+import { getUserAuth } from '../../../../utils/api-openEdx'
 
 const FormCreateRubricaHolistica = () => {
   const [form] = Form.useForm()
   const navigate = useNavigate()
   const { fetchData, isloading } = useFetchData()
-  const [usuario] = useSessionStorage('usuario')
+
+  const user_id = getUserAuth().userId
 
   function handleFinish(values) {
     const data = {
       ...values,
-      user_id: usuario.id,
+      user_id,
       niveles_de_logro: {
         create: values.niveles_de_logro.map(level => {
           const { desde, hasta, ...rest } = level

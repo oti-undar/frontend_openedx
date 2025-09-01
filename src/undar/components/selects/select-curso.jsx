@@ -3,13 +3,12 @@ import { Form, Select } from 'antd'
 import useFetchData from '../../hooks/useFetchData'
 import { API_URL } from '../../lib/globales'
 import qs from 'qs'
-import { useSessionStorage } from '../../hooks/useSessionStorage'
+import { getUserAuth } from '../../utils/api-openEdx'
 
 const SelectCurso = () => {
   const { response, fetchData } = useFetchData()
 
-  const [usuario] = useSessionStorage('usuario')
-  const user_id = usuario.id
+  const user_id = getUserAuth().userId
 
   useEffect(() => {
     fetchData({

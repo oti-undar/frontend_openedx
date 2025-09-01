@@ -9,11 +9,11 @@ import useFetchData from '../../../../hooks/useFetchData'
 import { API_URL, states, tiposExamen } from '../../../../lib/globales'
 import SelectCurso from '../../../../components/selects/select-curso'
 import { useGetStates } from '../../../../hooks/use-get-states'
-import { useSessionStorage } from '../../../../hooks/useSessionStorage'
 import { appendFormDataRecursively } from '../../../../utils/form-data'
 import { useNavigate } from 'react-router-dom'
 import { LuLoaderCircle } from 'react-icons/lu'
 import FormSeleccionarRubrica from './form-seleccionar-rubrica'
+import { getUserAuth } from '../../../../utils/api-openEdx'
 
 const FormCrearExamen = () => {
   const navigate = useNavigate()
@@ -22,7 +22,7 @@ const FormCrearExamen = () => {
   const { fetchData, isloading } = useFetchData()
   const { estados } = useGetStates()
 
-  const [usuario] = useSessionStorage('usuario')
+  const user_id = getUserAuth().userId
 
   const [rubrica, setRubrica] = useState()
 
@@ -32,7 +32,7 @@ const FormCrearExamen = () => {
       rubrica_holistica_id: values.rubrica_holistica_id?.id,
       rubrica_analitica_id: values.rubrica_analitica_id?.id,
       state_id: estados.find(state => state.name === states.Activo).id,
-      user_id: usuario.id,
+      user_id,
     }
 
     const formData = new FormData()
