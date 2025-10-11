@@ -1,67 +1,39 @@
-import React, { forwardRef } from 'react'
+import React, { forwardRef, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import useColumnsAlumnosInscritos from './columns-alumnos-inscritos'
 import TableAgGrid from '../../../../components/tables/table-agGrid'
+import { useGetEjecucionesExamen } from '../../hooks/get-ejecuciones-examen'
 
-const data = [
-  {
-    nombres: 'Juan Perez',
-    nota: '10',
-  },
-  {
-    nombres: 'Juan Perez',
-    nota: '10',
-  },
-  {
-    nombres: 'Juan Perez',
-    nota: '10',
-  },
-  {
-    nombres: 'Juan Perez',
-    nota: '10',
-  },
-  {
-    nombres: 'Juan Perez',
-    nota: '10',
-  },
-  {
-    nombres: 'Juan Perez',
-    nota: '10',
-  },
-  {
-    nombres: 'Juan Perez',
-    nota: '10',
-  },
-  {
-    nombres: 'Juan Perez',
-    nota: '10',
-  },
-  {
-    nombres: 'Juan Perez',
-    nota: '10',
-  },
-  {
-    nombres: 'Juan Perez',
-    nota: '10',
-  },
-  {
-    nombres: 'Juan Perez',
-    nota: '10',
-  },
-  {
-    nombres: 'Juan Perez',
-    nota: '10',
-  },
-]
+const TableAlumnosInscritos = forwardRef(
+  ({ className, examenSeleccionado, setAlumnoSeleccionado }, ref) => {
+    const [data, setData] = useState([])
 
-const TableAlumnosInscritos = forwardRef((props, ref) => (
-  <TableAgGrid
-    {...props}
-    ref={ref}
-    rowData={data}
-    columnDefs={useColumnsAlumnosInscritos()}
-  />
-))
+    const { isloading, getEjecucionesExamen } = useGetEjecucionesExamen()
+
+    useEffect(() => {
+      if (examenSeleccionado)
+        getEjecucionesExamen({
+          examen_id: examenSeleccionado.id,
+          onSuccess: data => setData(data),
+        })
+      else setData([])
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [examenSeleccionado])
+
+    return (
+      <TableAgGrid
+        loading={isloading}
+        className={className}
+        ref={ref}
+        rowData={data}
+        columnDefs={useColumnsAlumnosInscritos({
+          examenSeleccionado,
+          setAlumnoSeleccionado,
+        })}
+      />
+    )
+  }
+)
 
 TableAlumnosInscritos.defaultProps = {
   className: '',
@@ -69,6 +41,8 @@ TableAlumnosInscritos.defaultProps = {
 
 TableAlumnosInscritos.propTypes = {
   className: PropTypes.string,
+  examenSeleccionado: PropTypes.object,
+  setAlumnoSeleccionado: PropTypes.func,
 }
 
 export default TableAlumnosInscritos

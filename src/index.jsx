@@ -40,6 +40,10 @@ import Dashboard from './undar/dashboard/dashboard/dashboard';
 import LayoutGeneral from './undar/components/layout/layout-general';
 import RealizarExamen from './undar/dashboard/realizar-examen/realizar-examen';
 import ExamenTerminado from './undar/dashboard/realizar-examen/examen-terminado';
+import LayoutGlobal from './undar/components/layout/layout-global';
+import EditarExamen from './undar/dashboard/editar-examen/editar-examen';
+import EditarRubricaHolistica from './undar/dashboard/rubricas/editar-rubrica-holistica';
+import EditarRubricaAnalitica from './undar/dashboard/rubricas/editar-rubrica-analitica';
 
 const queryClient = new QueryClient();
 
@@ -60,24 +64,33 @@ const App = () => {
 
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route>
+      <Route element={<LayoutGlobal />}>
         <Route element={<LayoutGeneral />}>
           <Route path="/" element={<Home />} />
           <Route element={<Layout />}>
             <Route path="/crear-examen" element={<CrearExamen />} />
+            <Route path="/editar-examen/:id" element={<EditarExamen />} />
             <Route path="/testear-examen/:id" element={<TestearExamen />} />
             <Route
-              path="/ranking-tiempo-real"
+              path="/ranking-tiempo-real/:id"
               element={<RankingTiempoReal />}
             />
             <Route
-              path="/ranking-final-examen"
+              path="/ranking-final-examen/:id"
               element={<RankingFinalExamen />}
             />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/examenes" element={<Examenes />} />
             <Route path="/cursos" element={<Cursos />} />
             <Route path="/rubricas" element={<Rubricas />} />
+            <Route
+              path="/editar-rubrica-holistica/:id"
+              element={<EditarRubricaHolistica />}
+            />
+            <Route
+              path="/editar-rubrica-analitica/:id"
+              element={<EditarRubricaAnalitica />}
+            />
           </Route>
         </Route>
         <Route path="/realizar-examen/:id" element={<RealizarExamen />} />

@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import RankingRow from '../../../ranking-tiempo-real/components/cards/ranking-row'
 
-const RankingRowWinner = ({ name, lastName, className, first }) => {
+const RankingRowWinner = ({ name, lastName, username, className, first }) => {
   return (
     <div
       className={`flex flex-col gap-2 items-center justify-center ${className} ${
@@ -15,7 +15,7 @@ const RankingRowWinner = ({ name, lastName, className, first }) => {
         src='https://picsum.photos/1500/1500'
         alt='Imagen de prueba'
       />
-      <RankingRow name={name} lastName={lastName} />
+      <RankingRow name={name} lastName={lastName} username={username} />
     </div>
   )
 }
@@ -28,6 +28,7 @@ RankingRowWinner.defaultProps = {
 RankingRowWinner.propTypes = {
   name: PropTypes.string.isRequired,
   lastName: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
   className: PropTypes.string,
   first: PropTypes.bool,
 }

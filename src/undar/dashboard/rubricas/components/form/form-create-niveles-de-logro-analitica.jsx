@@ -33,7 +33,7 @@ const FormCreateNivelesDeLogroAnalitica = ({ indicador, form }) => (
             )
           }
 
-          if (value.some(level => level.desde > level.hasta)) {
+          if (value.some(level => Number(level.desde) > Number(level.hasta))) {
             notification.error({
               message: 'Error',
               description: `Los valores Desde no pueden ser mayores a los valores Hasta en el indicador ${
@@ -49,8 +49,8 @@ const FormCreateNivelesDeLogroAnalitica = ({ indicador, form }) => (
 
           const levels = value.map(level =>
             Array.from(
-              { length: level.hasta - level.desde + 1 },
-              (_, i) => i + level.desde
+              { length: Number(level.hasta) - Number(level.desde) + 1 },
+              (_, i) => i + Number(level.desde)
             )
           )
 

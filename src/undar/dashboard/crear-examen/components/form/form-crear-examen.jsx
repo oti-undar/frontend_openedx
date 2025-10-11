@@ -1,9 +1,9 @@
 import { Form, Input, Select } from 'antd'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import FormBase from '../../../../components/form/form-base'
 import FormCrearPreguntas from './form-crear-preguntas'
 import FormAjustesExamen from './form-ajustes-examen'
-import { FaPlusCircle } from 'react-icons/fa'
+import { FaEdit, FaPlusCircle } from 'react-icons/fa'
 import ButtonPrimary from '../../../../components/buttons/button-primary'
 import useFetchData from '../../../../hooks/useFetchData'
 import { API_URL, states, tiposExamen } from '../../../../lib/globales'
@@ -14,8 +14,10 @@ import { useNavigate } from 'react-router-dom'
 import { LuLoaderCircle } from 'react-icons/lu'
 import FormSeleccionarRubrica from './form-seleccionar-rubrica'
 import { getUserAuth } from '../../../../utils/api-openEdx'
+import PropTypes from 'prop-types'
+import { toUploadFile, urlToFile } from '../../../../utils/upload'
 
-const FormCrearExamen = () => {
+const FormCrearExamen = ({ examen }) => {
   const navigate = useNavigate()
   const [form] = Form.useForm()
 
@@ -24,7 +26,48 @@ const FormCrearExamen = () => {
 
   const user_id = getUserAuth().userId
 
-  const [rubrica, setRubrica] = useState()
+  const [tipoRubrica, setTipoRubrica] = useState(
+    examen?.rubrica_analitica_id ? 'analitica' : 'holistica'
+  )
+  const [rubrica, setRubrica] = useState(
+    examen?.rubrica_analitica || examen?.rubrica_holistica
+  )
+
+  const [archivos, setArchivos] = useState({
+    principal: null,
+    preguntas: [],
+  })
+
+  useEffect(() => {
+    if (archivos?.principal)
+      form.setFieldValue('archivo', toUploadFile(archivos?.principal))
+
+    if (archivos?.preguntas?.length)
+      archivos?.preguntas?.forEach(pregunta => {
+        if (pregunta?.principal) {
+          form.setFieldValue(
+            ['preguntas', pregunta.name, 'archivo'],
+            toUploadFile(pregunta?.principal)
+          )
+        }
+
+        if (pregunta?.respuestas?.length)
+          pregunta?.respuestas?.forEach(respuesta => {
+            if (respuesta?.principal) {
+              form.setFieldValue(
+                [
+                  'preguntas',
+                  pregunta.name,
+                  'respuestas',
+                  respuesta.name,
+                  'archivo',
+                ],
+                toUploadFile(respuesta?.principal)
+              )
+            }
+          })
+      })
+  }, [archivos, form])
 
   function handleFinish(values) {
     const data = {
@@ -39,13 +82,15 @@ const FormCrearExamen = () => {
     appendFormDataRecursively(formData, data)
 
     fetchData({
-      method: 'POST',
-      url: `${API_URL()}/examen`,
+      method: examen ? 'PUT' : 'POST',
+      url: `${API_URL()}/examen${examen ? `/${examen?.id}` : ''}`,
       data: formData,
       headers: {
         'Content-Type': 'multipart/form-data',
       },
-      msgSuccess: 'Examen creado correctamente',
+      msgSuccess: examen
+        ? 'Examen editado correctamente'
+        : 'Examen creado correctamente',
       onSuccess: () => {
         form.resetFields()
         navigate('/examenes')
@@ -53,23 +98,131 @@ const FormCrearExamen = () => {
     })
   }
 
-  return (
-    <FormBase
-      form={form}
-      onSubmit={handleFinish}
-      className='text-gray-700 flex flex-col'
-      initialValues={{
+  useEffect(() => {
+    form.resetFields()
+    if (examen) {
+      if (examen?.img || examen?.video || examen?.audio)
+        urlToFile(
+          `${API_URL()}/${examen?.img || examen?.video || examen?.audio}`
+        ).then(file => {
+          setArchivos(prev => ({
+            ...prev,
+            principal: file,
+          }))
+        })
+
+      if (examen?.preguntas?.length)
+        examen?.preguntas?.forEach((pregunta, name) => {
+          if (pregunta?.img || pregunta?.video || pregunta?.audio)
+            urlToFile(
+              `${API_URL()}/${
+                pregunta?.img || pregunta?.video || pregunta?.audio
+              }`
+            ).then(file => {
+              setArchivos(prev => {
+                const pregunta_en_aux = prev.preguntas.find(
+                  p => p.name === name
+                )
+                return {
+                  ...prev,
+                  preguntas: pregunta_en_aux
+                    ? prev.preguntas.map(p =>
+                        p.name === name ? { ...p, principal: file } : p
+                      )
+                    : [
+                        ...prev.preguntas,
+                        { name, principal: file, respuestas: [] },
+                      ],
+                }
+              })
+            })
+
+          if (pregunta?.respuestas?.length)
+            pregunta?.respuestas?.forEach((respuesta, name_respuesta) => {
+              if (respuesta?.img || respuesta?.video || respuesta?.audio)
+                urlToFile(
+                  `${API_URL()}/${
+                    respuesta?.img || respuesta?.video || respuesta?.audio
+                  }`
+                ).then(file => {
+                  setArchivos(prev => {
+                    const pregunta_en_aux = prev.preguntas.find(
+                      p => p.name === name
+                    )
+                    const respuesta_en_aux = pregunta_en_aux?.respuestas.find(
+                      r => r.name === name_respuesta
+                    )
+                    return {
+                      ...prev,
+                      preguntas: pregunta_en_aux
+                        ? prev.preguntas.map(p =>
+                            p.name === name
+                              ? {
+                                  ...p,
+                                  respuestas: respuesta_en_aux
+                                    ? p.respuestas.map(r =>
+                                        r.name === name_respuesta
+                                          ? { ...r, principal: file }
+                                          : r
+                                      )
+                                    : [
+                                        ...p.respuestas,
+                                        {
+                                          name: name_respuesta,
+                                          principal: file,
+                                        },
+                                      ],
+                                }
+                              : p
+                          )
+                        : [
+                            ...prev.preguntas,
+                            {
+                              name,
+                              principal: null,
+                              respuestas: [
+                                { name: name_respuesta, principal: file },
+                              ],
+                            },
+                          ],
+                    }
+                  })
+                })
+            })
+        })
+
+      form.setFieldsValue({
+        ...examen,
+        rubrica_analitica_id: examen?.rubrica_analitica,
+        rubrica_holistica_id: examen?.rubrica_holistica,
+        preguntas: examen?.preguntas?.map(pregunta => ({
+          ...pregunta,
+          indicadores: pregunta?.indicadores?.map(indicador => indicador.id),
+        })),
+      })
+      setTipoRubrica(examen?.rubrica_analitica_id ? 'analitica' : 'holistica')
+      setRubrica(examen?.rubrica_analitica || examen?.rubrica_holistica)
+    } else {
+      form.setFieldsValue({
         preguntas: [
           {
             respuestas: [{}, {}, {}, {}],
           },
         ],
-      }}
+      })
+    }
+  }, [examen, form])
+
+  return (
+    <FormBase
+      form={form}
+      onSubmit={handleFinish}
+      className='text-gray-700 flex flex-col'
     >
       <div className='flex justify-between items-center w-full'>
         <div className='flex gap-4 items-center'>
           <h1 className='text-4xl font-bold text-gray-700 h-fit text-nowrap mb-7'>
-            Crear Examen
+            {examen ? 'Editar' : 'Crear'} Examen
           </h1>
           <SelectCurso />
           <Form.Item hasFeedback name='tipo_examen' className='w-full'>
@@ -92,10 +245,12 @@ const FormCrearExamen = () => {
           <ButtonPrimary size='large' type='submit' disabled={isloading}>
             {isloading ? (
               <LuLoaderCircle className='animate-spin' />
+            ) : examen ? (
+              <FaEdit />
             ) : (
               <FaPlusCircle />
             )}
-            Crear Examen
+            {examen ? 'Editar' : 'Crear'} Examen
           </ButtonPrimary>
         </div>
       </div>
@@ -123,7 +278,13 @@ const FormCrearExamen = () => {
               />
             </Form.Item>
           </div>
-          <FormSeleccionarRubrica form={form} setRubrica={setRubrica} />
+          <FormSeleccionarRubrica
+            form={form}
+            rubrica={rubrica}
+            setRubrica={setRubrica}
+            setTipoRubrica={setTipoRubrica}
+            tipoRubrica={tipoRubrica}
+          />
           <div className='flex flex-col gap-2 w-full'>
             <h2 className='text-xl font-semibold '>Descripción del Examen:</h2>
             <Form.Item hasFeedback name='description' className='w-full'>
@@ -136,10 +297,19 @@ const FormCrearExamen = () => {
               />
             </Form.Item>
           </div>
-          <FormAjustesExamen form={form} />
+          <FormAjustesExamen
+            form={form}
+            examen={examen}
+            archivos={archivos}
+            setArchivos={setArchivos}
+          />
         </div>
         <div className='col-span-2 h-[calc(100dvh-130px)]'>
-          <FormCrearPreguntas form={form} rubrica={rubrica} />
+          <FormCrearPreguntas
+            rubrica={rubrica}
+            archivos={archivos}
+            setArchivos={setArchivos}
+          />
         </div>
       </div>
     </FormBase>
@@ -148,6 +318,8 @@ const FormCrearExamen = () => {
 
 FormCrearExamen.defaultProps = {}
 
-FormCrearExamen.propTypes = {}
+FormCrearExamen.propTypes = {
+  examen: PropTypes.object,
+}
 
 export default FormCrearExamen

@@ -1,6 +1,7 @@
 import React from 'react'
 import { FaFlag } from 'react-icons/fa6'
 import Confetti from 'react-confetti-boom'
+import ButtonPrimary from '../../components/buttons/button-primary'
 
 const ExamenTerminado = () => {
   return (
@@ -14,6 +15,13 @@ const ExamenTerminado = () => {
       <div className='w-[30%] text-center text-xl font-semibold text-balance -mt-8'>
         Has terminado el examen
       </div>
+
+      <ButtonPrimary
+        className='animate-bounce animate-ease-in-out'
+        onClick={() => (window.location.href = '/')}
+      >
+        Volver al inicio
+      </ButtonPrimary>
     </div>
   )
 }

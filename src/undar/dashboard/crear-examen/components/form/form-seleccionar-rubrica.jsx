@@ -1,10 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Form, Select } from 'antd'
 import SelectRubrica from '../../../../components/selects/select-rubrica'
 
-const FormSeleccionarRubrica = ({ form, setRubrica }) => {
-  const [tipoRubrica, setTipoRubrica] = useState('holistica')
+const FormSeleccionarRubrica = ({
+  form,
+  rubrica,
+  setRubrica,
+  setTipoRubrica,
+  tipoRubrica,
+}) => {
   useEffect(() => {
     form.setFieldValue(`rubrica_${tipoRubrica}_id`, undefined)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -27,6 +32,7 @@ const FormSeleccionarRubrica = ({ form, setRubrica }) => {
               label: 'Analítica',
             },
           ]}
+          value={tipoRubrica}
           onChange={setTipoRubrica}
         />
       </div>
@@ -42,7 +48,11 @@ const FormSeleccionarRubrica = ({ form, setRubrica }) => {
             },
           ]}
         >
-          <SelectRubrica tipoRubrica={tipoRubrica} onChange={setRubrica} />
+          <SelectRubrica
+            tipoRubrica={tipoRubrica}
+            rubrica={rubrica}
+            onChange={setRubrica}
+          />
         </Form.Item>
       </div>
     </div>
@@ -53,7 +63,10 @@ FormSeleccionarRubrica.defaultProps = {}
 
 FormSeleccionarRubrica.propTypes = {
   form: PropTypes.object.isRequired,
+  rubrica: PropTypes.object.isRequired,
   setRubrica: PropTypes.func.isRequired,
+  setTipoRubrica: PropTypes.func.isRequired,
+  tipoRubrica: PropTypes.string.isRequired,
 }
 
 export default FormSeleccionarRubrica

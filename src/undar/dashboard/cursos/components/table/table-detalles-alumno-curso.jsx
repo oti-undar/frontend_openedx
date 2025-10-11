@@ -2,126 +2,27 @@ import React, { forwardRef } from 'react'
 import PropTypes from 'prop-types'
 import useColumnsDetallesAlumnoCurso from './columns-detalles-alumno-curso'
 import TableAgGrid from '../../../../components/tables/table-agGrid'
+import { useGetDetallesCursoSeleccionado } from '../../hooks/use-get-detalles-curso-seleccionado'
 
-const data = [
-  {
-    nombres: 'Juan Perez',
-    examen1: '5',
-    peso1: '1',
-    examen2: '9',
-    peso2: '2',
-    examen3: '10',
-    peso3: '3',
-  },
-  {
-    nombres: 'Juan Perez',
-    examen1: '5',
-    peso1: '1',
-    examen2: '9',
-    peso2: '2',
-    examen3: '10',
-    peso3: '3',
-  },
-  {
-    nombres: 'Juan Perez',
-    examen1: '5',
-    peso1: '1',
-    examen2: '9',
-    peso2: '2',
-    examen3: '10',
-    peso3: '3',
-  },
-  {
-    nombres: 'Juan Perez',
-    examen1: '5',
-    peso1: '1',
-    examen2: '9',
-    peso2: '2',
-    examen3: '10',
-    peso3: '3',
-  },
-  {
-    nombres: 'Juan Perez',
-    examen1: '5',
-    peso1: '1',
-    examen2: '9',
-    peso2: '2',
-    examen3: '10',
-    peso3: '3',
-  },
-  {
-    nombres: 'Juan Perez',
-    examen1: '5',
-    peso1: '1',
-    examen2: '9',
-    peso2: '2',
-    examen3: '10',
-    peso3: '3',
-  },
-  {
-    nombres: 'Juan Perez',
-    examen1: '5',
-    peso1: '1',
-    examen2: '9',
-    peso2: '2',
-    examen3: '10',
-    peso3: '3',
-  },
-  {
-    nombres: 'Juan Perez',
-    examen1: '5',
-    peso1: '1',
-    examen2: '9',
-    peso2: '2',
-    examen3: '10',
-    peso3: '3',
-  },
-  {
-    nombres: 'Juan Perez',
-    examen1: '5',
-    peso1: '1',
-    examen2: '9',
-    peso2: '2',
-    examen3: '10',
-    peso3: '3',
-  },
-  {
-    nombres: 'Juan Perez',
-    examen1: '5',
-    peso1: '1',
-    examen2: '9',
-    peso2: '2',
-    examen3: '10',
-    peso3: '3',
-  },
-  {
-    nombres: 'Juan Perez',
-    examen1: '5',
-    peso1: '1',
-    examen2: '9',
-    peso2: '2',
-    examen3: '10',
-    peso3: '3',
-  },
-  {
-    nombres: 'Juan Perez',
-    examen1: '5',
-    peso1: '1',
-    examen2: '9',
-    peso2: '2',
-    examen3: '10',
-    peso3: '3',
-  },
-]
+const TableDetallesAlumnoCurso = forwardRef(
+  ({ className, cursoSeleccionado }, ref) => {
+    const { response, isloading } = useGetDetallesCursoSeleccionado({
+      cursoSeleccionado,
+    })
 
-const TableDetallesAlumnoCurso = forwardRef((props, ref) => (
-  <TableAgGrid
-    {...props}
-    ref={ref}
-    rowData={data}
-    columnDefs={useColumnsDetallesAlumnoCurso()}
-  />
-))
+    const data = response?.usuarios ?? []
+
+    return (
+      <TableAgGrid
+        className={className}
+        ref={ref}
+        rowData={data}
+        columnDefs={useColumnsDetallesAlumnoCurso({ response })}
+        loading={isloading}
+      />
+    )
+  }
+)
 
 TableDetallesAlumnoCurso.defaultProps = {
   className: '',
@@ -129,6 +30,7 @@ TableDetallesAlumnoCurso.defaultProps = {
 
 TableDetallesAlumnoCurso.propTypes = {
   className: PropTypes.string,
+  cursoSeleccionado: PropTypes.object,
 }
 
 export default TableDetallesAlumnoCurso

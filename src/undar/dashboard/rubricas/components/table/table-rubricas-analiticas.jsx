@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect } from 'react'
+import React, { forwardRef, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import TableAgGrid from '../../../../components/tables/table-agGrid'
 import useFetchData from '../../../../hooks/useFetchData'
@@ -6,9 +6,17 @@ import { API_URL } from '../../../../lib/globales'
 import qs from 'qs'
 import useColumnsRubricasAnaliticas from './columns-rubricas-analiticas'
 import { getUserAuth } from '../../../../utils/api-openEdx'
+import { useRemoveRubrica } from '../../hooks/use-remove-rubrica'
 
 const TableRubricasAnaliticas = forwardRef((props, ref) => {
   const user_id = getUserAuth().userId
+
+  const [refetch, setRefetch] = useState(0)
+
+  const { removeRubrica } = useRemoveRubrica({
+    tipo: 'analitica',
+    onSuccess: () => setRefetch(prev => prev + 1),
+  })
 
   const { response: data, isloading, fetchData } = useFetchData()
   useEffect(() => {
@@ -19,14 +27,14 @@ const TableRubricasAnaliticas = forwardRef((props, ref) => {
       })}`,
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [refetch])
 
   return (
     <TableAgGrid
       {...props}
       ref={ref}
       rowData={data}
-      columnDefs={useColumnsRubricasAnaliticas()}
+      columnDefs={useColumnsRubricasAnaliticas({ removeRubrica })}
       loading={isloading}
     />
   )

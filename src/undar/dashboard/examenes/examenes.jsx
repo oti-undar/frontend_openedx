@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import TableExamenes from './components/table/table-examenes'
 import TableAlumnosInscritos from './components/table/table-alumnos-inscritos'
 import TableDetallesAlumnoExamen from './components/table/table-detalles-alumno-examen'
@@ -21,6 +21,9 @@ const Examenes = () => {
   const exportarDetallesAlumnos = () =>
     exportAGGridDataToJSON(detallesAlumnosRef.current, 'Detalles de Alumnos')
 
+  const [examenSeleccionado, setExamenSeleccionado] = useState()
+  const [alumnoSeleccionado, setAlumnoSeleccionado] = useState()
+
   return (
     <div className='flex flex-col gap-8 h-full'>
       <div className='grid grid-cols-8 gap-8 h-full w-full'>
@@ -29,7 +32,10 @@ const Examenes = () => {
           onExport={exportarExamenes}
           className='col-span-4'
         >
-          <TableExamenes ref={examenesRef} />
+          <TableExamenes
+            ref={examenesRef}
+            setExamenSeleccionado={setExamenSeleccionado}
+          />
         </TableTitle>
         <TableTitle
           title='Rúbricas Holísticas'
@@ -46,20 +52,28 @@ const Examenes = () => {
           <TableRubricasAnaliticas />
         </TableTitle>
       </div>
-      <div className='grid grid-cols-3 gap-8 h-full'>
+      <div className='grid grid-cols-4 gap-8 h-full'>
         <TableTitle
           title='Alumnos Inscritos'
-          className='col-span-1'
+          className='col-span-2'
           onExport={exportarAlumnosInscritos}
         >
-          <TableAlumnosInscritos ref={alumnosInscritosRef} />
+          <TableAlumnosInscritos
+            ref={alumnosInscritosRef}
+            examenSeleccionado={examenSeleccionado}
+            setAlumnoSeleccionado={setAlumnoSeleccionado}
+          />
         </TableTitle>
         <TableTitle
           title='Detalles'
           className='col-span-2'
           onExport={exportarDetallesAlumnos}
         >
-          <TableDetallesAlumnoExamen ref={detallesAlumnosRef} />
+          <TableDetallesAlumnoExamen
+            ref={detallesAlumnosRef}
+            examenSeleccionado={examenSeleccionado}
+            alumnoSeleccionado={alumnoSeleccionado}
+          />
         </TableTitle>
       </div>
     </div>

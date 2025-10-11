@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 
-const RankingRow = ({ name, lastName, number, className }) => {
+const RankingRow = ({ name, lastName, username, number, className }) => {
   return (
     <div className={`flex gap-4 items-center ${className}`}>
       {number && (
@@ -13,8 +13,8 @@ const RankingRow = ({ name, lastName, number, className }) => {
         alt='Imagen de prueba'
       />
       <div className='flex flex-col'>
-        <h1 className='text-2xl font-semibold'>{name}</h1>
-        <h2 className='text-gray-500'>{lastName}</h2>
+        <h1 className='text-2xl font-semibold'>{name || username}</h1>
+        <h2 className='text-gray-500'>{lastName || '-'}</h2>
       </div>
     </div>
   )
@@ -27,6 +27,7 @@ RankingRow.defaultProps = {
 RankingRow.propTypes = {
   name: PropTypes.string.isRequired,
   lastName: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
   number: PropTypes.number,
   className: PropTypes.string,
 }

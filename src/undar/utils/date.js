@@ -13,5 +13,5 @@ export const presetsDatePicker = [
 
 export function formatDayjsToUTC(date) {
   if (!date) return null
-  return dayjs(Number(date)).utc().format('YYYY-MM-DD HH:mm:ss')
+  return dayjs(Number(date)).format('YYYY-MM-DD HH:mm:ss')
 }

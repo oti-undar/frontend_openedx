@@ -1,30 +1,49 @@
 import { DatePicker, Form, InputNumber, Select } from 'antd'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { FaClock } from 'react-icons/fa'
 import { formatDayjsToUTC, presetsDatePicker } from '../../../../utils/date'
 import PropTypes from 'prop-types'
 import dayjs from 'dayjs'
 
-const FormFinalExamen = ({ form, fecha_inicio }) => {
-  const [modoFinal, setModoFinal] = useState('manual')
+const FormFinalExamen = ({ form, inicio_examen, examen }) => {
+  const [modoFinal, setModoFinal] = useState(
+    examen?.final_examen ? 'fecha' : 'manual'
+  )
   const [modoTiempo, setModoTiempo] = useState('h')
   const [tiempo, setTiempo] = useState(null)
-  const [fecha, setFecha] = useState(null)
+  const [fecha, setFecha] = useState(
+    examen?.final_examen
+      ? dayjs(examen.final_examen).local().format('YYYY-MM-DD HH:mm:ss')
+      : null
+  )
+
+  const primerResetConExamen = useRef(true)
+  useEffect(() => {
+    if (examen?.final_examen) {
+      setModoFinal('fecha')
+      setFecha(dayjs(examen.final_examen).local().format('YYYY-MM-DD HH:mm:ss'))
+    }
+  }, [examen])
 
   useEffect(() => {
-    resetValues()
+    if (primerResetConExamen.current && examen?.final_examen)
+      primerResetConExamen.current = false
+    else resetValues()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modoFinal])
 
   useEffect(() => {
-    setFecha(
-      tiempo && fecha_inicio
-        ? formatDayjsToUTC(dayjs(fecha_inicio + 'Z').add(tiempo, modoTiempo))
-        : null
-    )
-  }, [modoTiempo, tiempo, fecha_inicio])
+    if (tiempo)
+      setFecha(
+        tiempo && inicio_examen
+          ? formatDayjsToUTC(dayjs(inicio_examen).add(tiempo, modoTiempo))
+          : null
+      )
+  }, [modoTiempo, tiempo, inicio_examen])
 
   useEffect(() => {
-    form.setFieldValue('fecha_final', fecha)
+    form.setFieldValue('final_examen', fecha)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fecha])
 
   function resetValues() {
@@ -90,16 +109,14 @@ const FormFinalExamen = ({ form, fecha_inicio }) => {
                 },
               ]}
             />
-            {!fecha_inicio && (
+            {!inicio_examen && (
               <div className='absolute right-2 -top-5 text-xs text-rose-500 animate-flip-up animate-duration-500 animate-ease-in-out text-nowrap'>
                 Debe seleccionar una fecha de inicio
               </div>
             )}
             {fecha && (
               <div className='absolute right-2 -top-5 text-xs text-gray-500 animate-flip-up animate-duration-500 animate-ease-in-out'>
-                {dayjs(fecha + 'Z')
-                  .local()
-                  .format('DD/MM/YYYY h:mm A')}
+                {dayjs(fecha).local().format('DD/MM/YYYY h:mm A')}
               </div>
             )}
           </div>
@@ -112,13 +129,14 @@ const FormFinalExamen = ({ form, fecha_inicio }) => {
             presets={presetsDatePicker}
             className='animate-fade-right animate-ease-in-out animate-duration-500'
             placeholder='Fecha de Final'
+            value={fecha ? dayjs(fecha).local() : null}
             onChange={value => {
               setFecha(formatDayjsToUTC(value))
             }}
           />
         )}
 
-        <Form.Item name='fecha_final' hidden />
+        <Form.Item name='final_examen' hidden />
       </div>
     </div>
   )
@@ -128,10 +146,11 @@ FormFinalExamen.defaultProps = {}
 
 FormFinalExamen.propTypes = {
   form: PropTypes.object.isRequired,
-  fecha_inicio: PropTypes.oneOfType([
+  inicio_examen: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.oneOf([null]),
   ]),
+  examen: PropTypes.object,
 }
 
 export default FormFinalExamen

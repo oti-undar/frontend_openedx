@@ -24,8 +24,3 @@ export const tiposExamen = {
   Sync: 'Sync',
   Async: 'Async',
 }
-
-export const tipoNivelDelogro = {
-  Porcentaje: 'Porcentaje',
-  Rango: 'Rango',
-}

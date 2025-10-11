@@ -21,7 +21,6 @@ const Dashboard = () => {
 
   const { response, isloading, fetchData } = useFetchData()
   const { response: cursos, fetchData: fetchCursos } = useFetchData()
-
   const [reFetchExamenes, setReFetchExamenes] = useState(0)
 
   useEffect(() => {

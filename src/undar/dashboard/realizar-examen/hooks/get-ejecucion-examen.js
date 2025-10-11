@@ -11,8 +11,7 @@ export function useGetEjecucionExamen() {
   function getEjecucionExamen({ examen_id, onSuccess }) {
     fetchData({
       method: 'GET',
-      url: `${API_URL()}/ejecucion_examen?${qs.stringify({
-        examen_id,
+      url: `${API_URL()}/ejecucion_examen/${examen_id}?${qs.stringify({
         user_id,
       })}`,
       onSuccess,

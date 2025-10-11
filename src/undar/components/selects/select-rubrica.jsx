@@ -6,7 +6,7 @@ import qs from 'qs'
 import PropTypes from 'prop-types'
 import { getUserAuth } from '../../utils/api-openEdx'
 
-const SelectRubrica = ({ tipoRubrica, onChange }) => {
+const SelectRubrica = ({ tipoRubrica, onChange, rubrica }) => {
   const { response, fetchData } = useFetchData()
 
   const user_id = getUserAuth().userId
@@ -33,6 +33,7 @@ const SelectRubrica = ({ tipoRubrica, onChange }) => {
       onChange={value =>
         onChange(response.find(rubrica => rubrica.id === value))
       }
+      value={rubrica?.id}
     />
   )
 }
@@ -44,6 +45,7 @@ SelectRubrica.defaultProps = {
 SelectRubrica.propTypes = {
   tipoRubrica: PropTypes.oneOf(['holistica', 'analitica']).isRequired,
   onChange: PropTypes.func.isRequired,
+  rubrica: PropTypes.object.isRequired,
 }
 
 export default SelectRubrica

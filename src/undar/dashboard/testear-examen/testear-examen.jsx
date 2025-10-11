@@ -2,14 +2,12 @@ import React, { useEffect } from 'react'
 import InicioExamen from './inicio-examen.jsx'
 import MostrarPregunta from './mostrar-pregunta.jsx'
 import { useLocalStorage } from '../../hooks/useLocalStorage.js'
-import { useParams } from 'react-router'
 import useFetchData from '../../hooks/useFetchData.js'
 import { API_URL } from '../../lib/globales.js'
-import qs from 'qs'
 import { getUserAuth } from '../../utils/api-openEdx.js'
 import Loader from '../../components/layout/components/loader.jsx'
 import Bloqueado from '../../components/layout/components/bloqueado.jsx'
-import { useNavigate } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 
 const TestearExamen = () => {
   const { id: examen_id } = useParams()
@@ -32,9 +30,9 @@ const TestearExamen = () => {
   useEffect(() => {
     fetchData({
       method: 'GET',
-      url: `${API_URL()}/examen/${examen_id}?${qs.stringify({
-        filters: { user_id },
-      })}`,
+      url: `${API_URL()}/examen/${examen_id}?filters=${encodeURIComponent(
+        JSON.stringify({ user_id })
+      )}`,
       onSuccess: data => {
         setExamenActual(prev => ({
           ...prev,

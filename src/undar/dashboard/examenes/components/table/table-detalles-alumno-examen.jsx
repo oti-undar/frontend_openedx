@@ -3,83 +3,20 @@ import PropTypes from 'prop-types'
 import useColumnsDetallesAlumnoExamen from './columns-detalles-alumno-examen'
 import TableAgGrid from '../../../../components/tables/table-agGrid'
 
-const data = [
-  {
-    pregunta: 'Juan Perez',
-    respuesta: '10',
-    correcta: '10',
-    puntos: '10',
-  },
-  {
-    pregunta: 'Juan Perez',
-    respuesta: '10',
-    correcta: '10',
-    puntos: '10',
-  },
-  {
-    pregunta: 'Juan Perez',
-    respuesta: '10',
-    correcta: '10',
-    puntos: '10',
-  },
-  {
-    pregunta: 'Juan Perez',
-    respuesta: '10',
-    correcta: '10',
-    puntos: '10',
-  },
-  {
-    pregunta: 'Juan Perez',
-    respuesta: '10',
-    correcta: '10',
-    puntos: '10',
-  },
-  {
-    pregunta: 'Juan Perez',
-    respuesta: '10',
-    correcta: '10',
-    puntos: '10',
-  },
-  {
-    pregunta: 'Juan Perez',
-    respuesta: '10',
-    correcta: '10',
-    puntos: '10',
-  },
-  {
-    pregunta: 'Juan Perez',
-    respuesta: '10',
-    correcta: '10',
-    puntos: '10',
-  },
-  {
-    pregunta: 'Juan Perez',
-    respuesta: '10',
-    correcta: '10',
-    puntos: '10',
-  },
-  {
-    pregunta: 'Juan Perez',
-    respuesta: '10',
-    correcta: '10',
-    puntos: '10',
-  },
-  {
-    pregunta: 'Juan Perez',
-    respuesta: '10',
-    correcta: '10',
-    puntos: '10',
-  },
-]
+const TableDetallesAlumnoExamen = forwardRef(
+  ({ className, examenSeleccionado, alumnoSeleccionado }, ref) => {
+    const data = alumnoSeleccionado?.preguntas_resueltas || []
 
-const TableDetallesAlumnoExamen = forwardRef((props, ref) => (
-  <TableAgGrid
-    {...props}
-    ref={ref}
-    rowData={data}
-    columnDefs={useColumnsDetallesAlumnoExamen()}
-  />
-))
+    return (
+      <TableAgGrid
+        className={className}
+        ref={ref}
+        rowData={data}
+        columnDefs={useColumnsDetallesAlumnoExamen({ examenSeleccionado })}
+      />
+    )
+  }
+)
 
 TableDetallesAlumnoExamen.defaultProps = {
   className: '',
@@ -87,6 +24,8 @@ TableDetallesAlumnoExamen.defaultProps = {
 
 TableDetallesAlumnoExamen.propTypes = {
   className: PropTypes.string,
+  examenSeleccionado: PropTypes.object,
+  alumnoSeleccionado: PropTypes.object,
 }
 
 export default TableDetallesAlumnoExamen

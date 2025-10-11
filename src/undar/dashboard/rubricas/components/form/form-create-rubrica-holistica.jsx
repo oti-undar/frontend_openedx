@@ -1,16 +1,18 @@
 import { Form, Input } from 'antd'
-import React from 'react'
+import React, { useEffect } from 'react'
 import FormBase from '../../../../components/form/form-base'
 import FormCreateNivelesDeLogro from './form-create-niveles-de-logro'
-import { FaPlusCircle } from 'react-icons/fa'
+import { FaEdit, FaPlusCircle } from 'react-icons/fa'
 import ButtonPrimary from '../../../../components/buttons/button-primary'
 import useFetchData from '../../../../hooks/useFetchData'
-import { API_URL, tipoNivelDelogro } from '../../../../lib/globales'
+import { API_URL } from '../../../../lib/globales'
 import { useNavigate } from 'react-router'
 import { LuLoaderCircle } from 'react-icons/lu'
 import { getUserAuth } from '../../../../utils/api-openEdx'
+import PropTypes from 'prop-types'
+import FormAdicionalesRubrica from './form-adicionales-rubrica'
 
-const FormCreateRubricaHolistica = () => {
+const FormCreateRubricaHolistica = ({ rubrica_holistica }) => {
   const [form] = Form.useForm()
   const navigate = useNavigate()
   const { fetchData, isloading } = useFetchData()
@@ -27,17 +29,23 @@ const FormCreateRubricaHolistica = () => {
           return {
             ...rest,
             nota: `${desde}-${hasta}`,
-            tipo: tipoNivelDelogro.Rango,
+            id: undefined,
+            rubrica_holistica_id: undefined,
+            indicador_id: undefined,
           }
         }),
       },
     }
 
     fetchData({
-      method: 'POST',
-      url: `${API_URL()}/rubrica/holistica`,
+      method: rubrica_holistica ? 'PUT' : 'POST',
+      url: `${API_URL()}/rubrica/holistica${
+        rubrica_holistica ? `/${rubrica_holistica.id}` : ''
+      }`,
       data,
-      msgSuccess: 'Rúbrica creada correctamente',
+      msgSuccess: rubrica_holistica
+        ? 'Rúbrica actualizada correctamente'
+        : 'Rúbrica creada correctamente',
       onSuccess: () => {
         form.resetFields()
         navigate('/examenes')
@@ -45,15 +53,30 @@ const FormCreateRubricaHolistica = () => {
     })
   }
 
+  useEffect(() => {
+    form.resetFields()
+    if (rubrica_holistica) {
+      form.setFieldsValue({
+        ...rubrica_holistica,
+        niveles_de_logro: rubrica_holistica.niveles_de_logro.map(level => ({
+          ...level,
+          desde: level.nota.split('-')[0],
+          hasta: level.nota.split('-')[1],
+        })),
+      })
+    } else {
+      form.setFieldsValue({
+        niveles_de_logro: [{}, {}, {}, {}],
+      })
+    }
+  }, [form, rubrica_holistica])
+
   return (
     <div>
       <FormBase
         form={form}
         onSubmit={handleFinish}
         className='text-gray-700 flex flex-col'
-        initialValues={{
-          niveles_de_logro: [{}, {}, {}, {}],
-        }}
       >
         <div className='flex justify-between gap-4 w-full'>
           <div className='flex gap-4 w-full'>
@@ -82,13 +105,18 @@ const FormCreateRubricaHolistica = () => {
             <ButtonPrimary size='large' type='submit' disabled={isloading}>
               {isloading ? (
                 <LuLoaderCircle className='animate-spin' />
+              ) : rubrica_holistica ? (
+                <FaEdit />
               ) : (
                 <FaPlusCircle />
               )}
-              <span className='text-nowrap'>Crear Rúbrica</span>
+              <span className='text-nowrap'>
+                {rubrica_holistica ? 'Editar' : 'Crear'} Rúbrica
+              </span>
             </ButtonPrimary>
           </div>
         </div>
+        <FormAdicionalesRubrica />
         <FormCreateNivelesDeLogro />
       </FormBase>
     </div>
@@ -97,6 +125,8 @@ const FormCreateRubricaHolistica = () => {
 
 FormCreateRubricaHolistica.defaultProps = {}
 
-FormCreateRubricaHolistica.propTypes = {}
+FormCreateRubricaHolistica.propTypes = {
+  rubrica_holistica: PropTypes.object,
+}
 
 export default FormCreateRubricaHolistica

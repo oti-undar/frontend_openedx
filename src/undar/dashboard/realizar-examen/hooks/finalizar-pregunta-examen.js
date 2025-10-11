@@ -12,6 +12,7 @@ export function useFinalizarPreguntaExamen() {
     pregunta_ejecucion_actual_id,
     respuesta_id,
     siguiente,
+    onSuccess,
   }) {
     fetchData({
       method: 'POST',
@@ -29,6 +30,7 @@ export function useFinalizarPreguntaExamen() {
             }
           : {}),
       },
+      onSuccess,
     })
   }
 

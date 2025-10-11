@@ -15,3 +15,17 @@ export const beforeUpload = file => {
   }
   return false
 }
+
+export const toUploadFile = file => ({
+  uid: file.name + '-' + file.lastModified,
+  name: file.name,
+  status: 'done',
+  originFileObj: file,
+})
+
+export async function urlToFile(url) {
+  const res = await fetch(url)
+  const blob = await res.blob()
+  const filename = url.split('/').pop() || 'file'
+  return new File([blob], filename, { type: blob.type })
+}

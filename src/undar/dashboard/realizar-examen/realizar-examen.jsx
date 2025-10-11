@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router'
-import qs from 'qs'
 import { getUserAuth } from '../../utils/api-openEdx'
 import useFetchData from '../../hooks/useFetchData'
-import { API_URL } from '../../lib/globales'
+import { API_URL, tiposExamen } from '../../lib/globales'
 import InicioExamen from '../testear-examen/inicio-examen'
 import MostrarPregunta from '../testear-examen/mostrar-pregunta'
 import Loader from '../../components/layout/components/loader'
@@ -12,7 +10,9 @@ import { useCreateEjecucionExamen } from './hooks/create-ejecucion-examen'
 import { useGetEjecucionExamen } from './hooks/get-ejecucion-examen'
 import { useFinalizarPreguntaExamen } from './hooks/finalizar-pregunta-examen'
 import { useFinalizarExamen } from './hooks/finalizar-examen'
-import { useNavigate } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
+import { useFinalizarPreguntaExamenRespuesta } from './hooks/finalizar-pregunta-examen-respuesta'
+import { socket } from '../../utils/socket'
 
 const RealizarExamen = () => {
   const { id: examen_id } = useParams()
@@ -36,8 +36,8 @@ const RealizarExamen = () => {
   useEffect(() => {
     fetchData({
       method: 'GET',
-      url: `${API_URL()}/examen/${examen_id}?${qs.stringify({
-        filters: {
+      url: `${API_URL()}/examen/${examen_id}?filters=${encodeURIComponent(
+        JSON.stringify({
           state: { name: 'Disponible' },
           curso: {
             usuarios: {
@@ -46,8 +46,8 @@ const RealizarExamen = () => {
               },
             },
           },
-        },
-      })}`,
+        })
+      )}`,
       onSuccess: data => {
         setExamenActual(prev => ({
           ...prev,
@@ -73,6 +73,7 @@ const RealizarExamen = () => {
             respuesta_id: p.respuesta_id,
           })),
           ejecucion_examen_id: data.id,
+          tipo_examen: data.tipo_examen,
         }))
       },
     })
@@ -81,8 +82,14 @@ const RealizarExamen = () => {
 
   const { createEjecucionExamen } = useCreateEjecucionExamen()
   const { finalizarPreguntaExamen } = useFinalizarPreguntaExamen()
+  const { finalizarPreguntaExamenRespuesta } =
+    useFinalizarPreguntaExamenRespuesta()
   const { finalizarExamen, isloading: isloadingFinalizarExamen } =
     useFinalizarExamen()
+
+  useEffect(() => {
+    if (examen_id) socket.emit('join_room', examen_id)
+  }, [examen_id])
 
   if (!examen_id)
     return (
@@ -109,42 +116,73 @@ const RealizarExamen = () => {
         <InicioExamen
           test={test}
           setExamenActual={setExamenActual}
-          onInitExamen={() =>
-            createEjecucionExamen({
-              examen_id,
-              pregunta_id: test.preguntas[0].id,
-              onSuccess: data => {
-                setExamenActual(prev => ({
-                  ...prev,
-                  pregunta_actual: {
-                    ...prev.pregunta_actual,
-                    pregunta_ejecucion_actual_id:
-                      data.pregunta_ejecucion_actual_id,
-                  },
-                }))
-              },
-            })
-          }
+          onInitExamen={() => {
+            if (examenActual.tipo_examen === tiposExamen.Async)
+              createEjecucionExamen({
+                examen_id,
+                pregunta_id: test.preguntas[0].id,
+                onSuccess: data => {
+                  setExamenActual(prev => ({
+                    ...prev,
+                    pregunta_actual: {
+                      ...prev.pregunta_actual,
+                      pregunta_ejecucion_actual_id:
+                        data.pregunta_ejecucion_actual_id,
+                    },
+                  }))
+                },
+              })
+          }}
         />
       ) : (
         <MostrarPregunta
           pregunta={examenActual.pregunta_actual}
           examenActual={examenActual}
           setExamenActual={setExamenActual}
-          onFinalizarPregunta={({ siguiente, respuesta_id } = {}) =>
-            finalizarPreguntaExamen({
-              examen_id,
+          onSelectRespuesta={respuesta_id => {
+            finalizarPreguntaExamenRespuesta({
               pregunta_ejecucion_actual_id:
                 examenActual.pregunta_actual.pregunta_ejecucion_actual_id,
               respuesta_id,
-              siguiente,
             })
-          }
+          }}
+          onFinalizarPregunta={({ siguiente, respuesta_id } = {}) => {
+            if (examenActual.tipo_examen === tiposExamen.Async)
+              finalizarPreguntaExamen({
+                examen_id,
+                pregunta_ejecucion_actual_id:
+                  examenActual.pregunta_actual.pregunta_ejecucion_actual_id,
+                respuesta_id,
+                siguiente,
+                onSuccess: data => {
+                  setExamenActual(prev => ({
+                    preguntas: prev.preguntas,
+                    fin_examen: data.fin_examen,
+                    pregunta_actual: {
+                      ...data.pregunta_ejecucion_actual.pregunta,
+                      inicio: new Date(
+                        data.pregunta_ejecucion_actual.inicio
+                      ).getTime(),
+                      pregunta_ejecucion_actual_id:
+                        data.pregunta_ejecucion_actual.id,
+                    },
+                    preguntas_resueltas: data.preguntas_resueltas.map(p => ({
+                      id: p.pregunta.id,
+                      respuesta_id: p.respuesta_id,
+                    })),
+                    ejecucion_examen_id: data.id,
+                    tipo_examen: data.tipo_examen,
+                  }))
+                },
+              })
+          }}
           onFinalizarExamen={() => {
-            finalizarExamen({
-              ejecucion_examen_id: examenActual.ejecucion_examen_id,
-              onSuccess: () => navigate('/examen-terminado'),
-            })
+            if (examenActual.tipo_examen === tiposExamen.Async)
+              finalizarExamen({
+                ejecucion_examen_id: examenActual.ejecucion_examen_id,
+                onSuccess: () => navigate('/examen-terminado'),
+              })
+            else navigate('/examen-terminado')
           }}
         />
       )}

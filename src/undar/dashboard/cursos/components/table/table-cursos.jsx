@@ -7,7 +7,7 @@ import { API_URL } from '../../../../lib/globales'
 import qs from 'qs'
 import { getUserAuth } from '../../../../utils/api-openEdx'
 
-const TableCursos = forwardRef((props, ref) => {
+const TableCursos = forwardRef(({ className, setCursoSeleccionado }, ref) => {
   const user_id = getUserAuth().userId
 
   const { response: cursos, fetchData: fetchCursos } = useFetchData()
@@ -22,10 +22,10 @@ const TableCursos = forwardRef((props, ref) => {
   }, [])
   return (
     <TableAgGrid
-      {...props}
+      className={className}
       ref={ref}
       rowData={cursos}
-      columnDefs={useColumnsCursos()}
+      columnDefs={useColumnsCursos({ setCursoSeleccionado })}
     />
   )
 })
@@ -36,6 +36,7 @@ TableCursos.defaultProps = {
 
 TableCursos.propTypes = {
   className: PropTypes.string,
+  setCursoSeleccionado: PropTypes.func,
 }
 
 export default TableCursos

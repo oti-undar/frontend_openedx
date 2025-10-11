@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-import { beforeUpload, normFile } from '../../../../utils/upload'
+import { beforeUpload, normFile, toUploadFile } from '../../../../utils/upload'
 import { Form, InputNumber, Upload } from 'antd'
 import { FaImage } from 'react-icons/fa6'
 import FormInicioExamen from './form-inicio-examen'
 import PropTypes from 'prop-types'
 import FormFinalExamen from './form-final-examen'
 
-const FormAjustesExamen = ({ form }) => {
+const FormAjustesExamen = ({ form, examen, archivos, setArchivos }) => {
   const [fechaInicio, setFechaInicio] = useState(null)
   return (
     <div className='grid grid-cols-2 gap-4'>
@@ -27,8 +27,16 @@ const FormAjustesExamen = ({ form }) => {
             />
           </Form.Item>
         </div>
-        <FormInicioExamen form={form} onChangeFecha={setFechaInicio} />
-        <FormFinalExamen form={form} fecha_inicio={fechaInicio} />
+        <FormInicioExamen
+          form={form}
+          onChangeFecha={setFechaInicio}
+          examen={examen}
+        />
+        <FormFinalExamen
+          form={form}
+          inicio_examen={fechaInicio}
+          examen={examen}
+        />
       </div>
       <div className='col-span-1'>
         <Form.Item
@@ -41,12 +49,20 @@ const FormAjustesExamen = ({ form }) => {
           <Upload.Dragger
             className='w-full h-[calc(100dvh-500px)] flex flex-col'
             name='files'
-            beforeUpload={beforeUpload}
+            fileList={
+              archivos?.principal ? [toUploadFile(archivos?.principal)] : []
+            }
+            beforeUpload={file => {
+              setArchivos(prev => ({
+                ...prev,
+                principal: file,
+              }))
+              return beforeUpload(file)
+            }}
+            onRemove={() => setArchivos(prev => ({ ...prev, principal: null }))}
             accept='.jpg, .jpeg, .png, .webp, .gif, .mp4, .mkv, .webm, .ogg, .oga, .mp3, .wav, .aac'
             maxCount={1}
-            onChange={({ fileList }) => {
-              form.setFieldValue('archivo', fileList[0])
-            }}
+            listType='picture'
           >
             <div className='flex flex-col gap-2 justify-center items-center'>
               <FaImage size={80} className='text-gray-500' />
@@ -69,6 +85,9 @@ FormAjustesExamen.defaultProps = {}
 
 FormAjustesExamen.propTypes = {
   form: PropTypes.object.isRequired,
+  examen: PropTypes.object,
+  archivos: PropTypes.object,
+  setArchivos: PropTypes.func.isRequired,
 }
 
 export default FormAjustesExamen

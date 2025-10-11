@@ -1,11 +1,51 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import ButtonPrimary from '../../components/buttons/button-primary.jsx'
 import { FaHourglassStart } from 'react-icons/fa'
 import PropTypes from 'prop-types'
-import { API_URL } from '../../lib/globales.js'
+import { API_URL, tiposExamen } from '../../lib/globales.js'
+import { socket } from '../../utils/socket.js'
+import { getUserAuth } from '../../utils/api-openEdx.js'
+import { useLocation } from 'react-router'
 
 const InicioExamen = ({ test, setExamenActual, onInitExamen }) => {
+  const location = useLocation()
+  const path = location.pathname
+
   const primeraPregunta = test.preguntas[0]
+
+  const user_id = getUserAuth().userId
+
+  function handleIniciarExamen(pregunta_ejecucion_actual_id) {
+    setExamenActual(prev => ({
+      ...prev,
+      fin_examen: null,
+      pregunta_actual: {
+        ...primeraPregunta,
+        respuesta_id: null,
+        inicio: Date.now(),
+        pregunta_ejecucion_actual_id: pregunta_ejecucion_actual_id,
+      },
+      preguntas_resueltas: [],
+      preguntas: test.preguntas,
+    }))
+    onInitExamen?.()
+  }
+
+  useEffect(() => {
+    function onInitExamen({ ejecucionesExamen }) {
+      const ejecucion_examen = ejecucionesExamen.find(
+        ejecucion => ejecucion.alumno_id == user_id
+      )
+      handleIniciarExamen(ejecucion_examen?.pregunta_ejecucion_actual_id)
+    }
+
+    socket.on('init-examen', onInitExamen)
+
+    return () => {
+      socket.off('init-examen', onInitExamen)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <div className='flex flex-col gap-2 text-center'>
@@ -22,26 +62,16 @@ const InicioExamen = ({ test, setExamenActual, onInitExamen }) => {
           </p>
 
           <div className='mt-8 animate-fade-up animate-delay-[1500ms] animate-ease-in-out'>
-            <ButtonPrimary
-              className='animate-bounce animate-ease-in-out'
-              onClick={() => {
-                setExamenActual(prev => ({
-                  ...prev,
-                  fin_examen: null,
-                  pregunta_actual: {
-                    ...primeraPregunta,
-                    respuesta_id: null,
-                    inicio: Date.now(),
-                  },
-                  preguntas_resueltas: [],
-                  preguntas: test.preguntas,
-                }))
-                onInitExamen?.()
-              }}
-            >
-              <FaHourglassStart />
-              Iniciar Examen
-            </ButtonPrimary>
+            {(test.tipo_examen === tiposExamen.Async ||
+              path.includes('testear-examen')) && (
+              <ButtonPrimary
+                className='animate-bounce animate-ease-in-out'
+                onClick={handleIniciarExamen}
+              >
+                <FaHourglassStart />
+                Iniciar Examen
+              </ButtonPrimary>
+            )}
           </div>
         </div>
         <div className='col-span-3'>

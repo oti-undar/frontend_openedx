@@ -47,7 +47,7 @@ Counter.defaultProps = {
 
 Counter.propTypes = {
   pregunta: PropTypes.object.isRequired,
-  onComplete: PropTypes.func.isRequired,
+  onComplete: PropTypes.func,
   size: PropTypes.number,
   className: PropTypes.string,
   classNameNumber: PropTypes.string,

@@ -2,13 +2,16 @@ import { Button, Form, Input, Upload } from 'antd'
 import React from 'react'
 import { FaCircleXmark } from 'react-icons/fa6'
 import PropTypes from 'prop-types'
-import { beforeUpload, normFile } from '../../../../utils/upload'
+import { beforeUpload, normFile, toUploadFile } from '../../../../utils/upload'
 
-const FormCrearRespuestas = ({ pregunta, form }) => (
+const FormCrearRespuestas = ({ pregunta, setArchivos, archivo_pregunta }) => (
   <Form.List name={[pregunta, 'respuestas']}>
     {(respuestas, { add, remove }) => (
       <div className='flex flex-col'>
         {respuestas.map(respuesta => {
+          const archivo_respuesta = archivo_pregunta?.respuestas?.find(
+            respuesta_archivo => respuesta_archivo.name === respuesta.name
+          )
           return (
             <div
               className={`flex gap-2 items-center justify-center ${
@@ -57,23 +60,78 @@ const FormCrearRespuestas = ({ pregunta, form }) => (
                 noStyle
               >
                 <Upload
-                  className='mb-6 upload-xs'
+                  className='mb-6 upload-xs max-w-[115px]'
                   name='files'
-                  beforeUpload={beforeUpload}
+                  fileList={
+                    archivo_respuesta?.principal
+                      ? [toUploadFile(archivo_respuesta?.principal)]
+                      : []
+                  }
+                  beforeUpload={file => {
+                    setArchivos(prev => ({
+                      ...prev,
+                      preguntas: archivo_pregunta
+                        ? prev.preguntas.map(pregunta_aux =>
+                            pregunta_aux.name === pregunta
+                              ? {
+                                  ...pregunta_aux,
+                                  respuestas: archivo_respuesta
+                                    ? pregunta_aux?.respuestas?.map(
+                                        respuesta_aux =>
+                                          respuesta_aux.name === respuesta.name
+                                            ? {
+                                                ...respuesta_aux,
+                                                principal: file,
+                                              }
+                                            : respuesta_aux
+                                      )
+                                    : [
+                                        ...(pregunta_aux?.respuestas ?? []),
+                                        {
+                                          name: respuesta.name,
+                                          principal: file,
+                                        },
+                                      ],
+                                }
+                              : pregunta_aux
+                          )
+                        : [
+                            ...prev.preguntas,
+                            {
+                              name: pregunta,
+                              principal: null,
+                              respuestas: [
+                                {
+                                  name: respuesta.name,
+                                  principal: file,
+                                },
+                              ],
+                            },
+                          ],
+                    }))
+                    return beforeUpload(file)
+                  }}
                   accept='.jpg, .jpeg, .png, .webp, .gif, .mp4, .mkv, .webm, .ogg, .oga, .mp3, .wav, .aac'
                   maxCount={1}
-                  onChange={({ fileList }) => {
-                    form.setFieldValue(
-                      [
-                        'preguntas',
-                        pregunta,
-                        'respuestas',
-                        respuesta.name,
-                        'archivo',
-                      ],
-                      fileList[0]
-                    )
-                  }}
+                  onRemove={() =>
+                    setArchivos(prev => ({
+                      ...prev,
+                      preguntas: prev.preguntas.map(pregunta_aux =>
+                        pregunta_aux.name === pregunta
+                          ? {
+                              ...pregunta_aux,
+                              respuestas: pregunta_aux?.respuestas?.map(
+                                respuesta_aux =>
+                                  respuesta_aux.name === respuesta.name
+                                    ? { ...respuesta_aux, principal: null }
+                                    : respuesta_aux
+                              ),
+                            }
+                          : pregunta_aux
+                      ),
+                    }))
+                  }
+                  listType='picture'
                 >
                   <Button
                     icon={'+'}
@@ -112,7 +170,8 @@ FormCrearRespuestas.defaultProps = {}
 
 FormCrearRespuestas.propTypes = {
   pregunta: PropTypes.number.isRequired,
-  form: PropTypes.object.isRequired,
+  setArchivos: PropTypes.func.isRequired,
+  archivo_pregunta: PropTypes.object.isRequired,
 }
 
 export default FormCrearRespuestas
