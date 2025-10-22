@@ -4,8 +4,14 @@ import { beforeUpload, normFile, toUploadFile } from '../../../../utils/upload'
 import { FaCircleXmark, FaImage } from 'react-icons/fa6'
 import FormCrearRespuestas from './form-crear-respuestas'
 import PropTypes from 'prop-types'
+import { tiposExamen } from '../../../../lib/globales'
 
-const FormCrearPreguntas = ({ rubrica, archivos, setArchivos }) => {
+const FormCrearPreguntas = ({
+  rubrica,
+  archivos,
+  setArchivos,
+  tipo_examen,
+}) => {
   return (
     <Form.List name='preguntas'>
       {(preguntas, { add, remove }) => (
@@ -99,23 +105,28 @@ const FormCrearPreguntas = ({ rubrica, archivos, setArchivos }) => {
                           max={100}
                         />
                       </Form.Item>
-                      <div className='font-semibold text-nowrap'>
-                        Duración (minutos):
-                      </div>
-                      <Form.Item
-                        className='mb-0'
-                        hasFeedback
-                        name={[pregunta.name, 'duracion']}
-                      >
-                        <InputNumber
-                          type='number'
-                          className='w-24'
-                          controls={false}
-                          placeholder='Indefinido'
-                          min={0}
-                        />
-                      </Form.Item>
+                      {tipo_examen !== tiposExamen.Solo && (
+                        <>
+                          <div className='font-semibold text-nowrap'>
+                            Duración (minutos):
+                          </div>
+                          <Form.Item
+                            className='mb-0'
+                            hasFeedback
+                            name={[pregunta.name, 'duracion']}
+                          >
+                            <InputNumber
+                              type='number'
+                              className='w-24'
+                              controls={false}
+                              placeholder='Indefinido'
+                              min={0}
+                            />
+                          </Form.Item>
+                        </>
+                      )}
                     </div>
+
                     <Form.Item
                       name={[pregunta.name, 'archivo']}
                       valuePropName='file'
@@ -180,6 +191,7 @@ const FormCrearPreguntas = ({ rubrica, archivos, setArchivos }) => {
                     pregunta={pregunta.name}
                     setArchivos={setArchivos}
                     archivo_pregunta={archivo_pregunta}
+                    tipo_examen={tipo_examen}
                   />
                 </div>
               </div>
@@ -190,7 +202,14 @@ const FormCrearPreguntas = ({ rubrica, archivos, setArchivos }) => {
             className='font-bold text-slate-500 w-full py-3'
             type='dashed'
             size='large'
-            onClick={() => add({ respuestas: [{}, {}, {}, {}] })}
+            onClick={() =>
+              add({
+                respuestas:
+                  tipo_examen === tiposExamen.Solo
+                    ? [{ respuesta: 'SI' }, { respuesta: 'NO' }]
+                    : [{}, {}, {}, {}],
+              })
+            }
             block
           >
             + Agregar Pregunta
@@ -207,6 +226,7 @@ FormCrearPreguntas.propTypes = {
   rubrica: PropTypes.object,
   archivos: PropTypes.object,
   setArchivos: PropTypes.func.isRequired,
+  tipo_examen: PropTypes.string.isRequired,
 }
 
 export default FormCrearPreguntas

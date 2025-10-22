@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect } from 'react'
+import React, { forwardRef, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import useColumnsExamenes from './columns-examenes'
 import TableAgGrid from '../../../../components/tables/table-agGrid'
@@ -11,6 +11,7 @@ const TableExamenes = forwardRef(
   ({ className, setExamenSeleccionado }, ref) => {
     const user_id = getUserAuth().userId
 
+    const [reFetch, setReFetch] = useState(0)
     const { response: data, isloading, fetchData } = useFetchData()
     useEffect(() => {
       fetchData({
@@ -20,14 +21,14 @@ const TableExamenes = forwardRef(
         })}`,
       })
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [reFetch])
 
     return (
       <TableAgGrid
         className={className}
         ref={ref}
         rowData={data}
-        columnDefs={useColumnsExamenes({ setExamenSeleccionado })}
+        columnDefs={useColumnsExamenes({ setExamenSeleccionado, setReFetch })}
         loading={isloading}
       />
     )

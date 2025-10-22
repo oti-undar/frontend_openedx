@@ -2,6 +2,9 @@ import { Tooltip } from 'antd'
 import PropTypes from 'prop-types'
 import React from 'react'
 import { GrRadialSelected } from 'react-icons/gr'
+import { SiTestcafe } from 'react-icons/si'
+import { tiposExamen } from '../../../../lib/globales'
+import { useNavigate } from 'react-router'
 
 export function getTotalObtenido({ preguntas_resueltas }) {
   return (
@@ -28,6 +31,7 @@ const useColumnsAlumnosInscritos = ({
   examenSeleccionado,
   setAlumnoSeleccionado,
 }) => {
+  const navigate = useNavigate()
   const isAnalitica = !!examenSeleccionado?.rubrica_analitica
   const total_puntos =
     examenSeleccionado?.preguntas?.reduce(
@@ -129,6 +133,20 @@ const useColumnsAlumnosInscritos = ({
               className='text-yellow-500 hover:scale-125 transition-all cursor-pointer'
             />
           </Tooltip>
+          {examenSeleccionado.tipo_examen === tiposExamen.Solo &&
+            !data.fin_examen && (
+              <Tooltip title='Calificar (Solo Docente)'>
+                <SiTestcafe
+                  onClick={() => {
+                    navigate(
+                      `/realizar-examen/${examenSeleccionado.id}?user_id=${data.user.id}`
+                    )
+                  }}
+                  size={15}
+                  className='text-emerald-500 hover:scale-125 transition-all cursor-pointer'
+                />
+              </Tooltip>
+            )}
         </div>
       ),
       minWidth: 110,
