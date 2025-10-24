@@ -1,17 +1,15 @@
 import { message, Popover, Tooltip } from 'antd'
 import PropTypes from 'prop-types'
 import React from 'react'
-import { FaFlag, FaShareAlt } from 'react-icons/fa'
+import { FaShareAlt } from 'react-icons/fa'
 import { GrRadialSelected } from 'react-icons/gr'
+import { PiExportBold } from 'react-icons/pi'
 import { API_URL, states, tiposExamen } from '../../../../lib/globales'
 import { useNavigate } from 'react-router'
 import { IoDocument } from 'react-icons/io5'
-import useFetchData from '../../../../hooks/useFetchData'
 
-const useColumnsExamenes = ({ setExamenSeleccionado, setReFetch }) => {
+const useColumnsExamenes = ({ setExamenSeleccionado }) => {
   const navigate = useNavigate()
-
-  const { fetchData } = useFetchData()
 
   return [
     {
@@ -58,6 +56,12 @@ const useColumnsExamenes = ({ setExamenSeleccionado, setReFetch }) => {
       cellRenderer: ({ data }) => {
         return (
           <div className='flex gap-2 items-center h-full'>
+            {/* <Tooltip title='Exportar'>
+              <PiExportBold
+                size={15}
+                className='text-sky-500 hover:scale-125 transition-all cursor-pointer'
+              />
+            </Tooltip> */}
             <Tooltip title='Seleccionar'>
               <GrRadialSelected
                 onClick={() => setExamenSeleccionado(data)}
@@ -101,32 +105,6 @@ const useColumnsExamenes = ({ setExamenSeleccionado, setReFetch }) => {
                   />
                 </Tooltip>
               )}
-            {data.state.name === states.Disponible && (
-              <Tooltip title='Finalizar Examen'>
-                <FaFlag
-                  onClick={() => {
-                    fetchData({
-                      method: 'POST',
-                      url: `${API_URL()}/examen/${data.id}`,
-                      data: {
-                        state: {
-                          connect: {
-                            name: states.Finalizado,
-                          },
-                        },
-                        final_examen: new Date(),
-                      },
-                      msgSuccess: 'Examen finalizado correctamente',
-                      onSuccess: () => {
-                        setReFetch(prev => prev + 1)
-                      },
-                    })
-                  }}
-                  size={15}
-                  className='text-rose-500 hover:scale-125 transition-all cursor-pointer'
-                />
-              </Tooltip>
-            )}
           </div>
         )
       },
@@ -138,7 +116,6 @@ useColumnsExamenes.defaultProps = {}
 
 useColumnsExamenes.propTypes = {
   setExamenSeleccionado: PropTypes.func,
-  setReFetch: PropTypes.func,
 }
 
 export default useColumnsExamenes

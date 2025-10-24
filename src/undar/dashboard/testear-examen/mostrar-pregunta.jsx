@@ -112,8 +112,7 @@ const MostrarPregunta = ({
             </h2>
           </div>
           {(examenActual?.tipo_examen === tiposExamen.Async ||
-            path.includes('testear-examen') ||
-            examenActual?.tipo_examen === tiposExamen.Solo) &&
+            path.includes('testear-examen')) &&
             (preguntas_no_resueltas.length ? (
               <ButtonPrimary
                 onClick={handleSiguientePregunta}

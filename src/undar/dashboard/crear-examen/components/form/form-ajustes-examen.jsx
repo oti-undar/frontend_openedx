@@ -5,10 +5,8 @@ import { FaImage } from 'react-icons/fa6'
 import FormInicioExamen from './form-inicio-examen'
 import PropTypes from 'prop-types'
 import FormFinalExamen from './form-final-examen'
-import { tiposExamen } from '../../../../lib/globales'
 
 const FormAjustesExamen = ({ form, examen, archivos, setArchivos }) => {
-  const tipo_examen = Form.useWatch('tipo_examen', form)
   const [fechaInicio, setFechaInicio] = useState(null)
   return (
     <div className='grid grid-cols-2 gap-4'>
@@ -29,20 +27,16 @@ const FormAjustesExamen = ({ form, examen, archivos, setArchivos }) => {
             />
           </Form.Item>
         </div>
-        {tipo_examen !== tiposExamen.Solo && (
-          <>
-            <FormInicioExamen
-              form={form}
-              onChangeFecha={setFechaInicio}
-              examen={examen}
-            />
-            <FormFinalExamen
-              form={form}
-              inicio_examen={fechaInicio}
-              examen={examen}
-            />
-          </>
-        )}
+        <FormInicioExamen
+          form={form}
+          onChangeFecha={setFechaInicio}
+          examen={examen}
+        />
+        <FormFinalExamen
+          form={form}
+          inicio_examen={fechaInicio}
+          examen={examen}
+        />
       </div>
       <div className='col-span-1'>
         <Form.Item

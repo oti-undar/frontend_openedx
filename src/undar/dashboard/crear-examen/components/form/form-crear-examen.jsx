@@ -74,10 +74,7 @@ const FormCrearExamen = ({ examen }) => {
       ...values,
       rubrica_holistica_id: values.rubrica_holistica_id?.id,
       rubrica_analitica_id: values.rubrica_analitica_id?.id,
-      state_id:
-        values.tipo_examen === tiposExamen.Solo
-          ? estados.find(state => state.name === states.Disponible).id
-          : estados.find(state => state.name === states.Activo).id,
+      state_id: estados.find(state => state.name === states.Activo).id,
       user_id,
     }
 
@@ -216,32 +213,6 @@ const FormCrearExamen = ({ examen }) => {
     }
   }, [examen, form])
 
-  const tipo_examen = Form.useWatch('tipo_examen', form)
-
-  useEffect(() => {
-    const preguntas = form.getFieldValue('preguntas')
-    form.setFieldsValue({
-      preguntas: preguntas?.map(pregunta => {
-        return {
-          ...pregunta,
-          respuestas:
-            tipo_examen === tiposExamen.Solo
-              ? [
-                  {
-                    respuesta: 'SI',
-                  },
-                  {
-                    respuesta: 'NO',
-                  },
-                ]
-              : [{}, {}, {}, {}],
-        }
-      }),
-    })
-    form.setFieldValue('inicio_examen', undefined)
-    form.setFieldValue('final_examen', undefined)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tipo_examen])
   return (
     <FormBase
       form={form}
@@ -257,6 +228,7 @@ const FormCrearExamen = ({ examen }) => {
           <Form.Item hasFeedback name='tipo_examen' className='w-full'>
             <Select
               className='min-w-96'
+              showSearch
               size='large'
               placeholder='Tipo de Examen (Independiente por defecto)'
               options={Object.values(tiposExamen).map(tipo => ({
@@ -264,9 +236,7 @@ const FormCrearExamen = ({ examen }) => {
                 label:
                   tipo === tiposExamen.Sync
                     ? 'Junto con los alumnos'
-                    : tipo === tiposExamen.Async
-                    ? 'Cada alumno independiente'
-                    : 'Solo para el docente',
+                    : 'Cada alumno independiente',
               }))}
             />
           </Form.Item>
@@ -339,7 +309,6 @@ const FormCrearExamen = ({ examen }) => {
             rubrica={rubrica}
             archivos={archivos}
             setArchivos={setArchivos}
-            tipo_examen={tipo_examen}
           />
         </div>
       </div>

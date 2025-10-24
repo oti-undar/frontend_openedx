@@ -13,12 +13,9 @@ import { useFinalizarExamen } from './hooks/finalizar-examen'
 import { useNavigate, useParams } from 'react-router'
 import { useFinalizarPreguntaExamenRespuesta } from './hooks/finalizar-pregunta-examen-respuesta'
 import { socket } from '../../utils/socket'
-import { useSearchParams } from 'react-router-dom'
 
 const RealizarExamen = () => {
   const { id: examen_id } = useParams()
-  const [searchParams] = useSearchParams()
-  const user_id_alumno = searchParams.get('user_id')
   const navigate = useNavigate()
 
   const user_id = getUserAuth().userId
@@ -34,7 +31,7 @@ const RealizarExamen = () => {
   })
 
   const { getEjecucionExamen, isloading: isloadingEjecucion } =
-    useGetEjecucionExamen({ user_id_alumno })
+    useGetEjecucionExamen()
 
   useEffect(() => {
     fetchData({
@@ -46,7 +43,6 @@ const RealizarExamen = () => {
             usuarios: {
               some: {
                 user_id,
-                is_instructor: user_id_alumno ? true : false,
               },
             },
           },
@@ -181,10 +177,7 @@ const RealizarExamen = () => {
               })
           }}
           onFinalizarExamen={() => {
-            if (
-              examenActual.tipo_examen === tiposExamen.Async ||
-              examenActual.tipo_examen === tiposExamen.Solo
-            )
+            if (examenActual.tipo_examen === tiposExamen.Async)
               finalizarExamen({
                 ejecucion_examen_id: examenActual.ejecucion_examen_id,
                 onSuccess: () => navigate('/examen-terminado'),
