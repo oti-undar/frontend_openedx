@@ -23,4 +23,5 @@ export const states = {
 export const tiposExamen = {
   Sync: 'Sync',
   Async: 'Async',
+  Solo: 'Solo',
 }
