@@ -8,13 +8,14 @@ import Loader from '../../components/layout/components/loader'
 import useGetExamenTiempoReal from './hooks/use-get-examen-tiempo-real'
 import Counter from '../testear-examen/components/counter/counter'
 import useUpdateExamen from './hooks/use-update-examen'
-import { socket } from '../../utils/socket'
 import { getUserAuth } from '../../utils/api-openEdx'
 import { states } from '../../lib/globales'
+import { useSocket } from '../../hooks/use-socket'
 
 const RankingTiempoReal = () => {
   const { id: examen_id } = useParams()
   const navigate = useNavigate()
+  const socket = useSocket()
 
   const user_id = getUserAuth().userId
 
@@ -71,10 +72,14 @@ const RankingTiempoReal = () => {
   })
 
   useEffect(() => {
+    if (!socket) return
+
     if (examen_id) socket.emit('join_room', examen_id)
-  }, [examen_id])
+  }, [examen_id, socket])
 
   useEffect(() => {
+    if (!socket) return
+
     function onInitExamen() {
       updateExamen({
         onSuccess: setExamenActual,
@@ -101,7 +106,7 @@ const RankingTiempoReal = () => {
       socket.off('finalizar-examen', onFinalizarExamen)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [socket])
 
   if (!examen_id)
     return (

@@ -6,9 +6,9 @@ import { FaCircleChevronRight } from 'react-icons/fa6'
 import Counter from './components/counter/counter'
 import Pregunta from './pregunta'
 import { tiposExamen } from '../../lib/globales'
-import { socket } from '../../utils/socket'
 import { getUserAuth } from '../../utils/api-openEdx'
 import { useLocation } from 'react-router'
+import { useSocket } from '../../hooks/use-socket'
 
 const MostrarPregunta = ({
   pregunta,
@@ -20,6 +20,7 @@ const MostrarPregunta = ({
 }) => {
   const location = useLocation()
   const path = location.pathname
+  const socket = useSocket()
 
   const preguntas_no_resueltas = examenActual.preguntas.filter(
     pregunta_aux =>
@@ -77,6 +78,8 @@ const MostrarPregunta = ({
   }
 
   useEffect(() => {
+    if (!socket) return
+
     function onSiguientePregunta({ ejecucionesExamen }) {
       const ejecucion_examen = ejecucionesExamen.find(
         ejecucion => ejecucion?.alumno_id == user_id
@@ -96,7 +99,7 @@ const MostrarPregunta = ({
       socket.off('finalizar-examen', onFinalizarExamen)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [socket])
 
   return (
     <>

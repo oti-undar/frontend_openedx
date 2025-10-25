@@ -3,13 +3,14 @@ import ButtonPrimary from '../../components/buttons/button-primary.jsx'
 import { FaHourglassStart } from 'react-icons/fa'
 import PropTypes from 'prop-types'
 import { API_URL, tiposExamen } from '../../lib/globales.js'
-import { socket } from '../../utils/socket.js'
 import { getUserAuth } from '../../utils/api-openEdx.js'
 import { useLocation } from 'react-router'
+import { useSocket } from '../../hooks/use-socket.js'
 
 const InicioExamen = ({ test, setExamenActual, onInitExamen }) => {
   const location = useLocation()
   const path = location.pathname
+  const socket = useSocket()
 
   const primeraPregunta = test.preguntas[0]
 
@@ -32,6 +33,8 @@ const InicioExamen = ({ test, setExamenActual, onInitExamen }) => {
   }
 
   useEffect(() => {
+    if (!socket) return
+
     function onInitExamen({ ejecucionesExamen }) {
       const ejecucion_examen = ejecucionesExamen.find(
         ejecucion => ejecucion.alumno_id == user_id
@@ -45,7 +48,7 @@ const InicioExamen = ({ test, setExamenActual, onInitExamen }) => {
       socket.off('init-examen', onInitExamen)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [socket])
 
   return (
     <div className='flex flex-col gap-2 text-center'>

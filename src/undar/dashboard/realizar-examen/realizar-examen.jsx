@@ -12,14 +12,15 @@ import { useFinalizarPreguntaExamen } from './hooks/finalizar-pregunta-examen'
 import { useFinalizarExamen } from './hooks/finalizar-examen'
 import { useNavigate, useParams } from 'react-router'
 import { useFinalizarPreguntaExamenRespuesta } from './hooks/finalizar-pregunta-examen-respuesta'
-import { socket } from '../../utils/socket'
 import { useSearchParams } from 'react-router-dom'
+import { useSocket } from '../../hooks/use-socket'
 
 const RealizarExamen = () => {
   const { id: examen_id } = useParams()
   const [searchParams] = useSearchParams()
   const user_id_alumno = searchParams.get('user_id')
   const navigate = useNavigate()
+  const socket = useSocket()
 
   const user_id = getUserAuth().userId
 
@@ -92,8 +93,10 @@ const RealizarExamen = () => {
     useFinalizarExamen()
 
   useEffect(() => {
+    if (!socket) return
+
     if (examen_id) socket.emit('join_room', examen_id)
-  }, [examen_id])
+  }, [examen_id, socket])
 
   if (!examen_id)
     return (

@@ -1,16 +1,14 @@
 import React, { useEffect } from 'react'
 import { Outlet } from 'react-router'
-import { socket } from '../../utils/socket'
+import { useSocket } from '../../hooks/use-socket'
 
 const LayoutGlobal = () => {
+  const socket = useSocket()
   useEffect(() => {
-    function onConnect() {
-      console.log('Connected')
-    }
+    if (!socket) return
 
-    function onDisconnect() {
-      console.log('Disconnected')
-    }
+    const onConnect = () => console.log('Connected')
+    const onDisconnect = () => console.log('Disconnected')
 
     socket.on('connect', onConnect)
     socket.on('disconnect', onDisconnect)
@@ -19,7 +17,7 @@ const LayoutGlobal = () => {
       socket.off('connect', onConnect)
       socket.off('disconnect', onDisconnect)
     }
-  }, [])
+  }, [socket])
 
   return <Outlet />
 }
