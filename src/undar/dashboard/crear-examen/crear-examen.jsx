@@ -1,11 +1,27 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import FormCrearExamen from './components/form/form-crear-examen'
+import { useGetExamen } from '../editar-examen/hooks/use-get-examen'
+import { useSearchParams } from 'react-router-dom'
+import Loader from '../../components/layout/components/loader'
 
-const CrearExamen = () => (
-  <div className='flex flex-col gap-4 h-full w-full'>
-    <FormCrearExamen />
-  </div>
-)
+const CrearExamen = () => {
+  const [searchParams] = useSearchParams()
+  const examen_id = searchParams.get('examen_id')
+
+  const { examen, isloading, getExamen } = useGetExamen({ activo: false })
+
+  useEffect(() => {
+    if (examen_id) getExamen({ examen_id })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [examen_id])
+
+  if (isloading) return <Loader />
+  return (
+    <div className='flex flex-col gap-4 h-full w-full'>
+      <FormCrearExamen examen={examen} creacion={true} />
+    </div>
+  )
+}
 
 CrearExamen.defaultProps = {}
 

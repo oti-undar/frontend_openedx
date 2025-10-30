@@ -7,6 +7,7 @@ import { API_URL, states, tiposExamen } from '../../../../lib/globales'
 import { useNavigate } from 'react-router'
 import { IoDocument } from 'react-icons/io5'
 import useFetchData from '../../../../hooks/useFetchData'
+import { FaCopy } from 'react-icons/fa6'
 
 const useColumnsExamenes = ({ setExamenSeleccionado, setReFetch }) => {
   const navigate = useNavigate()
@@ -53,7 +54,7 @@ const useColumnsExamenes = ({ setExamenSeleccionado, setReFetch }) => {
     },
     {
       headerName: 'Acciones',
-      minWidth: 110,
+      minWidth: 130,
       flex: 1,
       cellRenderer: ({ data }) => {
         return (
@@ -62,7 +63,14 @@ const useColumnsExamenes = ({ setExamenSeleccionado, setReFetch }) => {
               <GrRadialSelected
                 onClick={() => setExamenSeleccionado(data)}
                 size={15}
-                className='text-yellow-500 hover:scale-125 transition-all cursor-pointer'
+                className='text-yellow-500 hover:scale-125 transition-all cursor-pointer min-w-fit'
+              />
+            </Tooltip>
+            <Tooltip title='Duplicar'>
+              <FaCopy
+                onClick={() => navigate(`/crear-examen?examen_id=${data.id}`)}
+                size={15}
+                className='text-slate-500 hover:scale-125 transition-all cursor-pointer min-w-fit'
               />
             </Tooltip>
             {data?.state?.name === states.Disponible && (
@@ -85,7 +93,7 @@ const useColumnsExamenes = ({ setExamenSeleccionado, setReFetch }) => {
               >
                 <FaShareAlt
                   size={15}
-                  className='text-purple-500 hover:scale-125 transition-all cursor-pointer'
+                  className='text-purple-500 hover:scale-125 transition-all cursor-pointer min-w-fit'
                 />
               </Popover>
             )}
@@ -97,7 +105,7 @@ const useColumnsExamenes = ({ setExamenSeleccionado, setReFetch }) => {
                       navigate(`/ranking-tiempo-real/${data.id}`)
                     }}
                     size={15}
-                    className='text-emerald-500 hover:scale-125 transition-all cursor-pointer'
+                    className='text-emerald-500 hover:scale-125 transition-all cursor-pointer min-w-fit'
                   />
                 </Tooltip>
               )}
@@ -123,7 +131,7 @@ const useColumnsExamenes = ({ setExamenSeleccionado, setReFetch }) => {
                     })
                   }}
                   size={15}
-                  className='text-rose-500 hover:scale-125 transition-all cursor-pointer'
+                  className='text-rose-500 hover:scale-125 transition-all cursor-pointer min-w-fit'
                 />
               </Tooltip>
             )}

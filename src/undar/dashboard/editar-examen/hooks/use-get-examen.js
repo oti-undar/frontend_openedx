@@ -2,7 +2,7 @@ import useFetchData from '../../../hooks/useFetchData'
 import { API_URL } from '../../../lib/globales'
 import { getUserAuth } from '../../../utils/api-openEdx'
 
-export function useGetExamen() {
+export function useGetExamen({ activo = true } = {}) {
   const { response: examen, isloading, fetchData } = useFetchData()
   const user_id = getUserAuth().userId
 
@@ -11,7 +11,7 @@ export function useGetExamen() {
       method: 'GET',
       url: `${API_URL()}/examen/${examen_id}?filters=${encodeURIComponent(
         JSON.stringify({
-          state: { name: 'Activo' },
+          ...(activo ? { state: { name: 'Activo' } } : {}),
           curso: {
             usuarios: {
               some: {

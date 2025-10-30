@@ -1,5 +1,5 @@
 import { Form, Input, Select } from 'antd'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import FormBase from '../../../../components/form/form-base'
 import FormCrearPreguntas from './form-crear-preguntas'
 import FormAjustesExamen from './form-ajustes-examen'
@@ -17,7 +17,7 @@ import { getUserAuth } from '../../../../utils/api-openEdx'
 import PropTypes from 'prop-types'
 import { toUploadFile, urlToFile } from '../../../../utils/upload'
 
-const FormCrearExamen = ({ examen }) => {
+const FormCrearExamen = ({ examen, creacion = false }) => {
   const navigate = useNavigate()
   const [form] = Form.useForm()
 
@@ -72,6 +72,17 @@ const FormCrearExamen = ({ examen }) => {
   function handleFinish(values) {
     const data = {
       ...values,
+      id: undefined,
+      preguntas: values.preguntas.map(pregunta => ({
+        ...pregunta,
+        id: undefined,
+        examen_id: undefined,
+        respuestas: pregunta?.respuestas?.map(respuesta => ({
+          ...respuesta,
+          id: undefined,
+          pregunta_id: undefined,
+        })),
+      })),
       rubrica_holistica_id: values.rubrica_holistica_id?.id,
       rubrica_analitica_id: values.rubrica_analitica_id?.id,
       state_id:
@@ -83,17 +94,18 @@ const FormCrearExamen = ({ examen }) => {
 
     const formData = new FormData()
     appendFormDataRecursively(formData, data)
+    console.log('🚀 ~ file: form-crear-examen.jsx:86 ~ data:', data)
 
     fetchData({
-      method: examen ? 'PUT' : 'POST',
-      url: `${API_URL()}/examen${examen ? `/${examen?.id}` : ''}`,
+      method: creacion ? 'POST' : 'PUT',
+      url: `${API_URL()}/examen${creacion ? '' : `/${examen?.id}`}`,
       data: formData,
       headers: {
         'Content-Type': 'multipart/form-data',
       },
-      msgSuccess: examen
-        ? 'Examen editado correctamente'
-        : 'Examen creado correctamente',
+      msgSuccess: creacion
+        ? 'Examen creado correctamente'
+        : 'Examen editado correctamente',
       onSuccess: () => {
         form.resetFields()
         navigate('/examenes')
@@ -217,8 +229,13 @@ const FormCrearExamen = ({ examen }) => {
   }, [examen, form])
 
   const tipo_examen = Form.useWatch('tipo_examen', form)
+  const primera_vez_con_examen = useRef(true)
 
   useEffect(() => {
+    if (!tipo_examen) return
+    if (primera_vez_con_examen.current)
+      return (primera_vez_con_examen.current = false)
+
     const preguntas = form.getFieldValue('preguntas')
     form.setFieldsValue({
       preguntas: preguntas?.map(pregunta => {
@@ -242,6 +259,7 @@ const FormCrearExamen = ({ examen }) => {
     form.setFieldValue('final_examen', undefined)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tipo_examen])
+
   return (
     <FormBase
       form={form}
@@ -251,7 +269,7 @@ const FormCrearExamen = ({ examen }) => {
       <div className='flex justify-between items-center w-full'>
         <div className='flex gap-4 items-center'>
           <h1 className='text-4xl font-bold text-gray-700 h-fit text-nowrap mb-7'>
-            {examen ? 'Editar' : 'Crear'} Examen
+            {creacion ? 'Crear' : 'Editar'} Examen
           </h1>
           <SelectCurso />
           <Form.Item hasFeedback name='tipo_examen' className='w-full'>
@@ -275,12 +293,12 @@ const FormCrearExamen = ({ examen }) => {
           <ButtonPrimary size='large' type='submit' disabled={isloading}>
             {isloading ? (
               <LuLoaderCircle className='animate-spin' />
-            ) : examen ? (
-              <FaEdit />
-            ) : (
+            ) : creacion ? (
               <FaPlusCircle />
+            ) : (
+              <FaEdit />
             )}
-            {examen ? 'Editar' : 'Crear'} Examen
+            {creacion ? 'Crear' : 'Editar'} Examen
           </ButtonPrimary>
         </div>
       </div>
@@ -351,6 +369,7 @@ FormCrearExamen.defaultProps = {}
 
 FormCrearExamen.propTypes = {
   examen: PropTypes.object,
+  creacion: PropTypes.bool,
 }
 
 export default FormCrearExamen
