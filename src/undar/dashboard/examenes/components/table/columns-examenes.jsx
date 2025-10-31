@@ -83,11 +83,11 @@ const useColumnsExamenes = ({ setExamenSeleccionado, setReFetch }) => {
                       className='font-semibold text-sky-500 cursor-pointer'
                       onClick={() => {
                         navigator.clipboard.writeText(
-                          `${window.location.origin}/realizar-examen/${data.id}`
+                          `${window.location.origin}/examen/realizar-examen/${data.id}`
                         )
                         message.success('URL copiada al portapapeles')
                       }}
-                    >{`${window.location.origin}/realizar-examen/${data.id}`}</p>
+                    >{`${window.location.origin}/examen/realizar-examen/${data.id}`}</p>
                   </div>
                 }
               >

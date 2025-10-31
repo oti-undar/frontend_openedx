@@ -33,7 +33,7 @@ const Sidenav = () => {
   const { actualizarData, isloading } = useActualizarData()
 
   return (
-    <div className='h-full flex flex-col justify-center items-center gap-20 p-8 pr-2 relative animate-fade-right animate-ease-in-out'>
+    <div className='h-full flex flex-col justify-between items-center gap-20 p-8 pr-2 relative animate-fade-right animate-ease-in-out'>
       <div className='absolute top-8 flex flex-col items-center gap-4'>
         <img src={logo} width={100} alt='Logo' />
         <div onClick={() => navigate('/crear-examen')} className='mt-6'>
@@ -58,6 +58,7 @@ const Sidenav = () => {
           {isloading ? 'Sincronizando...' : 'Sincronizar'}
         </ButtonPrimary>
       </div>
+      <div className='mt-8'></div>
       <div className='flex flex-col gap-2'>
         {links.map(link => (
           <ButtonSidenav key={link.title} path={link.path}>
@@ -65,6 +66,15 @@ const Sidenav = () => {
             {link.title}
           </ButtonSidenav>
         ))}
+      </div>
+      <div className='flex flex-col gap-2'>
+        <ButtonPrimary
+          variant='danger'
+          size='small'
+          onClick={() => (window.location.href = '/')}
+        >
+          Volver a Open EDX
+        </ButtonPrimary>
       </div>
     </div>
   )
