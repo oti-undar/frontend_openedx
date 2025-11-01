@@ -27,10 +27,10 @@ const RealizarExamen = () => {
   const { response: test, isloading, fetchData } = useFetchData()
 
   const [examenActual, setExamenActual] = useState({
+    preguntas: test?.preguntas,
     fin_examen: null,
     pregunta_actual: null,
     preguntas_resueltas: [],
-    preguntas: test?.preguntas,
     ejecucion_examen_id: null,
   })
 
@@ -57,6 +57,7 @@ const RealizarExamen = () => {
         setExamenActual(prev => ({
           ...prev,
           preguntas: data.preguntas,
+          tipo_examen: data.tipo_examen,
         }))
       },
     })

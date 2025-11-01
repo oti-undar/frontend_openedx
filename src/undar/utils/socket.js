@@ -7,7 +7,6 @@ function waitForAPIUrl(retries = 20, delay = 50) {
   return new Promise((resolve, reject) => {
     let attempts = 0
     const check = () => {
-      console.log('🚀 ~ file: socket.js:14 ~ attempts:', attempts)
       const url = API_URL()
       if (url) resolve(url)
       else {

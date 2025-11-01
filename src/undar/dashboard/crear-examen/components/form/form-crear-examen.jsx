@@ -94,7 +94,6 @@ const FormCrearExamen = ({ examen, creacion = false }) => {
 
     const formData = new FormData()
     appendFormDataRecursively(formData, data)
-    console.log('🚀 ~ file: form-crear-examen.jsx:86 ~ data:', data)
 
     fetchData({
       method: creacion ? 'POST' : 'PUT',
