@@ -54,6 +54,8 @@ const useColumnsAlumnosInscritos = ({
               .map(indic => indic.id)
               .includes(indicador.id)
           )
+          if (!preguntas_del_indicador.length)
+            return 'Ninguna pregunta pertenece a este indicador'
           const total_puntos_local =
             examenSeleccionado?.preguntas
               .filter(item =>

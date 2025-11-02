@@ -34,14 +34,14 @@ const useColumnsDetallesAlumnoExamen = ({ examenSeleccionado }) => [
     field: 'pregunta',
     minWidth: 110,
     filter: 'agNumberColumnFilter',
-    valueFormatter: ({ value }) => {
+    valueFormatter: ({ value, data }) => {
       const total_puntos = examenSeleccionado.preguntas.reduce(
         (acc, item) => acc + item.puntos,
         0
       )
 
       const puntaje = (value.puntos * 20) / total_puntos
-      const correcta = value.respuesta && value.respuesta?.correcta
+      const correcta = data.respuesta && data.respuesta?.correcta
 
       return correcta ? puntaje.toFixed(0) : 0
     },
