@@ -11,8 +11,6 @@ const config = createConfig('webpack-prod', {
       fs: false,
       constants: false,
     },
-    extensions: ['.js', '.jsx', '.json'], // asegúrate de incluir .jsx
-    fullySpecified: false, // <--- agrega esto
   },
 });
 
