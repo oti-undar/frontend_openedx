@@ -62,6 +62,7 @@ const Examenes = () => {
             ref={alumnosInscritosRef}
             examenSeleccionado={examenSeleccionado}
             setAlumnoSeleccionado={setAlumnoSeleccionado}
+            alumnoSeleccionado={alumnoSeleccionado}
           />
         </TableTitle>
         <TableTitle

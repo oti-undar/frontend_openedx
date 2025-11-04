@@ -26,36 +26,67 @@ const FormCrearRespuestas = ({
                 }`}
                 key={respuesta.key}
               >
-                <div className='font-semibold mb-6'>{respuesta.name + 1}.</div>
-                <Form.Item
-                  hasFeedback
-                  name={[respuesta.name, 'respuesta']}
-                  className='w-full'
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Por favor ingrese la alternativa',
-                    },
-                  ]}
-                >
-                  <Input
-                    className={`${
-                      respuesta.name === 0 ? 'shadow-lg shadow-lime-500/30' : ''
-                    }`}
-                    allowClear
-                    placeholder={
-                      respuesta.name === 0
-                        ? 'Respuesta correcta'
-                        : `Ingrese una alternativa`
-                    }
-                    readOnly={tipo_examen === tiposExamen.Solo}
-                    variant={
-                      tipo_examen === tiposExamen.Solo
-                        ? 'borderless'
-                        : undefined
-                    }
-                  />
-                </Form.Item>
+                <div className='flex flex-col w-full'>
+                  <div className='flex items-center gap-2'>
+                    <div className='font-semibold mb-6'>
+                      {respuesta.name + 1}.
+                    </div>
+                    <Form.Item
+                      hasFeedback
+                      name={[respuesta.name, 'respuesta']}
+                      className='w-full'
+                      rules={[
+                        {
+                          required: true,
+                          message: 'Por favor ingrese la alternativa',
+                        },
+                      ]}
+                    >
+                      <Input
+                        className={`${
+                          respuesta.name === 0
+                            ? 'shadow-lg shadow-lime-500/30'
+                            : ''
+                        }`}
+                        allowClear
+                        placeholder={
+                          respuesta.name === 0
+                            ? 'Respuesta correcta'
+                            : `Ingrese una alternativa`
+                        }
+                        readOnly={tipo_examen === tiposExamen.Solo}
+                        variant={
+                          tipo_examen === tiposExamen.Solo
+                            ? 'borderless'
+                            : undefined
+                        }
+                      />
+                    </Form.Item>
+                  </div>
+                  {tipo_examen !== tiposExamen.Solo && (
+                    <Form.Item
+                      hasFeedback
+                      name={[respuesta.name, 'retroalimentacion']}
+                      className='w-full'
+                    >
+                      <Input
+                        className={`${
+                          respuesta.name === 0
+                            ? 'shadow-lg shadow-lime-500/30'
+                            : ''
+                        }`}
+                        allowClear
+                        placeholder='Retroalimentación (opcional)'
+                        readOnly={tipo_examen === tiposExamen.Solo}
+                        variant={
+                          tipo_examen === tiposExamen.Solo
+                            ? 'borderless'
+                            : undefined
+                        }
+                      />
+                    </Form.Item>
+                  )}
+                </div>
                 <style>
                   {`
                   .upload-xs .ant-upload-list-item-name {

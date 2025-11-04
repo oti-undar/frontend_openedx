@@ -5,6 +5,7 @@ import { GrRadialSelected } from 'react-icons/gr'
 import { SiTestcafe } from 'react-icons/si'
 import { tiposExamen } from '../../../../lib/globales'
 import { useNavigate } from 'react-router'
+import { FaFilePdf } from 'react-icons/fa6'
 
 export function getTotalObtenido({ preguntas_resueltas }) {
   return (
@@ -30,6 +31,7 @@ export function getNivelPorNotaEnRango({ nota, niveles }) {
 const useColumnsAlumnosInscritos = ({
   examenSeleccionado,
   setAlumnoSeleccionado,
+  setOpen,
 }) => {
   const navigate = useNavigate()
   const isAnalitica = !!examenSeleccionado?.rubrica_analitica
@@ -135,6 +137,16 @@ const useColumnsAlumnosInscritos = ({
               className='text-yellow-500 hover:scale-125 transition-all cursor-pointer'
             />
           </Tooltip>
+          <Tooltip title='Reporte'>
+            <FaFilePdf
+              onClick={() => {
+                setAlumnoSeleccionado(data)
+                setOpen(true)
+              }}
+              size={15}
+              className='text-rose-700 hover:scale-125 transition-all cursor-pointer'
+            />
+          </Tooltip>
           {examenSeleccionado.tipo_examen === tiposExamen.Solo &&
             !data.fin_examen && (
               <Tooltip title='Calificar (Solo Docente)'>
@@ -162,6 +174,7 @@ useColumnsAlumnosInscritos.defaultProps = {}
 useColumnsAlumnosInscritos.propTypes = {
   examenSeleccionado: PropTypes.object,
   setAlumnoSeleccionado: PropTypes.func,
+  setOpen: PropTypes.func,
 }
 
 export default useColumnsAlumnosInscritos
