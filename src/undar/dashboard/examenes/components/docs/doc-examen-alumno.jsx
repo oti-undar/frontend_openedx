@@ -31,14 +31,6 @@ const styles = StyleSheet.create({
 })
 
 const DocExamenAlumno = ({ examenSeleccionado, alumnoSeleccionado, title }) => {
-  console.log(
-    '🚀 ~ file: table-detalles-alumno-examen.jsx:8 ~ examenSeleccionado:',
-    examenSeleccionado
-  )
-  console.log(
-    '🚀 ~ file: table-detalles-alumno-examen.jsx:8 ~ alumnoSeleccionado:',
-    alumnoSeleccionado
-  )
   const preguntasResueltas = alumnoSeleccionado?.preguntas_resueltas ?? []
 
   const total_puntos =
@@ -135,7 +127,7 @@ const DocExamenAlumno = ({ examenSeleccionado, alumnoSeleccionado, title }) => {
                 >
                   <View style={styles.styleRespuesta}>
                     <Text style={{ fontWeight: 'bold' }}>Respuesta:</Text>
-                    <Text>{pr?.respuesta?.respuesta || ''}</Text>
+                    <Text>{pr?.respuesta?.respuesta || '-'}</Text>
                   </View>
                   <View style={styles.styleRespuesta}>
                     <Text style={{ fontWeight: 'bold' }}>

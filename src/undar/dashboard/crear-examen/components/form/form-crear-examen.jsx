@@ -18,7 +18,6 @@ import PropTypes from 'prop-types'
 import { toUploadFile, urlToFile } from '../../../../utils/upload'
 
 const FormCrearExamen = ({ examen, creacion = false }) => {
-  console.log('🚀 ~ file: form-crear-examen.jsx:21 ~ examen:', examen)
   const navigate = useNavigate()
   const [form] = Form.useForm()
 

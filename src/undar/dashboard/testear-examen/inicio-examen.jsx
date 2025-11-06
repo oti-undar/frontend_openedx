@@ -60,7 +60,7 @@ const InicioExamen = ({ test, setExamenActual, onInitExamen }) => {
       </h2>
       <div className='grid grid-cols-5 gap-4 mt-6'>
         <div className='col-span-2 flex-col'>
-          <p className='text-gray-700 text-justify max-w-xl animate-fade animate-delay-1000 animate-ease-in-out'>
+          <p className='text-gray-700 text-justify max-w-xl animate-fade animate-delay-1000 animate-ease-in-out whitespace-pre-line'>
             {test.description}
           </p>
 

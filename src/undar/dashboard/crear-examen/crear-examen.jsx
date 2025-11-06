@@ -15,10 +15,18 @@ const CrearExamen = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [examen_id])
 
+  const examen_formated = examen
+    ? {
+        ...examen,
+        inicio_examen: null,
+        final_examen: null,
+      }
+    : undefined
+
   if (isloading) return <Loader />
   return (
     <div className='flex flex-col gap-4 h-full w-full'>
-      <FormCrearExamen examen={examen} creacion={true} />
+      <FormCrearExamen examen={examen_formated} creacion={true} />
     </div>
   )
 }
