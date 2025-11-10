@@ -65,7 +65,8 @@ const RealizarExamen = () => {
     getEjecucionExamen({
       examen_id,
       onSuccess: data => {
-        if (data.fin_examen) return navigate('/examen-terminado')
+        if (data.fin_examen)
+          return navigate('/examen-terminado?examen_id=' + examen_id)
         setExamenActual(prev => ({
           preguntas: prev.preguntas,
           fin_examen: data.fin_examen,
@@ -191,9 +192,10 @@ const RealizarExamen = () => {
             )
               finalizarExamen({
                 ejecucion_examen_id: examenActual.ejecucion_examen_id,
-                onSuccess: () => navigate('/examen-terminado'),
+                onSuccess: () =>
+                  navigate('/examen-terminado?examen_id=' + examen_id),
               })
-            else navigate('/examen-terminado')
+            else navigate('/examen-terminado?examen_id=' + examen_id)
           }}
         />
       )}
