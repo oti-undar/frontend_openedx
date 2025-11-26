@@ -2,7 +2,14 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import RankingRow from '../../../ranking-tiempo-real/components/cards/ranking-row'
 
-const RankingRowWinner = ({ name, lastName, username, className, first }) => {
+const RankingRowWinner = ({
+  name,
+  lastName,
+  username,
+  className,
+  first,
+  avatar,
+}) => {
   return (
     <div
       className={`flex flex-col gap-2 items-center justify-center ${className} ${
@@ -10,12 +17,12 @@ const RankingRowWinner = ({ name, lastName, username, className, first }) => {
       }`}
       style={{ zoom: first ? 1.5 : 1.2 }}
     >
-      <img
-        className='max-w-[100px] max-h-[100px] rounded-full'
-        src='https://picsum.photos/1500/1500'
-        alt='Imagen de prueba'
+      <RankingRow
+        name={name}
+        lastName={lastName}
+        username={username}
+        avatar={avatar}
       />
-      <RankingRow name={name} lastName={lastName} username={username} />
     </div>
   )
 }
@@ -31,6 +38,7 @@ RankingRowWinner.propTypes = {
   username: PropTypes.string.isRequired,
   className: PropTypes.string,
   first: PropTypes.bool,
+  avatar: PropTypes.string,
 }
 
 export default RankingRowWinner

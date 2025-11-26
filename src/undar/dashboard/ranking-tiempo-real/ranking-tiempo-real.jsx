@@ -25,10 +25,10 @@ const RankingTiempoReal = () => {
 
   const preguntas_resueltas =
     examenActual?.ejecuciones?.[0]?.preguntas_resueltas?.map(
-      pregunta_resuelta => pregunta_resuelta.pregunta_id
+      (pregunta_resuelta) => pregunta_resuelta.pregunta_id
     )
   const preguntas_no_resueltas = examenActual?.preguntas?.filter(
-    pregunta => !preguntas_resueltas?.includes(pregunta.id)
+    (pregunta) => !preguntas_resueltas?.includes(pregunta.id)
   )
 
   const puntosTotales =
@@ -38,10 +38,10 @@ const RankingTiempoReal = () => {
     ) ?? 1
 
   const alumnos = examenActual?.curso?.usuarios
-    ?.filter(usuario => usuario.user.id !== user_id)
-    ?.map(usuario => {
+    ?.filter((usuario) => usuario.user.id !== user_id)
+    ?.map((usuario) => {
       const examen_resuelto_actual = usuario.user.examenes_resueltos?.find(
-        examen => examen.examen_id === examen_id
+        (examen) => examen.examen_id === examen_id
       )
       const puntos_obtenidos =
         examen_resuelto_actual?.preguntas_resueltas?.reduce(
@@ -60,6 +60,7 @@ const RankingTiempoReal = () => {
         apellido: usuario.user.last_name,
         username: usuario.user.username,
         nota,
+        avatar: usuario.user.avatar,
       }
     })
 
@@ -156,7 +157,7 @@ const RankingTiempoReal = () => {
                         pregunta_actual_sync_id:
                           preguntas_no_resueltas?.[0]?.id,
                       },
-                      onSuccess: data => {
+                      onSuccess: (data) => {
                         setExamenActual(data)
                         socket.emit('message_room', {
                           room: examen_id,
@@ -223,7 +224,7 @@ const RankingTiempoReal = () => {
                   data: {
                     pregunta_actual_sync_id: examenActual?.preguntas?.[0]?.id,
                   },
-                  onSuccess: data => {
+                  onSuccess: (data) => {
                     setExamenActual(data)
                     socket.emit('message_room', {
                       room: examen_id,
@@ -270,6 +271,7 @@ const RankingTiempoReal = () => {
               lastName={alumno.apellido}
               username={alumno.username}
               number={index + 1}
+              avatar={alumno.avatar}
             />
           ))}
         </div>
@@ -281,6 +283,7 @@ const RankingTiempoReal = () => {
               lastName={alumno.apellido}
               username={alumno.username}
               number={index + 4}
+              avatar={alumno.avatar}
             />
           ))}
         </div>

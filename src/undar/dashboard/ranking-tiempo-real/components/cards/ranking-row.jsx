@@ -1,7 +1,15 @@
 import PropTypes from 'prop-types'
 import React from 'react'
+import { API_URL } from '../../../../lib/globales'
 
-const RankingRow = ({ name, lastName, username, number, className }) => {
+const RankingRow = ({
+  name,
+  lastName,
+  username,
+  number,
+  className,
+  avatar,
+}) => {
   return (
     <div className={`flex gap-4 items-center ${className}`}>
       {number && (
@@ -9,7 +17,7 @@ const RankingRow = ({ name, lastName, username, number, className }) => {
       )}
       <img
         className='max-w-[70px] max-h-[70px] rounded-full'
-        src='https://picsum.photos/1500/1500'
+        src={`${API_URL()}${avatar}` || 'https://picsum.photos/1500/1500'}
         alt='Imagen de prueba'
       />
       <div className='flex flex-col'>
@@ -30,6 +38,7 @@ RankingRow.propTypes = {
   username: PropTypes.string.isRequired,
   number: PropTypes.number,
   className: PropTypes.string,
+  avatar: PropTypes.string,
 }
 
 export default RankingRow

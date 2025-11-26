@@ -36,10 +36,10 @@ const RankingFinalExamen = () => {
     ) ?? 1
 
   const alumnos = examenActual?.curso?.usuarios
-    ?.filter(usuario => usuario.user.id !== user_id)
-    ?.map(usuario => {
+    ?.filter((usuario) => usuario.user.id !== user_id)
+    ?.map((usuario) => {
       const examen_resuelto_actual = usuario.user.examenes_resueltos?.find(
-        examen => examen.examen_id === examen_id
+        (examen) => examen.examen_id === examen_id
       )
       const puntos_obtenidos =
         examen_resuelto_actual?.preguntas_resueltas?.reduce(
@@ -58,6 +58,7 @@ const RankingFinalExamen = () => {
         apellido: usuario.user.last_name,
         username: usuario.user.username,
         nota,
+        avatar: usuario.user.avatar,
       }
     })
   const alumnosOrdenados = alumnos?.sort((a, b) => b.nota - a.nota)
@@ -95,17 +96,20 @@ const RankingFinalExamen = () => {
           name={primeros3?.[1]?.nombre}
           lastName={primeros3?.[1]?.apellido}
           username={primeros3?.[1]?.username}
+          avatar={primeros3?.[1]?.avatar}
         />
         <RankingRowWinner
           name={primeros3?.[0]?.nombre}
           lastName={primeros3?.[0]?.apellido}
           username={primeros3?.[0]?.username}
           first
+          avatar={primeros3?.[0]?.avatar}
         />
         <RankingRowWinner
           name={primeros3?.[2]?.nombre}
           lastName={primeros3?.[2]?.apellido}
           username={primeros3?.[2]?.username}
+          avatar={primeros3?.[2]?.avatar}
         />
       </div>
     </div>

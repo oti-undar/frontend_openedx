@@ -4,7 +4,7 @@ try {
   ;({ getAuthenticatedUser } = require('@edx/frontend-platform/auth'))
 } catch {
   getAuthenticatedUser = () => ({
-    userId: 4,
+    userId: 5,
   })
 }
 

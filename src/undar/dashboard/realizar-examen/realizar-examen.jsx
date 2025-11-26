@@ -14,6 +14,7 @@ import { useNavigate, useParams } from 'react-router'
 import { useFinalizarPreguntaExamenRespuesta } from './hooks/finalizar-pregunta-examen-respuesta'
 import { useSearchParams } from 'react-router-dom'
 import { useSocket } from '../../hooks/use-socket'
+import AvatarMenu from './components/avatar-menu'
 
 const RealizarExamen = () => {
   const { id: examen_id } = useParams()
@@ -121,6 +122,9 @@ const RealizarExamen = () => {
 
   return (
     <div className='flex flex-col gap-4 size-full py-8 px-12 overflow-y-auto rounded-2xl overflow-x-hidden relative'>
+      <div className='absolute top-4 left-4'>
+        <AvatarMenu />
+      </div>
       {!examenActual?.pregunta_actual ? (
         <InicioExamen
           test={test}
