@@ -59,7 +59,9 @@ const AvatarMenu = () => {
         >
           <img
             src={
-              `${API_URL()}${avatarActual}` || 'https://picsum.photos/1500/1500'
+              avatarActual
+                ? `${API_URL()}${avatarActual}`
+                : 'https://picsum.photos/1500/1500'
             }
             alt='Avatar'
             className='w-10 h-10 rounded-full'

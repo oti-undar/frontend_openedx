@@ -17,7 +17,9 @@ const RankingRow = ({
       )}
       <img
         className='max-w-[70px] max-h-[70px] rounded-full'
-        src={`${API_URL()}${avatar}` || 'https://picsum.photos/1500/1500'}
+        src={
+          avatar ? `${API_URL()}${avatar}` : 'https://picsum.photos/1500/1500'
+        }
         alt='Imagen de prueba'
       />
       <div className='flex flex-col'>

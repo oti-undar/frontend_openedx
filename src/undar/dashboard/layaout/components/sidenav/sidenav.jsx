@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router'
 import { FaChartSimple } from 'react-icons/fa6'
 import { useActualizarData } from '../../../../hooks/use-actualizar-data'
 import ButtonPrimary from '../../../../components/buttons/button-primary'
+import AvatarMenu from '../../../realizar-examen/components/avatar-menu'
 
 const links = [
   {
@@ -36,6 +37,7 @@ const Sidenav = () => {
     <div className='h-full flex flex-col justify-between items-center gap-20 p-8 pr-2 relative animate-fade-right animate-ease-in-out'>
       <div className='absolute top-8 flex flex-col items-center gap-4'>
         <img src={logo} width={100} alt='Logo' />
+        <AvatarMenu />
         <div onClick={() => navigate('/crear-examen')} className='mt-6'>
           <GradientText
             colors={['#40ffaa', '#4079ff', '#40ffaa', '#4079ff', '#40ffaa']}
@@ -60,7 +62,7 @@ const Sidenav = () => {
       </div>
       <div className='mt-8'></div>
       <div className='flex flex-col gap-2'>
-        {links.map(link => (
+        {links.map((link) => (
           <ButtonSidenav key={link.title} path={link.path}>
             {link.icon}
             {link.title}
