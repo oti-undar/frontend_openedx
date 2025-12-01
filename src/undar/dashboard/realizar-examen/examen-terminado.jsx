@@ -4,6 +4,7 @@ import Confetti from 'react-confetti-boom'
 import ButtonPrimary from '../../components/buttons/button-primary'
 import { useSearchParams } from 'react-router-dom'
 import { useGetNotaEjecucionExamen } from './hooks/get-nota-ejecucion-examen'
+import AvatarMenu from './components/avatar-menu'
 
 const ExamenTerminado = () => {
   const [searchParams] = useSearchParams()
@@ -19,7 +20,10 @@ const ExamenTerminado = () => {
   }, [examen_id])
 
   return (
-    <div className='h-dvh w-dvw flex flex-col gap-8 justify-center items-center -mt-16'>
+    <div className='h-dvh w-dvw flex flex-col gap-8 justify-center items-center -mt-16 relative'>
+      <div className='absolute top-20 left-4'>
+        <AvatarMenu />
+      </div>
       <Confetti mode='fall' />
       <FaFlag size={100} className='text-emerald-600' />
 

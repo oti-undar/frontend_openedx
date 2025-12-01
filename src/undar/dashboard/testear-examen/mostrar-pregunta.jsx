@@ -23,32 +23,32 @@ const MostrarPregunta = ({
   const socket = useSocket()
 
   const preguntas_no_resueltas = examenActual.preguntas.filter(
-    pregunta_aux =>
+    (pregunta_aux) =>
       !examenActual.preguntas_resueltas
-        .map(p => p.id)
+        .map((p) => p.id)
         .includes(pregunta_aux.id) && pregunta_aux.id !== pregunta.id
   )
 
   const user_id = getUserAuth().userId
 
-  function handleFinalizarExamen() {
-    onFinalizarPregunta?.({
+  async function handleFinalizarExamen() {
+    await onFinalizarPregunta?.({
       respuesta_id: examenActual.pregunta_actual.respuesta_id,
     })
-    onFinalizarExamen?.()
+    await onFinalizarExamen?.()
     setExamenActual(null)
   }
 
-  function handleSiguientePregunta(pregunta_ejecucion_actual_id) {
+  async function handleSiguientePregunta(pregunta_ejecucion_actual_id) {
     const siguiente = preguntas_no_resueltas[0]
     if (!siguiente) return handleFinalizarExamen()
 
-    onFinalizarPregunta?.({
+    await onFinalizarPregunta?.({
       siguiente,
       respuesta_id: examenActual.pregunta_actual.respuesta_id,
     })
 
-    setExamenActual(prev => ({
+    setExamenActual((prev) => ({
       ...prev,
       pregunta_actual: {
         ...siguiente,
@@ -67,7 +67,7 @@ const MostrarPregunta = ({
   }
 
   function handleChangeRespuestaId(respuestaId) {
-    setExamenActual(prev => ({
+    setExamenActual((prev) => ({
       ...prev,
       pregunta_actual: {
         ...prev.pregunta_actual,
@@ -82,7 +82,7 @@ const MostrarPregunta = ({
 
     function onSiguientePregunta({ ejecucionesExamen }) {
       const ejecucion_examen = ejecucionesExamen.find(
-        ejecucion => ejecucion?.alumno_id == user_id
+        (ejecucion) => ejecucion?.alumno_id == user_id
       )
       handleSiguientePregunta(ejecucion_examen?.pregunta_ejecucion_actual_id)
     }

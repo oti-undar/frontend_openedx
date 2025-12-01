@@ -17,9 +17,10 @@ const Pregunta = ({ onChangeRespuestaId, pregunta }) => {
       >
         <div className='grid grid-cols-2 gap-x-8 gap-y-6 animate-flip-down animate-delay-500 animate-ease-in-out'>
           {useMemo(
-            () => [...pregunta.respuestas].sort(() => Math.random() - 0.5),
+            () =>
+              [...(pregunta.respuestas ?? [])].sort(() => Math.random() - 0.5),
             [pregunta.respuestas]
-          ).map(alternativa => (
+          ).map((alternativa) => (
             <div key={alternativa.id} className='flex flex-col justify-center'>
               <button
                 onClick={() => onChangeRespuestaId(alternativa.id)}

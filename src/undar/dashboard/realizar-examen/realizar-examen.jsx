@@ -54,8 +54,8 @@ const RealizarExamen = () => {
           },
         })
       )}`,
-      onSuccess: data => {
-        setExamenActual(prev => ({
+      onSuccess: (data) => {
+        setExamenActual((prev) => ({
           ...prev,
           preguntas: data.preguntas,
           tipo_examen: data.tipo_examen,
@@ -65,10 +65,10 @@ const RealizarExamen = () => {
 
     getEjecucionExamen({
       examen_id,
-      onSuccess: data => {
+      onSuccess: (data) => {
         if (data.fin_examen)
           return navigate('/examen-terminado?examen_id=' + examen_id)
-        setExamenActual(prev => ({
+        setExamenActual((prev) => ({
           preguntas: prev.preguntas,
           fin_examen: data.fin_examen,
           pregunta_actual: {
@@ -76,7 +76,7 @@ const RealizarExamen = () => {
             inicio: new Date(data.pregunta_ejecucion_actual.inicio).getTime(),
             pregunta_ejecucion_actual_id: data.pregunta_ejecucion_actual.id,
           },
-          preguntas_resueltas: data.preguntas_resueltas.map(p => ({
+          preguntas_resueltas: data.preguntas_resueltas.map((p) => ({
             id: p.pregunta.id,
             respuesta_id: p.respuesta_id,
           })),
@@ -134,15 +134,19 @@ const RealizarExamen = () => {
               createEjecucionExamen({
                 examen_id,
                 pregunta_id: test.preguntas[0].id,
-                onSuccess: data => {
-                  setExamenActual(prev => ({
-                    ...prev,
-                    pregunta_actual: {
-                      ...prev.pregunta_actual,
-                      pregunta_ejecucion_actual_id:
-                        data.pregunta_ejecucion_actual_id,
-                    },
-                  }))
+                onSuccess: (data) => {
+                  setExamenActual((prev) => {
+                    const result = {
+                      ...prev,
+                      ejecucion_examen_id: data.id,
+                      pregunta_actual: {
+                        ...prev.pregunta_actual,
+                        pregunta_ejecucion_actual_id:
+                          data.pregunta_ejecucion_actual_id,
+                      },
+                    }
+                    return result
+                  })
                 },
               })
           }}
@@ -152,54 +156,69 @@ const RealizarExamen = () => {
           pregunta={examenActual.pregunta_actual}
           examenActual={examenActual}
           setExamenActual={setExamenActual}
-          onSelectRespuesta={respuesta_id => {
+          onSelectRespuesta={(respuesta_id) => {
             finalizarPreguntaExamenRespuesta({
               pregunta_ejecucion_actual_id:
                 examenActual.pregunta_actual.pregunta_ejecucion_actual_id,
               respuesta_id,
             })
           }}
-          onFinalizarPregunta={({ siguiente, respuesta_id } = {}) => {
-            if (examenActual.tipo_examen === tiposExamen.Async)
-              finalizarPreguntaExamen({
-                examen_id,
-                pregunta_ejecucion_actual_id:
-                  examenActual.pregunta_actual.pregunta_ejecucion_actual_id,
-                respuesta_id,
-                siguiente,
-                onSuccess: data => {
-                  setExamenActual(prev => ({
-                    preguntas: prev.preguntas,
-                    fin_examen: data.fin_examen,
-                    pregunta_actual: {
-                      ...data.pregunta_ejecucion_actual.pregunta,
-                      inicio: new Date(
-                        data.pregunta_ejecucion_actual.inicio
-                      ).getTime(),
-                      pregunta_ejecucion_actual_id:
-                        data.pregunta_ejecucion_actual.id,
-                    },
-                    preguntas_resueltas: data.preguntas_resueltas.map(p => ({
-                      id: p.pregunta.id,
-                      respuesta_id: p.respuesta_id,
-                    })),
-                    ejecucion_examen_id: data.id,
-                    tipo_examen: data.tipo_examen,
-                  }))
-                },
-              })
+          onFinalizarPregunta={({ siguiente, respuesta_id }) => {
+            return new Promise((resolve) => {
+              if (examenActual.tipo_examen === tiposExamen.Async)
+                finalizarPreguntaExamen({
+                  examen_id,
+                  pregunta_ejecucion_actual_id:
+                    examenActual.pregunta_actual.pregunta_ejecucion_actual_id,
+                  respuesta_id,
+                  siguiente,
+                  onSuccess: (data) => {
+                    setExamenActual((prev) => {
+                      const result = {
+                        preguntas: prev.preguntas,
+                        fin_examen: data.fin_examen,
+                        pregunta_actual: {
+                          ...data.pregunta_ejecucion_actual.pregunta,
+                          inicio: new Date(
+                            data.pregunta_ejecucion_actual.inicio
+                          ).getTime(),
+                          pregunta_ejecucion_actual_id:
+                            data.pregunta_ejecucion_actual.id,
+                        },
+                        preguntas_resueltas: data.preguntas_resueltas.map(
+                          (p) => ({
+                            id: p.pregunta.id,
+                            respuesta_id: p.respuesta_id,
+                          })
+                        ),
+                        ejecucion_examen_id: data.id,
+                        tipo_examen: data.tipo_examen,
+                      }
+                      return result
+                    })
+                    resolve()
+                  },
+                })
+            })
           }}
           onFinalizarExamen={() => {
-            if (
-              examenActual.tipo_examen === tiposExamen.Async ||
-              examenActual.tipo_examen === tiposExamen.Solo
-            )
-              finalizarExamen({
-                ejecucion_examen_id: examenActual.ejecucion_examen_id,
-                onSuccess: () =>
-                  navigate('/examen-terminado?examen_id=' + examen_id),
-              })
-            else navigate('/examen-terminado?examen_id=' + examen_id)
+            return new Promise((resolve) => {
+              if (
+                examenActual.tipo_examen === tiposExamen.Async ||
+                examenActual.tipo_examen === tiposExamen.Solo
+              ) {
+                finalizarExamen({
+                  ejecucion_examen_id: examenActual.ejecucion_examen_id,
+                  onSuccess: () => {
+                    navigate('/examen-terminado?examen_id=' + examen_id)
+                    resolve()
+                  },
+                })
+              } else {
+                navigate('/examen-terminado?examen_id=' + examen_id)
+                resolve()
+              }
+            })
           }}
         />
       )}
