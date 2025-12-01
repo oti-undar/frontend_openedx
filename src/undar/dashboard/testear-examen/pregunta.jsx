@@ -44,12 +44,14 @@ const Pregunta = ({ onChangeRespuestaId, pregunta }) => {
                 <video
                   className='max-w-[500px] max-h-[400px] rounded-xl'
                   src={`${API_URL()}${alternativa.video}`}
+                  controls
                 />
               )}
               {alternativa.audio && (
                 <audio
                   className='max-w-[500px] max-h-[400px] rounded-xl'
                   src={`${API_URL()}${alternativa.audio}`}
+                  controls
                 />
               )}
             </div>
@@ -70,12 +72,14 @@ const Pregunta = ({ onChangeRespuestaId, pregunta }) => {
                 className='max-w-[500px] max-h-[400px] rounded-xl'
                 src={`${API_URL()}${pregunta.video}`}
                 alt='Video de prueba'
+                controls
               />
             )}
             {pregunta.audio && (
               <audio
                 className='max-w-[500px] max-h-[400px] rounded-xl'
                 src={`${API_URL()}${pregunta.audio}`}
+                controls
                 alt='Audio de prueba'
               />
             )}

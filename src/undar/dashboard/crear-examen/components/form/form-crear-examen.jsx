@@ -43,7 +43,7 @@ const FormCrearExamen = ({ examen, creacion = false }) => {
       form.setFieldValue('archivo', toUploadFile(archivos?.principal))
 
     if (archivos?.preguntas?.length)
-      archivos?.preguntas?.forEach(pregunta => {
+      archivos?.preguntas?.forEach((pregunta) => {
         if (pregunta?.principal) {
           form.setFieldValue(
             ['preguntas', pregunta.name, 'archivo'],
@@ -52,7 +52,7 @@ const FormCrearExamen = ({ examen, creacion = false }) => {
         }
 
         if (pregunta?.respuestas?.length)
-          pregunta?.respuestas?.forEach(respuesta => {
+          pregunta?.respuestas?.forEach((respuesta) => {
             if (respuesta?.principal) {
               form.setFieldValue(
                 [
@@ -73,11 +73,11 @@ const FormCrearExamen = ({ examen, creacion = false }) => {
     const data = {
       ...values,
       id: undefined,
-      preguntas: values.preguntas.map(pregunta => ({
+      preguntas: values.preguntas.map((pregunta) => ({
         ...pregunta,
         id: undefined,
         examen_id: undefined,
-        respuestas: pregunta?.respuestas?.map(respuesta => ({
+        respuestas: pregunta?.respuestas?.map((respuesta) => ({
           ...respuesta,
           id: undefined,
           pregunta_id: undefined,
@@ -87,8 +87,8 @@ const FormCrearExamen = ({ examen, creacion = false }) => {
       rubrica_analitica_id: values.rubrica_analitica_id?.id,
       state_id:
         values.tipo_examen === tiposExamen.Solo
-          ? estados.find(state => state.name === states.Disponible).id
-          : estados.find(state => state.name === states.Activo).id,
+          ? estados.find((state) => state.name === states.Disponible).id
+          : estados.find((state) => state.name === states.Activo).id,
       user_id,
     }
 
@@ -118,8 +118,8 @@ const FormCrearExamen = ({ examen, creacion = false }) => {
       if (examen?.img || examen?.video || examen?.audio)
         urlToFile(
           `${API_URL()}/${examen?.img || examen?.video || examen?.audio}`
-        ).then(file => {
-          setArchivos(prev => ({
+        ).then((file) => {
+          setArchivos((prev) => ({
             ...prev,
             principal: file,
           }))
@@ -132,15 +132,15 @@ const FormCrearExamen = ({ examen, creacion = false }) => {
               `${API_URL()}/${
                 pregunta?.img || pregunta?.video || pregunta?.audio
               }`
-            ).then(file => {
-              setArchivos(prev => {
+            ).then((file) => {
+              setArchivos((prev) => {
                 const pregunta_en_aux = prev.preguntas.find(
-                  p => p.name === name
+                  (p) => p.name === name
                 )
                 return {
                   ...prev,
                   preguntas: pregunta_en_aux
-                    ? prev.preguntas.map(p =>
+                    ? prev.preguntas.map((p) =>
                         p.name === name ? { ...p, principal: file } : p
                       )
                     : [
@@ -158,23 +158,23 @@ const FormCrearExamen = ({ examen, creacion = false }) => {
                   `${API_URL()}/${
                     respuesta?.img || respuesta?.video || respuesta?.audio
                   }`
-                ).then(file => {
-                  setArchivos(prev => {
+                ).then((file) => {
+                  setArchivos((prev) => {
                     const pregunta_en_aux = prev.preguntas.find(
-                      p => p.name === name
+                      (p) => p.name === name
                     )
                     const respuesta_en_aux = pregunta_en_aux?.respuestas.find(
-                      r => r.name === name_respuesta
+                      (r) => r.name === name_respuesta
                     )
                     return {
                       ...prev,
                       preguntas: pregunta_en_aux
-                        ? prev.preguntas.map(p =>
+                        ? prev.preguntas.map((p) =>
                             p.name === name
                               ? {
                                   ...p,
                                   respuestas: respuesta_en_aux
-                                    ? p.respuestas.map(r =>
+                                    ? p.respuestas.map((r) =>
                                         r.name === name_respuesta
                                           ? { ...r, principal: file }
                                           : r
@@ -209,9 +209,9 @@ const FormCrearExamen = ({ examen, creacion = false }) => {
         ...examen,
         rubrica_analitica_id: examen?.rubrica_analitica,
         rubrica_holistica_id: examen?.rubrica_holistica,
-        preguntas: examen?.preguntas?.map(pregunta => ({
+        preguntas: examen?.preguntas?.map((pregunta) => ({
           ...pregunta,
-          indicadores: pregunta?.indicadores?.map(indicador => indicador.id),
+          indicadores: pregunta?.indicadores?.map((indicador) => indicador.id),
         })),
       })
       setTipoRubrica(examen?.rubrica_analitica_id ? 'analitica' : 'holistica')
@@ -232,12 +232,12 @@ const FormCrearExamen = ({ examen, creacion = false }) => {
 
   useEffect(() => {
     if (!tipo_examen) return
-    if (primera_vez_con_examen.current)
+    if (examen && primera_vez_con_examen.current)
       return (primera_vez_con_examen.current = false)
 
     const preguntas = form.getFieldValue('preguntas')
     form.setFieldsValue({
-      preguntas: preguntas?.map(pregunta => {
+      preguntas: preguntas?.map((pregunta) => {
         return {
           ...pregunta,
           respuestas:
@@ -276,7 +276,7 @@ const FormCrearExamen = ({ examen, creacion = false }) => {
               className='min-w-96'
               size='large'
               placeholder='Tipo de Examen (Independiente por defecto)'
-              options={Object.values(tiposExamen).map(tipo => ({
+              options={Object.values(tiposExamen).map((tipo) => ({
                 value: tipo,
                 label:
                   tipo === tiposExamen.Sync
