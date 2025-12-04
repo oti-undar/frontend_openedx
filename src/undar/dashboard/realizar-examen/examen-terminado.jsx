@@ -33,7 +33,7 @@ const ExamenTerminado = () => {
       <div className='w-[30%] text-center text-xl font-semibold text-balance -mt-8'>
         Has terminado el examen
       </div>
-      {response && response?.nota && (
+      {response && response?.nota !== undefined && (
         <div className='w-[30%] text-center text-3xl font-semibold text-balance'>
           <span className='text-sky-500'>Nota: </span>
           <span

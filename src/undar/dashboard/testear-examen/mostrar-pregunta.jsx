@@ -23,10 +23,13 @@ const MostrarPregunta = ({
   const socket = useSocket()
 
   const preguntas_no_resueltas = examenActual.preguntas.filter(
-    (pregunta_aux) =>
-      !examenActual.preguntas_resueltas
-        .map((p) => p.id)
-        .includes(pregunta_aux.id) && pregunta_aux.id !== pregunta.id
+    (pregunta_aux) => {
+      return (
+        !examenActual.preguntas_resueltas
+          .map((p) => p.id)
+          .includes(pregunta_aux.id) && pregunta_aux.id !== pregunta.id
+      )
+    }
   )
 
   const user_id = getUserAuth().userId
@@ -43,27 +46,28 @@ const MostrarPregunta = ({
     const siguiente = preguntas_no_resueltas[0]
     if (!siguiente) return handleFinalizarExamen()
 
-    await onFinalizarPregunta?.({
-      siguiente,
-      respuesta_id: examenActual.pregunta_actual.respuesta_id,
-    })
-
-    setExamenActual((prev) => ({
-      ...prev,
-      pregunta_actual: {
-        ...siguiente,
-        inicio: Date.now(),
-        respuesta_id: null,
-        pregunta_ejecucion_actual_id: pregunta_ejecucion_actual_id,
-      },
-      preguntas_resueltas: [
-        ...prev.preguntas_resueltas,
-        {
-          id: pregunta.id,
-          respuesta_id: examenActual.pregunta_actual.respuesta_id,
+    if (pregunta_ejecucion_actual_id)
+      setExamenActual((prev) => ({
+        ...prev,
+        pregunta_actual: {
+          ...siguiente,
+          inicio: Date.now(),
+          respuesta_id: null,
+          pregunta_ejecucion_actual_id: pregunta_ejecucion_actual_id,
         },
-      ],
-    }))
+        preguntas_resueltas: [
+          ...prev.preguntas_resueltas,
+          {
+            id: pregunta.id,
+            respuesta_id: examenActual.pregunta_actual.respuesta_id,
+          },
+        ],
+      }))
+    else
+      await onFinalizarPregunta?.({
+        siguiente,
+        respuesta_id: examenActual.pregunta_actual.respuesta_id,
+      })
   }
 
   function handleChangeRespuestaId(respuestaId) {
@@ -104,7 +108,10 @@ const MostrarPregunta = ({
   return (
     <>
       {pregunta.duracion && (
-        <Counter pregunta={pregunta} onComplete={handleSiguientePregunta} />
+        <Counter
+          pregunta={pregunta}
+          onComplete={() => handleSiguientePregunta()}
+        />
       )}
       <div className='flex flex-col gap-2 text-center justify-center items-center'>
         <div className='w-full flex justify-between'>
@@ -119,7 +126,7 @@ const MostrarPregunta = ({
             examenActual?.tipo_examen === tiposExamen.Solo) &&
             (preguntas_no_resueltas.length ? (
               <ButtonPrimary
-                onClick={handleSiguientePregunta}
+                onClick={() => handleSiguientePregunta()}
                 className='animate-bounce animate-ease-in-out'
               >
                 <FaCircleChevronRight />
@@ -128,7 +135,7 @@ const MostrarPregunta = ({
             ) : (
               <ButtonPrimary
                 variant='danger'
-                onClick={handleFinalizarExamen}
+                onClick={() => handleFinalizarExamen()}
                 className='animate-bounce animate-ease-in-out'
               >
                 <FaFlag />

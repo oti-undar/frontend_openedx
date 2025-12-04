@@ -24,7 +24,9 @@ const Counter = ({
         initialRemainingTime={tiempoRestante}
         colors={['#004777', '#F7B801', '#A30000', '#A30000']}
         colorsTime={[duracionTotal, duracionTotal / 2, duracionTotal / 4, 0]}
-        onComplete={onComplete}
+        onComplete={() => {
+          onComplete?.()
+        }}
       >
         {({ elapsedTime, color }) => (
           <span

@@ -70,6 +70,7 @@ const RealizarExamen = () => {
           return navigate('/examen-terminado?examen_id=' + examen_id)
         setExamenActual((prev) => ({
           preguntas: prev.preguntas,
+          tipo_examen: data.tipo_examen,
           fin_examen: data.fin_examen,
           pregunta_actual: {
             ...data.pregunta_ejecucion_actual.pregunta,
@@ -81,7 +82,6 @@ const RealizarExamen = () => {
             respuesta_id: p.respuesta_id,
           })),
           ejecucion_examen_id: data.id,
-          tipo_examen: data.tipo_examen,
         }))
       },
     })
@@ -175,7 +175,9 @@ const RealizarExamen = () => {
                   onSuccess: (data) => {
                     setExamenActual((prev) => {
                       const result = {
+                        ...prev,
                         preguntas: prev.preguntas,
+                        tipo_examen: data.tipo_examen,
                         fin_examen: data.fin_examen,
                         pregunta_actual: {
                           ...data.pregunta_ejecucion_actual.pregunta,
@@ -192,7 +194,6 @@ const RealizarExamen = () => {
                           })
                         ),
                         ejecucion_examen_id: data.id,
-                        tipo_examen: data.tipo_examen,
                       }
                       return result
                     })
