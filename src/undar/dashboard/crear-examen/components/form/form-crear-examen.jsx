@@ -117,7 +117,7 @@ const FormCrearExamen = ({ examen, creacion = false }) => {
     if (examen) {
       if (examen?.img || examen?.video || examen?.audio)
         urlToFile(
-          `${API_URL()}/${examen?.img || examen?.video || examen?.audio}`
+          `${API_URL()}${examen?.img || examen?.video || examen?.audio}`
         ).then((file) => {
           setArchivos((prev) => ({
             ...prev,
@@ -129,7 +129,7 @@ const FormCrearExamen = ({ examen, creacion = false }) => {
         examen?.preguntas?.forEach((pregunta, name) => {
           if (pregunta?.img || pregunta?.video || pregunta?.audio)
             urlToFile(
-              `${API_URL()}/${
+              `${API_URL()}${
                 pregunta?.img || pregunta?.video || pregunta?.audio
               }`
             ).then((file) => {
@@ -155,7 +155,7 @@ const FormCrearExamen = ({ examen, creacion = false }) => {
             pregunta?.respuestas?.forEach((respuesta, name_respuesta) => {
               if (respuesta?.img || respuesta?.video || respuesta?.audio)
                 urlToFile(
-                  `${API_URL()}/${
+                  `${API_URL()}${
                     respuesta?.img || respuesta?.video || respuesta?.audio
                   }`
                 ).then((file) => {

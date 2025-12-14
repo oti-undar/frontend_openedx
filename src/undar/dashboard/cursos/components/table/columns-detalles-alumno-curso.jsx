@@ -70,7 +70,7 @@ const useColumnsDetallesAlumnoCurso = ({ response }) => {
 
         let sumNotas = 0
 
-        examenes_resueltos.forEach(examen_resuelto => {
+        examenes_resueltos.forEach((examen_resuelto) => {
           const nota = getNota({ examen_resuelto })
           sumNotas += nota * (examen_resuelto?.examen?.peso ?? 1)
         })
@@ -79,21 +79,6 @@ const useColumnsDetallesAlumnoCurso = ({ response }) => {
       },
       flex: 1,
     },
-    // {
-    //   headerName: 'Acciones',
-    //   cellRenderer: () => (
-    //     <div className='flex gap-2 items-center h-full'>
-    //       <Tooltip title='Exportar Exámenes'>
-    //         <PiExportBold
-    //           size={15}
-    //           className='text-sky-500 hover:scale-125 transition-all cursor-pointer'
-    //         />
-    //       </Tooltip>
-    //     </div>
-    //   ),
-    //   minWidth: 110,
-    //   flex: 1,
-    // },
   ]
 }
 
