@@ -216,7 +216,13 @@ const RealizarExamen = () => {
                 finalizarExamen({
                   ejecucion_examen_id: examenActual.ejecucion_examen_id,
                   onSuccess: () => {
-                    navigate('/examen-terminado?examen_id=' + examen_id)
+                    navigate(
+                      '/examen-terminado?examen_id=' +
+                        examen_id +
+                        (examenActual.tipo_examen === tiposExamen.Solo
+                          ? '&solo=true'
+                          : '')
+                    )
                     resolve()
                   },
                 })

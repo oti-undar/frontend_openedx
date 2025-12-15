@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
-import { API_URL } from '../../lib/globales'
+import { API_URL, tiposExamen } from '../../lib/globales'
 
-const Pregunta = ({ onChangeRespuestaId, pregunta }) => {
+const Pregunta = ({ onChangeRespuestaId, pregunta, tipoExamen }) => {
   return (
     <>
       <div
@@ -16,11 +16,12 @@ const Pregunta = ({ onChangeRespuestaId, pregunta }) => {
         key={`a-${pregunta.id}`}
       >
         <div className='grid grid-cols-2 gap-x-8 gap-y-6 animate-flip-down animate-delay-500 animate-ease-in-out'>
-          {useMemo(
-            () =>
-              [...(pregunta.respuestas ?? [])].sort(() => Math.random() - 0.5),
-            [pregunta.respuestas]
-          ).map((alternativa) => (
+          {useMemo(() => {
+            const respuestas = [...(pregunta.respuestas ?? [])]
+            return tipoExamen === tiposExamen.Solo
+              ? respuestas
+              : respuestas.sort(() => Math.random() - 0.5)
+          }, [pregunta.respuestas, tipoExamen]).map((alternativa) => (
             <div key={alternativa.id} className='flex flex-col justify-center'>
               <button
                 onClick={() => onChangeRespuestaId(alternativa.id)}
@@ -95,6 +96,7 @@ Pregunta.defaultProps = {}
 Pregunta.propTypes = {
   pregunta: PropTypes.object.isRequired,
   onChangeRespuestaId: PropTypes.func.isRequired,
+  tipoExamen: PropTypes.string,
 }
 
 export default Pregunta

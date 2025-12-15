@@ -3,12 +3,16 @@ import { FaFlag } from 'react-icons/fa6'
 import Confetti from 'react-confetti-boom'
 import ButtonPrimary from '../../components/buttons/button-primary'
 import { useSearchParams } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import { useGetNotaEjecucionExamen } from './hooks/get-nota-ejecucion-examen'
 import AvatarMenu from './components/avatar-menu'
 
 const ExamenTerminado = () => {
   const [searchParams] = useSearchParams()
   const examen_id = searchParams.get('examen_id')
+  const solo = searchParams.get('solo')
+
+  const navigate = useNavigate()
 
   const { response, getNotaEjecucionExamen } = useGetNotaEjecucionExamen()
 
@@ -48,7 +52,10 @@ const ExamenTerminado = () => {
 
       <ButtonPrimary
         className='animate-bounce animate-ease-in-out'
-        onClick={() => (window.location.href = '/')}
+        onClick={() => {
+          if (solo) return navigate('/examenes')
+          else window.location.href = '/'
+        }}
       >
         Volver al inicio
       </ButtonPrimary>

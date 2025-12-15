@@ -146,6 +146,7 @@ const MostrarPregunta = ({
         <Pregunta
           pregunta={pregunta}
           onChangeRespuestaId={handleChangeRespuestaId}
+          tipoExamen={examenActual?.tipo_examen}
         />
       </div>
     </>
