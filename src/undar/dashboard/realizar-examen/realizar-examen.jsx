@@ -89,7 +89,9 @@ const RealizarExamen = () => {
   }, [examen_id, user_id])
 
   const { createEjecucionExamen } = useCreateEjecucionExamen()
-  const { finalizarPreguntaExamen } = useFinalizarPreguntaExamen()
+  const { finalizarPreguntaExamen } = useFinalizarPreguntaExamen({
+    user_id_alumno,
+  })
   const { finalizarPreguntaExamenRespuesta } =
     useFinalizarPreguntaExamenRespuesta()
   const { finalizarExamen, isloading: isloadingFinalizarExamen } =
@@ -165,7 +167,10 @@ const RealizarExamen = () => {
           }}
           onFinalizarPregunta={({ siguiente, respuesta_id }) => {
             return new Promise((resolve) => {
-              if (examenActual.tipo_examen === tiposExamen.Async)
+              if (
+                examenActual.tipo_examen === tiposExamen.Async ||
+                examenActual.tipo_examen === tiposExamen.Solo
+              )
                 finalizarPreguntaExamen({
                   examen_id,
                   pregunta_ejecucion_actual_id:

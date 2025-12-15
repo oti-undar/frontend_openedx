@@ -2,10 +2,10 @@ import useFetchData from '../../../hooks/useFetchData'
 import { API_URL } from '../../../lib/globales'
 import { getUserAuth } from '../../../utils/api-openEdx'
 
-export function useFinalizarPreguntaExamen() {
+export function useFinalizarPreguntaExamen({ user_id_alumno }) {
   const { response, isloading, fetchData } = useFetchData()
 
-  const user_id = getUserAuth().userId
+  const user_id = Number(user_id_alumno ? user_id_alumno : getUserAuth().userId)
 
   function finalizarPreguntaExamen({
     examen_id,
