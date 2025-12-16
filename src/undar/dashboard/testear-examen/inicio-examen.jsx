@@ -17,7 +17,7 @@ const InicioExamen = ({ test, setExamenActual, onInitExamen }) => {
   const user_id = getUserAuth().userId
 
   function handleIniciarExamen(pregunta_ejecucion_actual_id) {
-    setExamenActual(prev => ({
+    setExamenActual((prev) => ({
       ...prev,
       fin_examen: null,
       pregunta_actual: {
@@ -37,7 +37,7 @@ const InicioExamen = ({ test, setExamenActual, onInitExamen }) => {
 
     function onInitExamen({ ejecucionesExamen }) {
       const ejecucion_examen = ejecucionesExamen.find(
-        ejecucion => ejecucion.alumno_id == user_id
+        (ejecucion) => ejecucion.alumno_id == user_id
       )
       handleIniciarExamen(ejecucion_examen?.pregunta_ejecucion_actual_id)
     }
@@ -69,7 +69,7 @@ const InicioExamen = ({ test, setExamenActual, onInitExamen }) => {
               path.includes('testear-examen')) && (
               <ButtonPrimary
                 className='animate-bounce animate-ease-in-out'
-                onClick={handleIniciarExamen}
+                onClick={() => handleIniciarExamen()}
               >
                 <FaHourglassStart />
                 Iniciar Examen

@@ -46,7 +46,7 @@ const MostrarPregunta = ({
     const siguiente = preguntas_no_resueltas[0]
     if (!siguiente) return handleFinalizarExamen()
 
-    if (pregunta_ejecucion_actual_id)
+    if (pregunta_ejecucion_actual_id || !onFinalizarPregunta)
       setExamenActual((prev) => ({
         ...prev,
         pregunta_actual: {
