@@ -66,6 +66,7 @@ const InicioExamen = ({ test, setExamenActual, onInitExamen }) => {
 
           <div className='mt-8 animate-fade-up animate-delay-[1500ms] animate-ease-in-out'>
             {(test.tipo_examen === tiposExamen.Async ||
+              test.tipo_examen === tiposExamen.Alumno ||
               path.includes('testear-examen')) && (
               <ButtonPrimary
                 className='animate-bounce animate-ease-in-out'

@@ -132,7 +132,10 @@ const RealizarExamen = () => {
           test={test}
           setExamenActual={setExamenActual}
           onInitExamen={() => {
-            if (examenActual.tipo_examen === tiposExamen.Async)
+            if (
+              examenActual.tipo_examen === tiposExamen.Async ||
+              examenActual.tipo_examen === tiposExamen.Alumno
+            )
               createEjecucionExamen({
                 examen_id,
                 pregunta_id: test.preguntas[0].id,
@@ -165,11 +168,16 @@ const RealizarExamen = () => {
               respuesta_id,
             })
           }}
-          onFinalizarPregunta={({ siguiente, respuesta_id }) => {
+          onFinalizarPregunta={({
+            siguiente,
+            respuesta_id,
+            retroalimentacion,
+          }) => {
             return new Promise((resolve) => {
               if (
                 examenActual.tipo_examen === tiposExamen.Async ||
-                examenActual.tipo_examen === tiposExamen.Solo
+                examenActual.tipo_examen === tiposExamen.Solo ||
+                examenActual.tipo_examen === tiposExamen.Alumno
               )
                 finalizarPreguntaExamen({
                   examen_id,
@@ -177,6 +185,7 @@ const RealizarExamen = () => {
                     examenActual.pregunta_actual.pregunta_ejecucion_actual_id,
                   respuesta_id,
                   siguiente,
+                  retroalimentacion,
                   onSuccess: (data) => {
                     setExamenActual((prev) => {
                       const result = {
@@ -211,7 +220,8 @@ const RealizarExamen = () => {
             return new Promise((resolve) => {
               if (
                 examenActual.tipo_examen === tiposExamen.Async ||
-                examenActual.tipo_examen === tiposExamen.Solo
+                examenActual.tipo_examen === tiposExamen.Solo ||
+                examenActual.tipo_examen === tiposExamen.Alumno
               ) {
                 finalizarExamen({
                   ejecucion_examen_id: examenActual.ejecucion_examen_id,

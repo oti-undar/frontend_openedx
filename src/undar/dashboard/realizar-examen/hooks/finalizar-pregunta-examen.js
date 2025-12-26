@@ -12,6 +12,7 @@ export function useFinalizarPreguntaExamen({ user_id_alumno }) {
     pregunta_ejecucion_actual_id,
     respuesta_id,
     siguiente,
+    retroalimentacion,
     onSuccess,
   }) {
     fetchData({
@@ -20,6 +21,7 @@ export function useFinalizarPreguntaExamen({ user_id_alumno }) {
       data: {
         respuesta_id,
         final: new Date(),
+        ...(retroalimentacion ? { retroalimentacion } : {}),
         ...(siguiente
           ? {
               nueva_pregunta_actual: {

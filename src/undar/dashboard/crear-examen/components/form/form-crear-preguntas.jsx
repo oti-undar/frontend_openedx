@@ -16,9 +16,9 @@ const FormCrearPreguntas = ({
     <Form.List name='preguntas'>
       {(preguntas, { add, remove }) => (
         <div className='flex flex-col gap-4 overflow-y-auto max-h-full rounded-xl px-3'>
-          {preguntas.map(pregunta => {
+          {preguntas.map((pregunta) => {
             const archivo_pregunta = archivos?.preguntas?.find(
-              pregunta_archivo => pregunta_archivo.name === pregunta.name
+              (pregunta_archivo) => pregunta_archivo.name === pregunta.name
             )
             return (
               <div
@@ -77,7 +77,7 @@ const FormCrearPreguntas = ({
                           showSearch
                           placeholder='Indicadores'
                           options={(rubrica?.indicadores ?? []).map(
-                            indicador => ({
+                            (indicador) => ({
                               value: indicador.id,
                               label: indicador.name,
                             })
@@ -105,26 +105,27 @@ const FormCrearPreguntas = ({
                           max={100}
                         />
                       </Form.Item>
-                      {tipo_examen !== tiposExamen.Solo && (
-                        <>
-                          <div className='font-semibold text-nowrap'>
-                            Duración (minutos):
-                          </div>
-                          <Form.Item
-                            className='mb-0'
-                            hasFeedback
-                            name={[pregunta.name, 'duracion']}
-                          >
-                            <InputNumber
-                              type='number'
-                              className='w-24'
-                              controls={false}
-                              placeholder='Indefinido'
-                              min={0}
-                            />
-                          </Form.Item>
-                        </>
-                      )}
+                      {tipo_examen !== tiposExamen.Solo &&
+                        tipo_examen !== tiposExamen.Alumno && (
+                          <>
+                            <div className='font-semibold text-nowrap'>
+                              Duración (minutos):
+                            </div>
+                            <Form.Item
+                              className='mb-0'
+                              hasFeedback
+                              name={[pregunta.name, 'duracion']}
+                            >
+                              <InputNumber
+                                type='number'
+                                className='w-24'
+                                controls={false}
+                                placeholder='Indefinido'
+                                min={0}
+                              />
+                            </Form.Item>
+                          </>
+                        )}
                     </div>
 
                     <Form.Item
@@ -141,11 +142,11 @@ const FormCrearPreguntas = ({
                             ? [toUploadFile(archivo_pregunta?.principal)]
                             : []
                         }
-                        beforeUpload={file => {
-                          setArchivos(prev => ({
+                        beforeUpload={(file) => {
+                          setArchivos((prev) => ({
                             ...prev,
                             preguntas: archivo_pregunta
-                              ? prev.preguntas.map(pregunta_aux =>
+                              ? prev.preguntas.map((pregunta_aux) =>
                                   pregunta_aux.name === pregunta.name
                                     ? {
                                         ...pregunta_aux,
@@ -165,9 +166,9 @@ const FormCrearPreguntas = ({
                           return beforeUpload(file)
                         }}
                         onRemove={() =>
-                          setArchivos(prev => ({
+                          setArchivos((prev) => ({
                             ...prev,
-                            preguntas: prev.preguntas.map(pregunta_aux =>
+                            preguntas: prev.preguntas.map((pregunta_aux) =>
                               pregunta_aux.name === pregunta.name
                                 ? { ...pregunta_aux, principal: null }
                                 : pregunta_aux
@@ -205,7 +206,8 @@ const FormCrearPreguntas = ({
             onClick={() =>
               add({
                 respuestas:
-                  tipo_examen === tiposExamen.Solo
+                  tipo_examen === tiposExamen.Solo ||
+                  tipo_examen === tiposExamen.Alumno
                     ? [{ respuesta: 'SI' }, { respuesta: 'NO' }]
                     : [{}, {}, {}, {}],
               })

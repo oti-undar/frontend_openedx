@@ -29,20 +29,21 @@ const FormAjustesExamen = ({ form, examen, archivos, setArchivos }) => {
             />
           </Form.Item>
         </div>
-        {tipo_examen !== tiposExamen.Solo && (
-          <>
-            <FormInicioExamen
-              form={form}
-              onChangeFecha={setFechaInicio}
-              examen={examen}
-            />
-            <FormFinalExamen
-              form={form}
-              inicio_examen={fechaInicio}
-              examen={examen}
-            />
-          </>
-        )}
+        {tipo_examen !== tiposExamen.Solo &&
+          tipo_examen !== tiposExamen.Alumno && (
+            <>
+              <FormInicioExamen
+                form={form}
+                onChangeFecha={setFechaInicio}
+                examen={examen}
+              />
+              <FormFinalExamen
+                form={form}
+                inicio_examen={fechaInicio}
+                examen={examen}
+              />
+            </>
+          )}
       </div>
       <div className='col-span-1'>
         <Form.Item
@@ -58,14 +59,16 @@ const FormAjustesExamen = ({ form, examen, archivos, setArchivos }) => {
             fileList={
               archivos?.principal ? [toUploadFile(archivos?.principal)] : []
             }
-            beforeUpload={file => {
-              setArchivos(prev => ({
+            beforeUpload={(file) => {
+              setArchivos((prev) => ({
                 ...prev,
                 principal: file,
               }))
               return beforeUpload(file)
             }}
-            onRemove={() => setArchivos(prev => ({ ...prev, principal: null }))}
+            onRemove={() =>
+              setArchivos((prev) => ({ ...prev, principal: null }))
+            }
             accept='.jpg, .jpeg, .png, .webp, .gif, .mp4, .mkv, .webm, .ogg, .oga, .mp3, .wav, .aac'
             maxCount={1}
             listType='picture'

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import ButtonPrimary from '../../components/buttons/button-primary'
 import { FaFlag } from 'react-icons/fa'
@@ -22,6 +22,8 @@ const MostrarPregunta = ({
   const path = location.pathname
   const socket = useSocket()
 
+  const [retroalimentacion, setRetroalimentacion] = useState('')
+
   const preguntas_no_resueltas = examenActual.preguntas.filter(
     (pregunta_aux) => {
       return (
@@ -37,6 +39,7 @@ const MostrarPregunta = ({
   async function handleFinalizarExamen() {
     await onFinalizarPregunta?.({
       respuesta_id: examenActual.pregunta_actual.respuesta_id,
+      retroalimentacion,
     })
     await onFinalizarExamen?.()
     setExamenActual(null)
@@ -67,7 +70,11 @@ const MostrarPregunta = ({
       await onFinalizarPregunta?.({
         siguiente,
         respuesta_id: examenActual.pregunta_actual.respuesta_id,
+        retroalimentacion,
       })
+
+    // Limpiar retroalimentación después de finalizar la pregunta
+    setRetroalimentacion('')
   }
 
   function handleChangeRespuestaId(respuestaId) {
@@ -123,7 +130,8 @@ const MostrarPregunta = ({
           </div>
           {(examenActual?.tipo_examen === tiposExamen.Async ||
             path.includes('testear-examen') ||
-            examenActual?.tipo_examen === tiposExamen.Solo) &&
+            examenActual?.tipo_examen === tiposExamen.Solo ||
+            examenActual?.tipo_examen === tiposExamen.Alumno) &&
             (preguntas_no_resueltas.length ? (
               <ButtonPrimary
                 onClick={() => handleSiguientePregunta()}
@@ -147,6 +155,8 @@ const MostrarPregunta = ({
           pregunta={pregunta}
           onChangeRespuestaId={handleChangeRespuestaId}
           tipoExamen={examenActual?.tipo_examen}
+          retroalimentacion={retroalimentacion}
+          onChangeRetroalimentacion={setRetroalimentacion}
         />
       </div>
     </>

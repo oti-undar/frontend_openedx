@@ -2,7 +2,13 @@ import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { API_URL, tiposExamen } from '../../lib/globales'
 
-const Pregunta = ({ onChangeRespuestaId, pregunta, tipoExamen }) => {
+const Pregunta = ({
+  onChangeRespuestaId,
+  pregunta,
+  tipoExamen,
+  retroalimentacion,
+  onChangeRetroalimentacion,
+}) => {
   return (
     <>
       <div
@@ -18,7 +24,8 @@ const Pregunta = ({ onChangeRespuestaId, pregunta, tipoExamen }) => {
         <div className='grid grid-cols-2 gap-x-8 gap-y-6 animate-flip-down animate-delay-500 animate-ease-in-out'>
           {useMemo(() => {
             const respuestas = [...(pregunta.respuestas ?? [])]
-            return tipoExamen === tiposExamen.Solo
+            return tipoExamen === tiposExamen.Solo ||
+              tipoExamen === tiposExamen.Alumno
               ? respuestas
               : respuestas.sort(() => Math.random() - 0.5)
           }, [pregunta.respuestas, tipoExamen]).map((alternativa) => (
@@ -86,6 +93,28 @@ const Pregunta = ({ onChangeRespuestaId, pregunta, tipoExamen }) => {
             )}
           </div>
         )}
+        {(tipoExamen === tiposExamen.Solo ||
+          tipoExamen === tiposExamen.Alumno) && (
+          <div className='flex flex-col gap-2 w-full max-w-2xl animate-fade-left animate-ease-in-out animate-delay-500'>
+            <label
+              htmlFor='retroalimentacion'
+              className='text-lg font-semibold text-gray-700'
+            >
+              {tipoExamen === tiposExamen.Alumno
+                ? '¿Que puedo mejorar?'
+                : 'Observación'}
+            </label>
+            <textarea
+              id='retroalimentacion'
+              name='retroalimentacion'
+              value={retroalimentacion || ''}
+              onChange={(e) => onChangeRetroalimentacion?.(e.target.value)}
+              placeholder='Escriba aquí...'
+              className='w-full min-h-[120px] px-4 py-3 rounded-xl border-2 border-gray-300 focus:border-yellow-400 focus:outline-none resize-y transition-all shadow-md'
+              rows={4}
+            />
+          </div>
+        )}
       </div>
     </>
   )
@@ -97,6 +126,8 @@ Pregunta.propTypes = {
   pregunta: PropTypes.object.isRequired,
   onChangeRespuestaId: PropTypes.func.isRequired,
   tipoExamen: PropTypes.string,
+  retroalimentacion: PropTypes.string,
+  onChangeRetroalimentacion: PropTypes.func,
 }
 
 export default Pregunta

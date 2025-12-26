@@ -24,4 +24,5 @@ export const tiposExamen = {
   Sync: 'Sync',
   Async: 'Async',
   Solo: 'Solo',
+  Alumno: 'Alumno',
 }

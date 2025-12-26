@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router'
 import { IoDocument } from 'react-icons/io5'
 import useFetchData from '../../../../hooks/useFetchData'
 import { FaCopy } from 'react-icons/fa6'
+import { PiRankingFill } from 'react-icons/pi'
 
 const useColumnsExamenes = ({ setExamenSeleccionado, setReFetch }) => {
   const navigate = useNavigate()
@@ -27,7 +28,7 @@ const useColumnsExamenes = ({ setExamenSeleccionado, setReFetch }) => {
       field: 'description',
       minWidth: 200,
       filter: true,
-      valueFormatter: params => params.value ?? '-',
+      valueFormatter: (params) => params.value ?? '-',
       flex: 2,
     },
     {
@@ -35,7 +36,7 @@ const useColumnsExamenes = ({ setExamenSeleccionado, setReFetch }) => {
       field: 'preguntas',
       minWidth: 50,
       filter: 'agNumberColumnFilter',
-      valueFormatter: params => params.value.length ?? 0,
+      valueFormatter: (params) => params.value.length ?? 0,
     },
     {
       headerName: 'Curso',
@@ -126,12 +127,23 @@ const useColumnsExamenes = ({ setExamenSeleccionado, setReFetch }) => {
                       },
                       msgSuccess: 'Examen finalizado correctamente',
                       onSuccess: () => {
-                        setReFetch(prev => prev + 1)
+                        setReFetch((prev) => prev + 1)
                       },
                     })
                   }}
                   size={15}
                   className='text-rose-500 hover:scale-125 transition-all cursor-pointer min-w-fit'
+                />
+              </Tooltip>
+            )}
+            {data.state.name === states.Finalizado && (
+              <Tooltip title='Ver Ranking'>
+                <PiRankingFill
+                  onClick={() => {
+                    navigate(`/ranking-final-examen/${data.id}`)
+                  }}
+                  size={15}
+                  className='text-yellow-500 hover:scale-125 transition-all cursor-pointer min-w-fit'
                 />
               </Tooltip>
             )}

@@ -1,6 +1,7 @@
 import { Document, Page, StyleSheet, Text, View } from '@react-pdf/renderer'
 import PropTypes from 'prop-types'
 import { getTotalObtenido } from '../table/columns-alumnos-inscritos'
+import { tiposExamen } from '../../../../lib/globales'
 
 const styles = StyleSheet.create({
   page: {
@@ -134,7 +135,7 @@ const DocExamenAlumno = ({ examenSeleccionado, alumnoSeleccionado, title }) => {
                       Respuesta Correcta:
                     </Text>
                     <Text>
-                      {pr?.pregunta?.respuestas?.find(r => r.correcta)
+                      {pr?.pregunta?.respuestas?.find((r) => r.correcta)
                         ?.respuesta || ''}
                     </Text>
                   </View>
@@ -144,6 +145,17 @@ const DocExamenAlumno = ({ examenSeleccionado, alumnoSeleccionado, title }) => {
                         Retroalimentación:
                       </Text>
                       <Text>{pr?.respuesta?.retroalimentacion || ''}</Text>
+                    </View>
+                  )}
+                  {pr?.retroalimentacion && (
+                    <View style={styles.styleRespuesta}>
+                      <Text style={{ fontWeight: 'bold' }}>
+                        {examenSeleccionado.tipo_examen === tiposExamen.Alumno
+                          ? '¿Que puedo mejorar?'
+                          : 'Observación'}
+                        :
+                      </Text>
+                      <Text>{pr?.retroalimentacion || ''}</Text>
                     </View>
                   )}
                 </View>

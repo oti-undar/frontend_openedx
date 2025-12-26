@@ -241,7 +241,8 @@ const FormCrearExamen = ({ examen, creacion = false }) => {
         return {
           ...pregunta,
           respuestas:
-            tipo_examen === tiposExamen.Solo
+            tipo_examen === tiposExamen.Solo ||
+            tipo_examen === tiposExamen.Alumno
               ? [
                   {
                     respuesta: 'SI',
@@ -283,6 +284,8 @@ const FormCrearExamen = ({ examen, creacion = false }) => {
                     ? 'Junto con los alumnos'
                     : tipo === tiposExamen.Async
                     ? 'Cada alumno independiente'
+                    : tipo === tiposExamen.Alumno
+                    ? 'Solo para el alumno'
                     : 'Solo para el docente',
               }))}
             />
