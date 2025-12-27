@@ -231,6 +231,8 @@ const RealizarExamen = () => {
                         examen_id +
                         (examenActual.tipo_examen === tiposExamen.Solo
                           ? '&solo=true'
+                          : examenActual.tipo_examen === tiposExamen.Alumno
+                          ? '&alumno=true'
                           : '')
                     )
                     resolve()

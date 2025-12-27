@@ -74,30 +74,31 @@ const useColumnsExamenes = ({ setExamenSeleccionado, setReFetch }) => {
                 className='text-slate-500 hover:scale-125 transition-all cursor-pointer min-w-fit'
               />
             </Tooltip>
-            {data?.state?.name === states.Disponible && (
-              <Popover
-                trigger='click'
-                title={
-                  <div>
-                    <p className='font-bold text-slate-500'>Compartir URL:</p>
-                    <p
-                      className='font-semibold text-sky-500 cursor-pointer'
-                      onClick={() => {
-                        navigator.clipboard.writeText(
-                          `${window.location.origin}/examen/realizar-examen/${data.id}`
-                        )
-                        message.success('URL copiada al portapapeles')
-                      }}
-                    >{`${window.location.origin}/examen/realizar-examen/${data.id}`}</p>
-                  </div>
-                }
-              >
-                <FaShareAlt
-                  size={15}
-                  className='text-purple-500 hover:scale-125 transition-all cursor-pointer min-w-fit'
-                />
-              </Popover>
-            )}
+            {data?.state?.name === states.Disponible &&
+              data?.tipo_examen !== tiposExamen.Solo && (
+                <Popover
+                  trigger='click'
+                  title={
+                    <div>
+                      <p className='font-bold text-slate-500'>Compartir URL:</p>
+                      <p
+                        className='font-semibold text-sky-500 cursor-pointer'
+                        onClick={() => {
+                          navigator.clipboard.writeText(
+                            `${window.location.origin}/examen/realizar-examen/${data.id}`
+                          )
+                          message.success('URL copiada al portapapeles')
+                        }}
+                      >{`${window.location.origin}/examen/realizar-examen/${data.id}`}</p>
+                    </div>
+                  }
+                >
+                  <FaShareAlt
+                    size={15}
+                    className='text-purple-500 hover:scale-125 transition-all cursor-pointer min-w-fit'
+                  />
+                </Popover>
+              )}
             {data?.tipo_examen === tiposExamen.Sync &&
               data?.state?.name === states.Disponible && (
                 <Tooltip title='Ir al Examen'>

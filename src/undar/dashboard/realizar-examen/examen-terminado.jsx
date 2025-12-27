@@ -11,6 +11,7 @@ const ExamenTerminado = () => {
   const [searchParams] = useSearchParams()
   const examen_id = searchParams.get('examen_id')
   const solo = searchParams.get('solo')
+  const alumno = searchParams.get('alumno')
 
   const navigate = useNavigate()
 
@@ -37,7 +38,7 @@ const ExamenTerminado = () => {
       <div className='w-[30%] text-center text-xl font-semibold text-balance -mt-8'>
         Has terminado el examen
       </div>
-      {response && response?.nota !== undefined && (
+      {response && response?.nota !== undefined && !alumno && (
         <div className='w-[30%] text-center text-3xl font-semibold text-balance'>
           <span className='text-sky-500'>Nota: </span>
           <span
