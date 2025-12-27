@@ -82,6 +82,9 @@ const RealizarExamen = () => {
             respuesta_id: p.respuesta_id,
           })),
           ejecucion_examen_id: data.id,
+          user_nombre: data.user.first_name
+            ? data.user.first_name + ' ' + data.user.last_name
+            : data.user.username,
         }))
       },
     })

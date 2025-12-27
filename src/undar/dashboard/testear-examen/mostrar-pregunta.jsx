@@ -120,6 +120,12 @@ const MostrarPregunta = ({
           onComplete={() => handleSiguientePregunta()}
         />
       )}
+      {examenActual?.tipo_examen === tiposExamen.Solo && (
+        <div className='text-center absolute top-6 w-full pr-24 text-xl font-bold text-slate-700'>
+          <span className='text-slate-500'>ALUMNO:</span>{' '}
+          {examenActual.user_nombre}
+        </div>
+      )}
       <div className='flex flex-col gap-2 text-center justify-center items-center'>
         <div className='w-full flex justify-between'>
           <div className='flex flex-col text-left opacity-70'>

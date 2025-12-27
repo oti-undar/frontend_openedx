@@ -3,10 +3,6 @@ import React from 'react'
 import { tiposExamen } from '../../../../lib/globales'
 
 const useColumnsDetallesAlumnoExamen = ({ examenSeleccionado }) => {
-  console.log(
-    '🚀 ~ useColumnsDetallesAlumnoExamen ~ examenSeleccionado:',
-    examenSeleccionado
-  )
   return [
     {
       headerName: 'Pregunta',
