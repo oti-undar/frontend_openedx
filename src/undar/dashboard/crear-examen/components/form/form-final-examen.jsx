@@ -4,8 +4,11 @@ import { FaClock } from 'react-icons/fa'
 import { formatDayjsToUTC, presetsDatePicker } from '../../../../utils/date'
 import PropTypes from 'prop-types'
 import dayjs from 'dayjs'
+import { useLanguage } from '../../../../../context/useLanguaje'
 
 const FormFinalExamen = ({ form, inicio_examen, examen }) => {
+  const { t } = useLanguage()
+
   const [modoFinal, setModoFinal] = useState(
     examen?.final_examen ? 'fecha' : 'manual'
   )
@@ -54,27 +57,29 @@ const FormFinalExamen = ({ form, inicio_examen, examen }) => {
 
   return (
     <div>
-      <h2 className='text-xl font-semibold pb-2'>Final de Examen</h2>
+      <h2 className='text-xl font-semibold pb-2'>
+        {t.createExam.settings.examEnd}
+      </h2>
 
       <div className='flex gap-2 items-center'>
         <Select
           className='w-1/2'
-          placeholder='Modo de Final'
+          placeholder={t.createExam.settings.endMode}
           value={modoFinal}
           prefix={<FaClock className='text-lime-500 mr-1' />}
           onChange={setModoFinal}
           options={[
             {
               value: 'manual',
-              label: 'Final Manual',
+              label: t.createExam.settings.manualEnd,
             },
             {
               value: 'tiempo',
-              label: 'Después de X tiempo',
+              label: t.createExam.settings.timeEnd,
             },
             {
               value: 'fecha',
-              label: 'En X fecha y hora',
+              label: t.createExam.settings.dateStart,
             },
           ]}
         />
@@ -91,27 +96,27 @@ const FormFinalExamen = ({ form, inicio_examen, examen }) => {
             />
             <Select
               className='w-32'
-              placeholder='Minutos'
+              placeholder={t.createExam.settings.minutes}
               value={modoTiempo}
               onChange={setModoTiempo}
               options={[
                 {
                   value: 'm',
-                  label: 'Minutos',
+                  label: t.createExam.settings.minutes,
                 },
                 {
                   value: 'h',
-                  label: 'Horas',
+                  label: t.createExam.settings.hours,
                 },
                 {
                   value: 'd',
-                  label: 'Días',
+                  label: t.createExam.settings.days,
                 },
               ]}
             />
             {!inicio_examen && (
               <div className='absolute right-2 -top-5 text-xs text-rose-500 animate-flip-up animate-duration-500 animate-ease-in-out text-nowrap'>
-                Debe seleccionar una fecha de inicio
+                {t.createExam.settings.startDateRequired}
               </div>
             )}
             {fecha && (
@@ -128,9 +133,9 @@ const FormFinalExamen = ({ form, inicio_examen, examen }) => {
             format='DD/MM/YYYY h:mm A'
             presets={presetsDatePicker}
             className='animate-fade-right animate-ease-in-out animate-duration-500'
-            placeholder='Fecha de Final'
+            placeholder={t.createExam.settings.endDate}
             value={fecha ? dayjs(fecha).local() : null}
-            onChange={value => {
+            onChange={(value) => {
               setFecha(formatDayjsToUTC(value))
             }}
           />

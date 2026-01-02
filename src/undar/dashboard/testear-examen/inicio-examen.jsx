@@ -6,11 +6,13 @@ import { API_URL, tiposExamen } from '../../lib/globales.js'
 import { getUserAuth } from '../../utils/api-openEdx.js'
 import { useLocation } from 'react-router'
 import { useSocket } from '../../hooks/use-socket.js'
+import { useLanguage } from '../../../context/useLanguaje.js'
 
 const InicioExamen = ({ test, setExamenActual, onInitExamen }) => {
   const location = useLocation()
   const path = location.pathname
   const socket = useSocket()
+  const { t } = useLanguage()
 
   const primeraPregunta = test.preguntas[0]
 
@@ -73,7 +75,7 @@ const InicioExamen = ({ test, setExamenActual, onInitExamen }) => {
                 onClick={() => handleIniciarExamen()}
               >
                 <FaHourglassStart />
-                Iniciar Examen
+                {t.studentExam.startExam}
               </ButtonPrimary>
             )}
           </div>
@@ -84,19 +86,19 @@ const InicioExamen = ({ test, setExamenActual, onInitExamen }) => {
               <img
                 className='max-w-[80%] max-h-[400px] rounded-xl'
                 src={`${API_URL()}${test.img}`}
-                alt='Imagen de prueba'
+                alt={t.studentExam.testImage}
               />
             )}
             {test.video && (
               <video className='max-w-[80%] max-h-[400px] rounded-xl' controls>
                 <source src={`${API_URL()}${test.video}`} type='video/mp4' />
-                Tu navegador no soporta el video.
+                {t.studentExam.videoNotSupported}
               </video>
             )}
             {test.audio && (
               <audio className='max-w-[80%] max-h-[400px] rounded-xl' controls>
                 <source src={`${API_URL()}${test.audio}`} type='audio/mp3' />
-                Tu navegador no soporta el audio.
+                {t.studentExam.audioNotSupported}
               </audio>
             )}
           </div>

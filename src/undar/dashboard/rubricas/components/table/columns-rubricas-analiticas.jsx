@@ -3,19 +3,22 @@ import React from 'react'
 import { FaEdit } from 'react-icons/fa'
 import { FaTrash } from 'react-icons/fa6'
 import { useNavigate } from 'react-router'
+import { useLanguage } from '../../../../../context/useLanguaje'
 
 const useColumnsRubricasAnaliticas = ({ removeRubrica }) => {
   const navigate = useNavigate()
+  const { t } = useLanguage()
+
   return [
     {
-      headerName: 'Identificador',
+      headerName: t.rubrics.table.identifier,
       field: 'name',
       minWidth: 200,
       filter: true,
       flex: 2,
     },
     {
-      headerName: 'Acciones',
+      headerName: t.rubrics.table.actions,
       field: '_count',
       cellRenderer: ({ value, data }) => {
         const examenes = value?.examenes || 0
@@ -24,8 +27,8 @@ const useColumnsRubricasAnaliticas = ({ removeRubrica }) => {
             <Tooltip
               title={
                 examenes == 0
-                  ? 'Editar'
-                  : 'No se puede editar por que tiene examenes asociados'
+                  ? t.rubrics.table.tooltips.edit
+                  : t.rubrics.table.tooltips.cantEdit
               }
             >
               <FaEdit
@@ -41,16 +44,16 @@ const useColumnsRubricasAnaliticas = ({ removeRubrica }) => {
             <Tooltip
               title={
                 examenes == 0
-                  ? 'Eliminar'
-                  : 'No se puede eliminar por que tiene examenes asociados'
+                  ? t.rubrics.table.tooltips.delete
+                  : t.rubrics.table.tooltips.cantDelete
               }
             >
               <FaTrash
                 onClick={() => {
                   if (examenes == 0)
                     Modal.confirm({
-                      title: 'Eliminar Rubrica',
-                      content: '¿Estas seguro de eliminar esta rúbrica?',
+                      title: t.rubrics.table.modals.deleteTitle,
+                      content: t.rubrics.table.modals.deleteContent,
                       onOk: () => removeRubrica({ examen_id: data.id }),
                     })
                 }}

@@ -1,7 +1,6 @@
-import { Tooltip } from 'antd'
 import PropTypes from 'prop-types'
 import React from 'react'
-import { PiExportBold } from 'react-icons/pi'
+import { useLanguage } from '../../../../../context/useLanguaje'
 
 function getNota({ examen_resuelto }) {
   const puntaje_total =
@@ -28,6 +27,7 @@ function getNota({ examen_resuelto }) {
 }
 
 const useColumnsDetallesAlumnoCurso = ({ response }) => {
+  const { t } = useLanguage()
   const maxExamenes = response?.examenes?.length ?? 0
 
   const examenesKeys = Array.from({ length: maxExamenes }, (_, i) => `${i + 1}`)
@@ -36,7 +36,7 @@ const useColumnsDetallesAlumnoCurso = ({ response }) => {
 
   return [
     {
-      headerName: 'Nombres y Apellidos',
+      headerName: t.studentsCourses.names,
       field: 'user',
       minWidth: 200,
       filter: true,
@@ -48,7 +48,7 @@ const useColumnsDetallesAlumnoCurso = ({ response }) => {
     },
 
     ...examenesKeys.map((key, index) => ({
-      headerName: `Examen ${key}`,
+      headerName: `${t.studentsCourses.exam} ${key}`,
       field: `user`,
       minWidth: 110,
       filter: 'agNumberColumnFilter',
@@ -60,7 +60,7 @@ const useColumnsDetallesAlumnoCurso = ({ response }) => {
     })),
 
     {
-      headerName: 'Promedio',
+      headerName: t.studentsCourses.average,
       field: 'user',
       minWidth: 110,
       filter: 'agNumberColumnFilter',

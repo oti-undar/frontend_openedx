@@ -15,6 +15,7 @@ import { useFinalizarPreguntaExamenRespuesta } from './hooks/finalizar-pregunta-
 import { useSearchParams } from 'react-router-dom'
 import { useSocket } from '../../hooks/use-socket'
 import AvatarMenu from './components/avatar-menu'
+import { useLanguage } from '../../../context/useLanguaje'
 
 const RealizarExamen = () => {
   const { id: examen_id } = useParams()
@@ -22,6 +23,7 @@ const RealizarExamen = () => {
   const user_id_alumno = searchParams.get('user_id')
   const navigate = useNavigate()
   const socket = useSocket()
+  const { t } = useLanguage()
 
   const user_id = getUserAuth().userId
 
@@ -109,8 +111,8 @@ const RealizarExamen = () => {
   if (!examen_id)
     return (
       <Bloqueado
-        description='Examen no encontrado'
-        textButton='Volver al inicio'
+        description={t.studentExam.notFound}
+        textButton={t.studentExam.backToHome}
         onClick={() => (window.location.href = '/')}
       />
     )
@@ -119,8 +121,8 @@ const RealizarExamen = () => {
   if (!test)
     return (
       <Bloqueado
-        description='Examen no encontrado'
-        textButton='Volver al inicio'
+        description={t.studentExam.notFound}
+        textButton={t.studentExam.backToHome}
         onClick={() => (window.location.href = '/')}
       />
     )

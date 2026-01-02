@@ -6,20 +6,25 @@ import TableTitle from '../../components/tables/table-title'
 import { exportAGGridDataToJSON } from '../../utils/ag-grid'
 import TableRubricasHolisticas from '../rubricas/components/table/table-rubricas-holisticas'
 import TableRubricasAnaliticas from '../rubricas/components/table/table-rubricas-analiticas'
+import { useLanguage } from '../../../context/useLanguaje'
 
 const Examenes = () => {
   const examenesRef = useRef()
   const alumnosInscritosRef = useRef()
   const detallesAlumnosRef = useRef()
+  const { t } = useLanguage()
 
   const exportarExamenes = () =>
-    exportAGGridDataToJSON(examenesRef.current, 'Lista de Exámenes')
+    exportAGGridDataToJSON(examenesRef.current, t.exams.title)
 
   const exportarAlumnosInscritos = () =>
-    exportAGGridDataToJSON(alumnosInscritosRef.current, 'Alumnos Inscritos')
+    exportAGGridDataToJSON(
+      alumnosInscritosRef.current,
+      t.exams.enrolledStudents
+    )
 
   const exportarDetallesAlumnos = () =>
-    exportAGGridDataToJSON(detallesAlumnosRef.current, 'Detalles de Alumnos')
+    exportAGGridDataToJSON(detallesAlumnosRef.current, t.exams.studentDetails)
 
   const [examenSeleccionado, setExamenSeleccionado] = useState()
   const [alumnoSeleccionado, setAlumnoSeleccionado] = useState()
@@ -28,7 +33,7 @@ const Examenes = () => {
     <div className='flex flex-col gap-8 h-full'>
       <div className='grid grid-cols-8 gap-8 h-full w-full'>
         <TableTitle
-          title='Lista de Exámenes'
+          title={t.exams.title}
           onExport={exportarExamenes}
           className='col-span-4'
         >
@@ -38,14 +43,14 @@ const Examenes = () => {
           />
         </TableTitle>
         <TableTitle
-          title='Rúbricas Holísticas'
+          title={t.exams.holisticRubrics}
           className='col-span-2'
           showExportButton={false}
         >
           <TableRubricasHolisticas />
         </TableTitle>
         <TableTitle
-          title='Rúbricas Analíticas'
+          title={t.exams.analyticRubrics}
           className='col-span-2'
           showExportButton={false}
         >
@@ -54,7 +59,7 @@ const Examenes = () => {
       </div>
       <div className='grid grid-cols-4 gap-8 h-full'>
         <TableTitle
-          title='Alumnos Inscritos'
+          title={t.exams.enrolledStudents}
           className='col-span-2'
           onExport={exportarAlumnosInscritos}
         >
@@ -66,7 +71,7 @@ const Examenes = () => {
           />
         </TableTitle>
         <TableTitle
-          title='Detalles'
+          title={t.exams.details}
           className='col-span-2'
           onExport={exportarDetallesAlumnos}
         >

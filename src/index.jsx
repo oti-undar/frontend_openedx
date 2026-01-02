@@ -44,6 +44,7 @@ import LayoutGlobal from './undar/components/layout/layout-global';
 import EditarExamen from './undar/dashboard/editar-examen/editar-examen';
 import EditarRubricaHolistica from './undar/dashboard/rubricas/editar-rubrica-holistica';
 import EditarRubricaAnalitica from './undar/dashboard/rubricas/editar-rubrica-analitica';
+import { LanguageProvider } from './context/LanguageContext';
 
 const queryClient = new QueryClient();
 
@@ -107,7 +108,9 @@ const App = () => {
       <ToastProvider>
         <QueryClientProvider client={queryClient}>
           <Head />
-          <RouterProvider router={router} />
+          <LanguageProvider>
+            <RouterProvider router={router} />
+          </LanguageProvider>
         </QueryClientProvider>
       </ToastProvider>
     </AppProvider>

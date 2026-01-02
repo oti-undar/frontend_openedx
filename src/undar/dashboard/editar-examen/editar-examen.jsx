@@ -4,9 +4,11 @@ import { useParams } from 'react-router'
 import { useGetExamen } from './hooks/use-get-examen'
 import Bloqueado from '../../components/layout/components/bloqueado'
 import Loader from '../../components/layout/components/loader'
+import { useLanguage } from '../../../context/useLanguaje'
 
 const EditarExamen = () => {
   const { id: examen_id } = useParams()
+  const { t } = useLanguage()
 
   const { examen, isloading, getExamen } = useGetExamen()
 
@@ -18,8 +20,8 @@ const EditarExamen = () => {
   if (!examen_id)
     return (
       <Bloqueado
-        description='Examen no encontrado'
-        textButton='Volver al inicio'
+        description={t.testExam.notFound}
+        textButton={t.testExam.backToHome}
         onClick={() => (window.location.href = '/')}
       />
     )
@@ -27,8 +29,8 @@ const EditarExamen = () => {
   if (!examen)
     return (
       <Bloqueado
-        description='Examen no encontrado'
-        textButton='Volver al inicio'
+        description={t.testExam.notFound}
+        textButton={t.testExam.backToHome}
         onClick={() => (window.location.href = '/')}
       />
     )

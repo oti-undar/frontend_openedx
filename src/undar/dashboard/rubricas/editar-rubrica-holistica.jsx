@@ -5,10 +5,12 @@ import { useGetRubrica } from './hooks/use-get-rubrica'
 import Bloqueado from '../../components/layout/components/bloqueado'
 import Loader from '../../components/layout/components/loader'
 import { useNavigate } from 'react-router'
+import { useLanguage } from '../../../context/useLanguaje'
 
 const EditarRubricaHolistica = () => {
   const { id: rubrica_holistica_id } = useParams()
   const navigate = useNavigate()
+  const { t } = useLanguage()
   const {
     response: rubrica_holistica,
     isloading,
@@ -25,8 +27,8 @@ const EditarRubricaHolistica = () => {
   if (!rubrica_holistica_id)
     return (
       <Bloqueado
-        description='Rúbrica no encontrada'
-        textButton='Volver'
+        description={t.rubrics.notFound}
+        textButton={t.rubrics.back}
         onClick={() => navigate('/examenes')}
       />
     )
@@ -34,16 +36,16 @@ const EditarRubricaHolistica = () => {
   if (!rubrica_holistica)
     return (
       <Bloqueado
-        description='Rúbrica no encontrada'
-        textButton='Volver'
+        description={t.rubrics.notFound}
+        textButton={t.rubrics.back}
         onClick={() => navigate('/examenes')}
       />
     )
   if ((rubrica_holistica?._count?.examenes ?? 0) > 0)
     return (
       <Bloqueado
-        description='Esta rúbrica no puede ser editada por que tiene examenes asociados'
-        textButton='Volver'
+        description={t.rubrics.blockedEdit}
+        textButton={t.rubrics.back}
         onClick={() => navigate('/examenes')}
       />
     )

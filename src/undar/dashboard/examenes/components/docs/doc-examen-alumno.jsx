@@ -2,6 +2,7 @@ import { Document, Page, StyleSheet, Text, View } from '@react-pdf/renderer'
 import PropTypes from 'prop-types'
 import { getTotalObtenido } from '../table/columns-alumnos-inscritos'
 import { tiposExamen } from '../../../../lib/globales'
+import { useLanguage } from '../../../../../context/useLanguaje'
 
 const styles = StyleSheet.create({
   page: {
@@ -32,6 +33,7 @@ const styles = StyleSheet.create({
 })
 
 const DocExamenAlumno = ({ examenSeleccionado, alumnoSeleccionado, title }) => {
+  const { t } = useLanguage()
   const preguntasResueltas = alumnoSeleccionado?.preguntas_resueltas ?? []
 
   const total_puntos =
@@ -80,7 +82,7 @@ const DocExamenAlumno = ({ examenSeleccionado, alumnoSeleccionado, title }) => {
                 fontWeight: 'bold',
               }}
             >
-              Nota:
+              {t.exams.enrolledTable.pdfReport.grade}
             </Text>
             <Text>{notaFinal}</Text>
           </View>
@@ -127,12 +129,14 @@ const DocExamenAlumno = ({ examenSeleccionado, alumnoSeleccionado, title }) => {
                   }}
                 >
                   <View style={styles.styleRespuesta}>
-                    <Text style={{ fontWeight: 'bold' }}>Respuesta:</Text>
+                    <Text style={{ fontWeight: 'bold' }}>
+                      {t.exams.enrolledTable.pdfReport.answer}
+                    </Text>
                     <Text>{pr?.respuesta?.respuesta || '-'}</Text>
                   </View>
                   <View style={styles.styleRespuesta}>
                     <Text style={{ fontWeight: 'bold' }}>
-                      Respuesta Correcta:
+                      {t.exams.enrolledTable.pdfReport.correctAnswer}
                     </Text>
                     <Text>
                       {pr?.pregunta?.respuestas?.find((r) => r.correcta)
@@ -142,7 +146,7 @@ const DocExamenAlumno = ({ examenSeleccionado, alumnoSeleccionado, title }) => {
                   {pr?.respuesta?.retroalimentacion && (
                     <View style={styles.styleRespuesta}>
                       <Text style={{ fontWeight: 'bold' }}>
-                        Retroalimentación:
+                        {t.exams.enrolledTable.pdfReport.feedback}
                       </Text>
                       <Text>{pr?.respuesta?.retroalimentacion || ''}</Text>
                     </View>
@@ -151,8 +155,8 @@ const DocExamenAlumno = ({ examenSeleccionado, alumnoSeleccionado, title }) => {
                     <View style={styles.styleRespuesta}>
                       <Text style={{ fontWeight: 'bold' }}>
                         {examenSeleccionado.tipo_examen === tiposExamen.Alumno
-                          ? '¿Que puedo mejorar?'
-                          : 'Observación'}
+                          ? t.testExam.whatToImprove
+                          : t.testExam.observation}
                         :
                       </Text>
                       <Text>{pr?.retroalimentacion || ''}</Text>

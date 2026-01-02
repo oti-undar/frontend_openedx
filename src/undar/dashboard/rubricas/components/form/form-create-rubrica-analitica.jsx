@@ -11,11 +11,13 @@ import FormCreateIndicadores from './form-create-indicadores'
 import { getUserAuth } from '../../../../utils/api-openEdx'
 import PropTypes from 'prop-types'
 import FormAdicionalesRubrica from './form-adicionales-rubrica'
+import { useLanguage } from '../../../../../context/useLanguaje'
 
 const FormCreateRubricaAnalitica = ({ rubrica_analitica }) => {
   const [form] = Form.useForm()
   const navigate = useNavigate()
   const { fetchData, isloading } = useFetchData()
+  const { t } = useLanguage()
 
   const user_id = getUserAuth().userId
 
@@ -24,14 +26,14 @@ const FormCreateRubricaAnalitica = ({ rubrica_analitica }) => {
       ...values,
       user_id,
       indicadores: {
-        create: values.indicadores.map(indicador => {
+        create: values.indicadores.map((indicador) => {
           const { niveles_de_logro, ...rest } = indicador
           return {
             ...rest,
             id: undefined,
             rubrica_analitica_id: undefined,
             niveles_de_logro: {
-              create: niveles_de_logro.map(level => {
+              create: niveles_de_logro.map((level) => {
                 const { desde, hasta, ...rest } = level
                 return {
                   ...rest,
@@ -54,8 +56,8 @@ const FormCreateRubricaAnalitica = ({ rubrica_analitica }) => {
       }`,
       data,
       msgSuccess: rubrica_analitica
-        ? 'Rúbrica actualizada correctamente'
-        : 'Rúbrica creada correctamente',
+        ? t.rubrics.create.successEdit
+        : t.rubrics.create.successCreate,
       onSuccess: () => {
         form.resetFields()
         navigate('/examenes')
@@ -68,9 +70,9 @@ const FormCreateRubricaAnalitica = ({ rubrica_analitica }) => {
     if (rubrica_analitica) {
       form.setFieldsValue({
         ...rubrica_analitica,
-        indicadores: rubrica_analitica.indicadores.map(indicador => ({
+        indicadores: rubrica_analitica.indicadores.map((indicador) => ({
           ...indicador,
-          niveles_de_logro: indicador.niveles_de_logro.map(level => ({
+          niveles_de_logro: indicador.niveles_de_logro.map((level) => ({
             ...level,
             desde: level.nota.split('-')[0],
             hasta: level.nota.split('-')[1],
@@ -103,7 +105,7 @@ const FormCreateRubricaAnalitica = ({ rubrica_analitica }) => {
         <div className='flex justify-between gap-4 w-full'>
           <div className='flex gap-4 w-full'>
             <h2 className='text-2xl font-semibold text-nowrap'>
-              Identificador de la Rúbrica Analítica:
+              {t.rubrics.create.identifierAnalytic}
             </h2>
             <Form.Item
               hasFeedback
@@ -112,14 +114,14 @@ const FormCreateRubricaAnalitica = ({ rubrica_analitica }) => {
               rules={[
                 {
                   required: true,
-                  message: 'Por favor ingrese el identificador de la Rúbrica',
+                  message: t.rubrics.create.identifierError,
                 },
               ]}
             >
               <Input
                 size='large'
                 allowClear
-                placeholder='Un identificador para reconocer a la Rúbrica creada'
+                placeholder={t.rubrics.create.identifierPlaceholder}
               />
             </Form.Item>
           </div>
@@ -133,7 +135,9 @@ const FormCreateRubricaAnalitica = ({ rubrica_analitica }) => {
                 <FaPlusCircle />
               )}
               <span className='text-nowrap'>
-                {rubrica_analitica ? 'Editar' : 'Crear'} Rúbrica
+                {rubrica_analitica
+                  ? t.rubrics.create.submitEdit
+                  : t.rubrics.create.submitCreate}
               </span>
             </ButtonPrimary>
           </div>

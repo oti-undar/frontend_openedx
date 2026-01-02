@@ -1,11 +1,14 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import { tiposExamen } from '../../../../lib/globales'
+import { useLanguage } from '../../../../../context/useLanguaje'
 
 const useColumnsDetallesAlumnoExamen = ({ examenSeleccionado }) => {
+  const { t } = useLanguage()
+
   return [
     {
-      headerName: 'Pregunta',
+      headerName: t.exams.detailsTable.question,
       field: 'pregunta',
       minWidth: 200,
       filter: true,
@@ -13,7 +16,7 @@ const useColumnsDetallesAlumnoExamen = ({ examenSeleccionado }) => {
       flex: 2,
     },
     {
-      headerName: 'Respuesta Alumno',
+      headerName: t.exams.detailsTable.studentAnswer,
       field: 'respuesta',
       minWidth: 200,
       filter: true,
@@ -21,7 +24,7 @@ const useColumnsDetallesAlumnoExamen = ({ examenSeleccionado }) => {
       flex: 2,
     },
     {
-      headerName: 'Respuesta Correcta',
+      headerName: t.exams.detailsTable.correctAnswer,
       field: 'pregunta',
       minWidth: 200,
       filter: true,
@@ -37,8 +40,8 @@ const useColumnsDetallesAlumnoExamen = ({ examenSeleccionado }) => {
           {
             headerName:
               examenSeleccionado?.tipo_examen === tiposExamen.Alumno
-                ? '¿Que puedo mejorar?'
-                : 'Observación',
+                ? t.testExam.whatToImprove
+                : t.testExam.observation,
             field: 'retroalimentacion',
             minWidth: 200,
             filter: true,
@@ -48,7 +51,7 @@ const useColumnsDetallesAlumnoExamen = ({ examenSeleccionado }) => {
         ]
       : []),
     {
-      headerName: 'Puntos',
+      headerName: t.exams.detailsTable.points,
       field: 'pregunta',
       minWidth: 110,
       filter: 'agNumberColumnFilter',

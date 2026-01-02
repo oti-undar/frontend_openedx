@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { API_URL, tiposExamen } from '../../lib/globales'
+import { useLanguage } from '../../../context/useLanguaje'
 
 const Pregunta = ({
   onChangeRespuestaId,
@@ -9,6 +10,8 @@ const Pregunta = ({
   retroalimentacion,
   onChangeRetroalimentacion,
 }) => {
+  const { t } = useLanguage()
+
   return (
     <>
       <div
@@ -45,7 +48,7 @@ const Pregunta = ({
                 <img
                   className='max-w-[500px] max-h-[400px] rounded-xl'
                   src={`${API_URL()}${alternativa.img}`}
-                  alt='Imagen de prueba'
+                  alt={t.studentExam.testImage}
                 />
               )}
               {alternativa.video && (
@@ -72,14 +75,14 @@ const Pregunta = ({
               <img
                 className='max-w-[500px] max-h-[400px] rounded-xl'
                 src={`${API_URL()}${pregunta.img}`}
-                alt='Imagen de prueba'
+                alt={t.studentExam.testImage}
               />
             )}
             {pregunta.video && (
               <video
                 className='max-w-[500px] max-h-[400px] rounded-xl'
                 src={`${API_URL()}${pregunta.video}`}
-                alt='Video de prueba'
+                alt={t.studentExam.testVideo}
                 controls
               />
             )}
@@ -88,7 +91,7 @@ const Pregunta = ({
                 className='max-w-[500px] max-h-[400px] rounded-xl'
                 src={`${API_URL()}${pregunta.audio}`}
                 controls
-                alt='Audio de prueba'
+                alt={t.studentExam.testAudio}
               />
             )}
           </div>
@@ -101,15 +104,15 @@ const Pregunta = ({
               className='text-lg font-semibold text-gray-700'
             >
               {tipoExamen === tiposExamen.Alumno
-                ? '¿Que puedo mejorar?'
-                : 'Observación'}
+                ? t.testExam.whatToImprove
+                : t.testExam.observation}
             </label>
             <textarea
               id='retroalimentacion'
               name='retroalimentacion'
               value={retroalimentacion || ''}
               onChange={(e) => onChangeRetroalimentacion?.(e.target.value)}
-              placeholder='Escriba aquí...'
+              placeholder={t.testExam.placeholder}
               className='w-full min-h-[120px] px-4 py-3 rounded-xl border-2 border-gray-300 focus:border-yellow-400 focus:outline-none resize-y transition-all shadow-md'
               rows={4}
             />

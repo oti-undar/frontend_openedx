@@ -9,6 +9,7 @@ import { tiposExamen } from '../../lib/globales'
 import { getUserAuth } from '../../utils/api-openEdx'
 import { useLocation } from 'react-router'
 import { useSocket } from '../../hooks/use-socket'
+import { useLanguage } from '../../../context/useLanguaje'
 
 const MostrarPregunta = ({
   pregunta,
@@ -21,6 +22,7 @@ const MostrarPregunta = ({
   const location = useLocation()
   const path = location.pathname
   const socket = useSocket()
+  const { t } = useLanguage()
 
   const [retroalimentacion, setRetroalimentacion] = useState('')
 
@@ -122,7 +124,7 @@ const MostrarPregunta = ({
       )}
       {examenActual?.tipo_examen === tiposExamen.Solo && (
         <div className='text-center absolute top-6 w-full pr-24 text-xl font-bold text-slate-700'>
-          <span className='text-slate-500'>ALUMNO:</span>{' '}
+          <span className='text-slate-500'>{t.studentExam.student}</span>{' '}
           {examenActual.user_nombre}
         </div>
       )}
@@ -144,7 +146,7 @@ const MostrarPregunta = ({
                 className='animate-bounce animate-ease-in-out'
               >
                 <FaCircleChevronRight />
-                Siguiente Pregunta
+                {t.studentExam.nextQuestion}
               </ButtonPrimary>
             ) : (
               <ButtonPrimary
@@ -153,7 +155,7 @@ const MostrarPregunta = ({
                 className='animate-bounce animate-ease-in-out'
               >
                 <FaFlag />
-                Finalizar Examen
+                {t.studentExam.finishExam}
               </ButtonPrimary>
             ))}
         </div>

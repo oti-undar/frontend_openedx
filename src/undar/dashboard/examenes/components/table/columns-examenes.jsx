@@ -9,22 +9,24 @@ import { IoDocument } from 'react-icons/io5'
 import useFetchData from '../../../../hooks/useFetchData'
 import { FaCopy } from 'react-icons/fa6'
 import { PiRankingFill } from 'react-icons/pi'
+import { useLanguage } from '../../../../../context/useLanguaje'
 
 const useColumnsExamenes = ({ setExamenSeleccionado, setReFetch }) => {
   const navigate = useNavigate()
+  const { t } = useLanguage()
 
   const { fetchData } = useFetchData()
 
   return [
     {
-      headerName: 'Título',
+      headerName: t.dashboard.columns.title,
       field: 'title',
       minWidth: 200,
       filter: true,
       flex: 2,
     },
     {
-      headerName: 'Descripción',
+      headerName: t.dashboard.columns.description,
       field: 'description',
       minWidth: 200,
       filter: true,
@@ -32,20 +34,20 @@ const useColumnsExamenes = ({ setExamenSeleccionado, setReFetch }) => {
       flex: 2,
     },
     {
-      headerName: 'N° Preguntas',
+      headerName: t.dashboard.columns.questions,
       field: 'preguntas',
       minWidth: 50,
       filter: 'agNumberColumnFilter',
       valueFormatter: (params) => params.value.length ?? 0,
     },
     {
-      headerName: 'Curso',
+      headerName: t.dashboard.columns.course,
       field: 'curso.name',
       minWidth: 110,
       flex: 1,
     },
     {
-      headerName: 'Rúbrica',
+      headerName: t.dashboard.columns.rubric,
       field: 'id',
       minWidth: 110,
       filter: true,
@@ -54,20 +56,20 @@ const useColumnsExamenes = ({ setExamenSeleccionado, setReFetch }) => {
       flex: 1,
     },
     {
-      headerName: 'Acciones',
+      headerName: t.dashboard.columns.actions,
       minWidth: 130,
       flex: 1,
       cellRenderer: ({ data }) => {
         return (
           <div className='flex gap-2 items-center h-full'>
-            <Tooltip title='Seleccionar'>
+            <Tooltip title={t.dashboard.tooltips.select}>
               <GrRadialSelected
                 onClick={() => setExamenSeleccionado(data)}
                 size={15}
                 className='text-yellow-500 hover:scale-125 transition-all cursor-pointer min-w-fit'
               />
             </Tooltip>
-            <Tooltip title='Duplicar'>
+            <Tooltip title={t.dashboard.tooltips.duplicate}>
               <FaCopy
                 onClick={() => navigate(`/crear-examen?examen_id=${data.id}`)}
                 size={15}
@@ -80,14 +82,16 @@ const useColumnsExamenes = ({ setExamenSeleccionado, setReFetch }) => {
                   trigger='click'
                   title={
                     <div>
-                      <p className='font-bold text-slate-500'>Compartir URL:</p>
+                      <p className='font-bold text-slate-500'>
+                        {t.dashboard.tooltips.shareUrl}:
+                      </p>
                       <p
                         className='font-semibold text-sky-500 cursor-pointer'
                         onClick={() => {
                           navigator.clipboard.writeText(
                             `${window.location.origin}/examen/realizar-examen/${data.id}`
                           )
-                          message.success('URL copiada al portapapeles')
+                          message.success(t.dashboard.messages.urlCopied)
                         }}
                       >{`${window.location.origin}/examen/realizar-examen/${data.id}`}</p>
                     </div>
@@ -101,7 +105,7 @@ const useColumnsExamenes = ({ setExamenSeleccionado, setReFetch }) => {
               )}
             {data?.tipo_examen === tiposExamen.Sync &&
               data?.state?.name === states.Disponible && (
-                <Tooltip title='Ir al Examen'>
+                <Tooltip title={t.dashboard.tooltips.goToExam}>
                   <IoDocument
                     onClick={() => {
                       navigate(`/ranking-tiempo-real/${data.id}`)
@@ -112,7 +116,7 @@ const useColumnsExamenes = ({ setExamenSeleccionado, setReFetch }) => {
                 </Tooltip>
               )}
             {data.state.name === states.Disponible && (
-              <Tooltip title='Finalizar Examen'>
+              <Tooltip title={t.dashboard.tooltips.finishExam}>
                 <FaFlag
                   onClick={() => {
                     fetchData({
@@ -126,7 +130,7 @@ const useColumnsExamenes = ({ setExamenSeleccionado, setReFetch }) => {
                         },
                         final_examen: new Date(),
                       },
-                      msgSuccess: 'Examen finalizado correctamente',
+                      msgSuccess: t.dashboard.messages.examFinished,
                       onSuccess: () => {
                         setReFetch((prev) => prev + 1)
                       },
@@ -138,7 +142,7 @@ const useColumnsExamenes = ({ setExamenSeleccionado, setReFetch }) => {
               </Tooltip>
             )}
             {data.state.name === states.Finalizado && (
-              <Tooltip title='Ver Ranking'>
+              <Tooltip title={t.dashboard.tooltips.viewRanking}>
                 <PiRankingFill
                   onClick={() => {
                     navigate(`/ranking-final-examen/${data.id}`)

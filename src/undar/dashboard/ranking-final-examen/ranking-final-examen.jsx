@@ -8,10 +8,12 @@ import Bloqueado from '../../components/layout/components/bloqueado'
 import Loader from '../../components/layout/components/loader'
 import { getUserAuth } from '../../utils/api-openEdx'
 import { includeGetExamenTiempoReal } from '../ranking-tiempo-real/hooks/use-get-examen-tiempo-real'
+import { useLanguage } from '../../../context/useLanguaje'
 
 const RankingFinalExamen = () => {
   const { id: examen_id } = useParams()
   const user_id = getUserAuth().userId
+  const { t } = useLanguage()
 
   const { response: examenActual, isloading, fetchData } = useFetchData()
   useEffect(() => {
@@ -67,8 +69,8 @@ const RankingFinalExamen = () => {
   if (!examen_id)
     return (
       <Bloqueado
-        description='Examen no encontrado'
-        textButton='Volver al inicio'
+        description={t.studentExam.notFound}
+        textButton={t.studentExam.backToHome}
         onClick={() => (window.location.href = '/')}
       />
     )
@@ -76,8 +78,8 @@ const RankingFinalExamen = () => {
   if (!examenActual)
     return (
       <Bloqueado
-        description='Examen no encontrado'
-        textButton='Volver al inicio'
+        description={t.studentExam.notFound}
+        textButton={t.studentExam.backToHome}
         onClick={() => (window.location.href = '/')}
       />
     )

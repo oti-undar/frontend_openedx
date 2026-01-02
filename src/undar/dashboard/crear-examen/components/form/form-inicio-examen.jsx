@@ -4,8 +4,11 @@ import { FaClock } from 'react-icons/fa'
 import { formatDayjsToUTC, presetsDatePicker } from '../../../../utils/date'
 import PropTypes from 'prop-types'
 import dayjs from 'dayjs'
+import { useLanguage } from '../../../../../context/useLanguaje'
 
 const FormInicioExamen = ({ form, onChangeFecha, examen }) => {
+  const { t } = useLanguage()
+
   const [modoInicio, setModoInicio] = useState(
     examen?.inicio_examen ? 'fecha' : 'manual'
   )
@@ -57,27 +60,29 @@ const FormInicioExamen = ({ form, onChangeFecha, examen }) => {
 
   return (
     <div>
-      <h2 className='text-xl font-semibold pb-2'>Inicio de Examen</h2>
+      <h2 className='text-xl font-semibold pb-2'>
+        {t.createExam.settings.examStart}
+      </h2>
 
       <div className='flex gap-2 items-center'>
         <Select
           className='w-1/2'
-          placeholder='Modo de Inicio'
+          placeholder={t.createExam.settings.startMode}
           value={modoInicio}
           prefix={<FaClock className='text-lime-500 mr-1' />}
           onChange={setModoInicio}
           options={[
             {
               value: 'manual',
-              label: 'Inicio Manual',
+              label: t.createExam.settings.manualStart,
             },
             {
               value: 'tiempo',
-              label: 'En X tiempo',
+              label: t.createExam.settings.timeStart,
             },
             {
               value: 'fecha',
-              label: 'En X fecha y hora',
+              label: t.createExam.settings.dateStart,
             },
           ]}
         />
@@ -93,21 +98,21 @@ const FormInicioExamen = ({ form, onChangeFecha, examen }) => {
             />
             <Select
               className='w-32'
-              placeholder='Minutos'
+              placeholder={t.createExam.settings.minutes}
               value={modoTiempo}
               onChange={setModoTiempo}
               options={[
                 {
                   value: 'm',
-                  label: 'Minutos',
+                  label: t.createExam.settings.minutes,
                 },
                 {
                   value: 'h',
-                  label: 'Horas',
+                  label: t.createExam.settings.hours,
                 },
                 {
                   value: 'd',
-                  label: 'Días',
+                  label: t.createExam.settings.days,
                 },
               ]}
             />
@@ -125,9 +130,9 @@ const FormInicioExamen = ({ form, onChangeFecha, examen }) => {
             format='DD/MM/YYYY h:mm A'
             presets={presetsDatePicker}
             className='animate-fade-right animate-ease-in-out animate-duration-500'
-            placeholder='Fecha de Inicio'
+            placeholder={t.createExam.settings.startDate}
             value={fecha ? dayjs(fecha).local() : null}
-            onChange={value => {
+            onChange={(value) => {
               setFecha(formatDayjsToUTC(value))
             }}
           />

@@ -12,10 +12,12 @@ import useFetchData from '../../hooks/useFetchData'
 import { API_URL, states } from '../../lib/globales'
 import qs from 'qs'
 import { getUserAuth } from '../../utils/api-openEdx'
+import { useLanguage } from '../../../context/useLanguaje'
 
 const Dashboard = () => {
   const listaExamenRef = useRef()
   const examenesConstruccionRef = useRef()
+  const { t } = useLanguage()
 
   const user_id = getUserAuth().userId
 
@@ -43,53 +45,54 @@ const Dashboard = () => {
   }, [])
 
   const exportarListaExamen = () =>
-    exportAGGridDataToJSON(listaExamenRef.current, 'Exámenes Realizados')
+    exportAGGridDataToJSON(listaExamenRef.current, t.dashboard.tables.examsDone)
 
   const exportarExamenesConstruccion = () =>
     exportAGGridDataToJSON(
       examenesConstruccionRef.current,
-      'Exámenes en Construcción'
+      t.dashboard.tables.building
     )
 
   return (
     <div className='flex flex-col gap-8 h-full'>
       <div className='flex gap-8 justify-between'>
         <CardResumeDashboard
-          title='Exámenes realizados'
+          title={t.dashboard.cards.examsDone}
           description={
-            response?.filter(exam => exam.state?.name === states.Finalizado)
+            response?.filter((exam) => exam.state?.name === states.Finalizado)
               ?.length ?? 0
           }
           icon={<MdWorkHistory size={70} className='text-lime-500' />}
         />
         <CardResumeDashboard
-          title='Exámenes en construcción'
+          title={t.dashboard.cards.examsBuilding}
           description={
-            response?.filter(exam => exam.state?.name === states.Activo)
+            response?.filter((exam) => exam.state?.name === states.Activo)
               ?.length ?? 0
           }
           icon={<GrTest size={60} className='text-lime-500' />}
         />
         <CardResumeDashboard
-          title='Total de Alumnos inscritos'
+          title={t.dashboard.cards.totalStudents}
           description={
             cursos?.reduce(
               (acc, curso) =>
-                acc + curso.usuarios.filter(user => !user.is_instructor).length,
+                acc +
+                curso.usuarios.filter((user) => !user.is_instructor).length,
               0
             ) ?? 0
           }
           icon={<PiStudentFill size={70} className='text-lime-500' />}
         />
         <CardResumeDashboard
-          title='Cursos asignados'
+          title={t.dashboard.cards.assignedCourses}
           description={cursos?.length ?? 0}
           icon={<FaAddressBook size={60} className='text-lime-500' />}
         />
       </div>
       <div className='grid grid-cols-3 gap-8 h-full'>
         <TableTitle
-          title='Exámenes Realizados'
+          title={t.dashboard.tables.examsDone}
           className='col-span-2'
           onExport={exportarListaExamen}
         >
@@ -97,12 +100,12 @@ const Dashboard = () => {
             ref={listaExamenRef}
             isloading={isloading}
             data={response?.filter(
-              exam => exam.state?.name === states.Finalizado
+              (exam) => exam.state?.name === states.Finalizado
             )}
           />
         </TableTitle>
         <TableTitle
-          title='En construcción'
+          title={t.dashboard.tables.building}
           className='col-span-1'
           onExport={exportarExamenesConstruccion}
         >
@@ -110,7 +113,9 @@ const Dashboard = () => {
             setReFetchExamenes={setReFetchExamenes}
             ref={examenesConstruccionRef}
             isloading={isloading}
-            data={response?.filter(exam => exam.state?.name === states.Activo)}
+            data={response?.filter(
+              (exam) => exam.state?.name === states.Activo
+            )}
           />
         </TableTitle>
       </div>

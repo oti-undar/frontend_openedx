@@ -6,25 +6,28 @@ import {
 import { Tooltip } from 'antd'
 import { IoMdCloudDownload } from 'react-icons/io'
 import { exportHolistica } from '../../../../utils/ag-grid'
+import { useLanguage } from '../../../../../context/useLanguaje'
 
 const useColumnsListaExamen = () => {
+  const { t } = useLanguage()
+
   return [
     {
-      headerName: 'Curso',
+      headerName: t.dashboard.columns.course,
       field: 'curso.name',
       minWidth: 200,
       filter: true,
       flex: 2,
     },
     {
-      headerName: 'Título',
+      headerName: t.dashboard.columns.title,
       field: 'title',
       minWidth: 200,
       filter: true,
       flex: 2,
     },
     {
-      headerName: 'N° Inscritos',
+      headerName: t.dashboard.columns.enrolled,
       field: 'ejecuciones',
       minWidth: 110,
       filter: 'agNumberColumnFilter',
@@ -32,7 +35,7 @@ const useColumnsListaExamen = () => {
       flex: 1,
     },
     {
-      headerName: 'Aprobados',
+      headerName: t.dashboard.columns.approved,
       field: 'preguntas',
       minWidth: 110,
       filter: 'agNumberColumnFilter',
@@ -42,7 +45,7 @@ const useColumnsListaExamen = () => {
           value?.reduce((acc, item) => acc + item.puntos, 0) ?? 1
         let aprobados = 0
 
-        ejecuciones.forEach(ex => {
+        ejecuciones.forEach((ex) => {
           const total_obtenido = getTotalObtenido({
             preguntas_resueltas: ex.preguntas_resueltas,
           })
@@ -54,7 +57,7 @@ const useColumnsListaExamen = () => {
       flex: 1,
     },
     {
-      headerName: 'Acciones',
+      headerName: t.dashboard.columns.actions,
       cellRenderer: ({ data }) => {
         const ejecuciones = data?.ejecuciones || []
         const isHolistica = !!data.rubrica_holistica
@@ -69,7 +72,7 @@ const useColumnsListaExamen = () => {
           const niveles_de_logro =
             data?.rubrica_holistica?.niveles_de_logro || []
           titles.push(data?.rubrica_holistica?.name)
-          ejecuciones.forEach(ex => {
+          ejecuciones.forEach((ex) => {
             const total_obtenido = getTotalObtenido({
               preguntas_resueltas: ex.preguntas_resueltas,
             })
@@ -87,26 +90,26 @@ const useColumnsListaExamen = () => {
             }
             mapa.get(nivelName).Cantidad++
           })
-          Array.from(mapa.values()).forEach(nivel => {
+          Array.from(mapa.values()).forEach((nivel) => {
             nivel.Porcentaje =
               ((nivel.Cantidad * 100) / totales_alumnos).toFixed(0) + '%'
           })
         } else {
           const indicadores = data?.rubrica_analitica?.indicadores || []
-          indicadores.forEach(indicador => {
+          indicadores.forEach((indicador) => {
             titles.push(indicador.name)
-            ejecuciones.forEach(ex => {
+            ejecuciones.forEach((ex) => {
               const preguntas_del_indicador = ex.preguntas_resueltas.filter(
-                item =>
+                (item) =>
                   item.pregunta.indicadores
-                    .map(indic => indic.id)
+                    .map((indic) => indic.id)
                     .includes(indicador.id)
               )
               const total_puntos_local =
                 data?.preguntas
-                  .filter(item =>
+                  .filter((item) =>
                     preguntas_del_indicador
-                      .map(pregunta_resuelta => pregunta_resuelta.pregunta.id)
+                      .map((pregunta_resuelta) => pregunta_resuelta.pregunta.id)
                       .includes(item.id)
                   )
                   ?.reduce((acc, item) => acc + item.puntos, 0) ?? 1
@@ -133,8 +136,8 @@ const useColumnsListaExamen = () => {
               mapa.get(nivelName)[`Cantidad(${indicador.name})`]++
             })
           })
-          indicadores.forEach(indicador => {
-            Array.from(mapa.values()).forEach(nivel => {
+          indicadores.forEach((indicador) => {
+            Array.from(mapa.values()).forEach((nivel) => {
               nivel[`Porcentaje(${indicador.name})`] =
                 (
                   (nivel[`Cantidad(${indicador.name})`] * 100) /
@@ -147,7 +150,7 @@ const useColumnsListaExamen = () => {
 
         return (
           <div className='flex gap-2 items-center h-full'>
-            <Tooltip title='Descargar resultados de rúbrica'>
+            <Tooltip title={t.dashboard.tooltips.downloadRubric}>
               <IoMdCloudDownload
                 onClick={() =>
                   exportHolistica(obj, `Resultados de ${data?.title}`, titles)

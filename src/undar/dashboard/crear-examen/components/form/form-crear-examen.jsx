@@ -16,10 +16,12 @@ import FormSeleccionarRubrica from './form-seleccionar-rubrica'
 import { getUserAuth } from '../../../../utils/api-openEdx'
 import PropTypes from 'prop-types'
 import { toUploadFile, urlToFile } from '../../../../utils/upload'
+import { useLanguage } from '../../../../../context/useLanguaje'
 
 const FormCrearExamen = ({ examen, creacion = false }) => {
   const navigate = useNavigate()
   const [form] = Form.useForm()
+  const { t } = useLanguage()
 
   const { fetchData, isloading } = useFetchData()
   const { estados } = useGetStates()
@@ -103,8 +105,8 @@ const FormCrearExamen = ({ examen, creacion = false }) => {
         'Content-Type': 'multipart/form-data',
       },
       msgSuccess: creacion
-        ? 'Examen creado correctamente'
-        : 'Examen editado correctamente',
+        ? t.createExam.successCreate
+        : t.createExam.successEdit,
       onSuccess: () => {
         form.resetFields()
         navigate('/examenes')
@@ -245,10 +247,10 @@ const FormCrearExamen = ({ examen, creacion = false }) => {
             tipo_examen === tiposExamen.Alumno
               ? [
                   {
-                    respuesta: 'SI',
+                    respuesta: t.common.yes,
                   },
                   {
-                    respuesta: 'NO',
+                    respuesta: t.common.no,
                   },
                 ]
               : [{}, {}, {}, {}],
@@ -269,24 +271,24 @@ const FormCrearExamen = ({ examen, creacion = false }) => {
       <div className='flex justify-between items-center w-full'>
         <div className='flex gap-4 items-center'>
           <h1 className='text-4xl font-bold text-gray-700 h-fit text-nowrap mb-7'>
-            {creacion ? 'Crear' : 'Editar'} Examen
+            {creacion ? t.createExam.title : t.createExam.editTitle}
           </h1>
           <SelectCurso />
           <Form.Item hasFeedback name='tipo_examen' className='w-full'>
             <Select
               className='min-w-96'
               size='large'
-              placeholder='Tipo de Examen (Independiente por defecto)'
+              placeholder={t.createExam.type}
               options={Object.values(tiposExamen).map((tipo) => ({
                 value: tipo,
                 label:
                   tipo === tiposExamen.Sync
-                    ? 'Junto con los alumnos'
+                    ? t.createExam.typeSync
                     : tipo === tiposExamen.Async
-                    ? 'Cada alumno independiente'
+                    ? t.createExam.typeAsync
                     : tipo === tiposExamen.Alumno
-                    ? 'Solo para el alumno'
-                    : 'Solo para el docente',
+                    ? t.createExam.typeStudent
+                    : t.createExam.typeTeacher,
               }))}
             />
           </Form.Item>
@@ -300,7 +302,7 @@ const FormCrearExamen = ({ examen, creacion = false }) => {
             ) : (
               <FaEdit />
             )}
-            {creacion ? 'Crear' : 'Editar'} Examen
+            {creacion ? t.createExam.create : t.createExam.edit}
           </ButtonPrimary>
         </div>
       </div>
@@ -308,7 +310,7 @@ const FormCrearExamen = ({ examen, creacion = false }) => {
         <div className='col-span-3'>
           <div className='flex gap-4 w-full'>
             <h2 className='text-2xl font-semibold text-nowrap'>
-              Título del Examen:
+              {t.createExam.examTitle}
             </h2>
             <Form.Item
               hasFeedback
@@ -317,14 +319,14 @@ const FormCrearExamen = ({ examen, creacion = false }) => {
               rules={[
                 {
                   required: true,
-                  message: 'Por favor ingrese el título del examen',
+                  message: t.createExam.requiredTitle,
                 },
               ]}
             >
               <Input
                 size='large'
                 allowClear
-                placeholder='Ingrese el título del examen'
+                placeholder={t.createExam.examTitlePlaceholder}
               />
             </Form.Item>
           </div>
@@ -336,14 +338,16 @@ const FormCrearExamen = ({ examen, creacion = false }) => {
             tipoRubrica={tipoRubrica}
           />
           <div className='flex flex-col gap-2 w-full'>
-            <h2 className='text-xl font-semibold '>Descripción del Examen:</h2>
+            <h2 className='text-xl font-semibold '>
+              {t.createExam.examDescription}
+            </h2>
             <Form.Item hasFeedback name='description' className='w-full'>
               <Input.TextArea
                 style={{ resize: 'none' }}
                 size='large'
                 rows={5}
                 allowClear
-                placeholder='Ingrese la descripción del examen'
+                placeholder={t.createExam.examDescriptionPlaceholder}
               />
             </Form.Item>
           </div>

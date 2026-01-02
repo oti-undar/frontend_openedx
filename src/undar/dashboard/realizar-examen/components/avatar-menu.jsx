@@ -6,12 +6,14 @@ import { API_URL } from '../../../lib/globales'
 import useFetchData from '../../../hooks/useFetchData'
 import ButtonPrimary from '../../../components/buttons/button-primary'
 import { beforeUpload } from '../../../utils/upload'
+import { useLanguage } from '../../../../context/useLanguaje'
 
 const AvatarMenu = () => {
+  const { t } = useLanguage()
   const items = [
     {
       key: '1',
-      label: 'Actualizar avatar',
+      label: t.components.avatarMenu.updateAvatar,
       onClick: () => setOpenModal(true),
     },
   ]
@@ -30,7 +32,7 @@ const AvatarMenu = () => {
       url: `${API_URL()}/usuario/${userId}/avatar`,
       data: form,
       headers: { 'Content-Type': 'multipart/form-data' },
-      msgSuccess: 'Avatar actualizado',
+      msgSuccess: t.components.avatarMenu.successUpdate,
       onSuccess: () => {
         setOpenModal(false)
         setFile(null)
@@ -71,7 +73,7 @@ const AvatarMenu = () => {
       </Dropdown>
 
       <Modal
-        title='Actualizar avatar'
+        title={t.components.avatarMenu.updateAvatar}
         centered
         open={openModal}
         onCancel={() => setOpenModal(false)}
@@ -94,7 +96,7 @@ const AvatarMenu = () => {
               icon={'+'}
               className='font-semibold text-xs text-gray-500 w-full'
             >
-              Subir archivo
+              {t.components.avatarMenu.uploadFile}
             </Button>
           </Upload>
           <div className='flex items-center justify-end gap-2'>
@@ -103,14 +105,14 @@ const AvatarMenu = () => {
               onClick={() => setOpenModal(false)}
               size='small'
             >
-              Cancelar
+              {t.components.avatarMenu.cancel}
             </ButtonPrimary>
             <ButtonPrimary
               onClick={onUpload}
               disabled={!file || isloading}
               size='small'
             >
-              Actualizar
+              {t.components.avatarMenu.update}
             </ButtonPrimary>
           </div>
         </div>

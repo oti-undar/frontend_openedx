@@ -5,8 +5,10 @@ import { useJSXToPdf } from '../../hooks/use-react-to-pdf'
 import { classOkButtonModal } from '../../lib/clases'
 import ButtonBase from '../buttons/button-base'
 import PropTypes from 'prop-types'
+import { useLanguage } from '../../../context/useLanguaje'
 
 const ModalShowDoc = ({ open, setOpen, title, children }) => {
+  const { t } = useLanguage()
   const childrenWithProps = cloneElement(children, {
     show_logo_html: true,
   })
@@ -24,7 +26,7 @@ const ModalShowDoc = ({ open, setOpen, title, children }) => {
       title={
         <div className='flex items-center gap-3'>
           {title}
-          <Tooltip title='Descargar PDF'>
+          <Tooltip title={t.common.downloadPdf}>
             <ButtonBase
               onClick={download}
               color='danger'
@@ -34,7 +36,7 @@ const ModalShowDoc = ({ open, setOpen, title, children }) => {
               <FaDownload />
             </ButtonBase>
           </Tooltip>
-          <Tooltip title='Compartir'>
+          <Tooltip title={t.common.share}>
             <ButtonBase
               onClick={share}
               color='success'
@@ -46,9 +48,9 @@ const ModalShowDoc = ({ open, setOpen, title, children }) => {
           </Tooltip>
         </div>
       }
-      okText={'Imprimir'}
+      okText={t.common.print}
       onOk={print}
-      cancelText='Cerrar'
+      cancelText={t.common.close}
       cancelButtonProps={{ className: 'rounded-xl' }}
       okButtonProps={{
         className: classOkButtonModal,

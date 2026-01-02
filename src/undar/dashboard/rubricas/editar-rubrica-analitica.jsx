@@ -5,10 +5,12 @@ import Bloqueado from '../../components/layout/components/bloqueado'
 import Loader from '../../components/layout/components/loader'
 import { useNavigate } from 'react-router'
 import FormCreateRubricaAnalitica from './components/form/form-create-rubrica-analitica'
+import { useLanguage } from '../../../context/useLanguaje'
 
 const EditarRubricaAnalitica = () => {
   const { id: rubrica_analitica_id } = useParams()
   const navigate = useNavigate()
+  const { t } = useLanguage()
   const {
     response: rubrica_analitica,
     isloading,
@@ -25,8 +27,8 @@ const EditarRubricaAnalitica = () => {
   if (!rubrica_analitica_id)
     return (
       <Bloqueado
-        description='Rúbrica no encontrada'
-        textButton='Volver'
+        description={t.rubrics.notFound}
+        textButton={t.rubrics.back}
         onClick={() => navigate('/examenes')}
       />
     )
@@ -34,16 +36,16 @@ const EditarRubricaAnalitica = () => {
   if (!rubrica_analitica)
     return (
       <Bloqueado
-        description='Rúbrica no encontrada'
-        textButton='Volver'
+        description={t.rubrics.notFound}
+        textButton={t.rubrics.back}
         onClick={() => navigate('/examenes')}
       />
     )
   if ((rubrica_analitica?._count?.examenes ?? 0) > 0)
     return (
       <Bloqueado
-        description='Esta rúbrica no puede ser editada por que tiene examenes asociados'
-        textButton='Volver'
+        description={t.rubrics.blockedEdit}
+        textButton={t.rubrics.back}
         onClick={() => navigate('/examenes')}
       />
     )

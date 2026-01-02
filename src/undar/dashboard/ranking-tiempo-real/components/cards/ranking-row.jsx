@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import { API_URL } from '../../../../lib/globales'
+import { useLanguage } from '../../../../../context/useLanguaje'
 
 const RankingRow = ({
   name,
@@ -10,6 +11,8 @@ const RankingRow = ({
   className,
   avatar,
 }) => {
+  const { t } = useLanguage()
+
   return (
     <div className={`flex gap-4 items-center ${className}`}>
       {number && (
@@ -20,7 +23,7 @@ const RankingRow = ({
         src={
           avatar ? `${API_URL()}${avatar}` : 'https://picsum.photos/1500/1500'
         }
-        alt='Imagen de prueba'
+        alt={t.common.userImage}
       />
       <div className='flex flex-col'>
         <h1 className='text-2xl font-semibold'>{name || username}</h1>

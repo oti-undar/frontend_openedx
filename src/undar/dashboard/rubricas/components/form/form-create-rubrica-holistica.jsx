@@ -11,11 +11,13 @@ import { LuLoaderCircle } from 'react-icons/lu'
 import { getUserAuth } from '../../../../utils/api-openEdx'
 import PropTypes from 'prop-types'
 import FormAdicionalesRubrica from './form-adicionales-rubrica'
+import { useLanguage } from '../../../../../context/useLanguaje'
 
 const FormCreateRubricaHolistica = ({ rubrica_holistica }) => {
   const [form] = Form.useForm()
   const navigate = useNavigate()
   const { fetchData, isloading } = useFetchData()
+  const { t } = useLanguage()
 
   const user_id = getUserAuth().userId
 
@@ -24,7 +26,7 @@ const FormCreateRubricaHolistica = ({ rubrica_holistica }) => {
       ...values,
       user_id,
       niveles_de_logro: {
-        create: values.niveles_de_logro.map(level => {
+        create: values.niveles_de_logro.map((level) => {
           const { desde, hasta, ...rest } = level
           return {
             ...rest,
@@ -44,8 +46,8 @@ const FormCreateRubricaHolistica = ({ rubrica_holistica }) => {
       }`,
       data,
       msgSuccess: rubrica_holistica
-        ? 'Rúbrica actualizada correctamente'
-        : 'Rúbrica creada correctamente',
+        ? t.rubrics.create.successEdit
+        : t.rubrics.create.successCreate,
       onSuccess: () => {
         form.resetFields()
         navigate('/examenes')
@@ -58,7 +60,7 @@ const FormCreateRubricaHolistica = ({ rubrica_holistica }) => {
     if (rubrica_holistica) {
       form.setFieldsValue({
         ...rubrica_holistica,
-        niveles_de_logro: rubrica_holistica.niveles_de_logro.map(level => ({
+        niveles_de_logro: rubrica_holistica.niveles_de_logro.map((level) => ({
           ...level,
           desde: level.nota.split('-')[0],
           hasta: level.nota.split('-')[1],
@@ -81,7 +83,7 @@ const FormCreateRubricaHolistica = ({ rubrica_holistica }) => {
         <div className='flex justify-between gap-4 w-full'>
           <div className='flex gap-4 w-full'>
             <h2 className='text-2xl font-semibold text-nowrap'>
-              Identificador de la Rúbrica Holística:
+              {t.rubrics.create.identifierHolistic}
             </h2>
             <Form.Item
               hasFeedback
@@ -90,14 +92,14 @@ const FormCreateRubricaHolistica = ({ rubrica_holistica }) => {
               rules={[
                 {
                   required: true,
-                  message: 'Por favor ingrese el identificador de la Rúbrica',
+                  message: t.rubrics.create.identifierError,
                 },
               ]}
             >
               <Input
                 size='large'
                 allowClear
-                placeholder='Un identificador para reconocer a la Rúbrica creada'
+                placeholder={t.rubrics.create.identifierPlaceholder}
               />
             </Form.Item>
           </div>
@@ -111,7 +113,9 @@ const FormCreateRubricaHolistica = ({ rubrica_holistica }) => {
                 <FaPlusCircle />
               )}
               <span className='text-nowrap'>
-                {rubrica_holistica ? 'Editar' : 'Crear'} Rúbrica
+                {rubrica_holistica
+                  ? t.rubrics.create.submitEdit
+                  : t.rubrics.create.submitCreate}
               </span>
             </ButtonPrimary>
           </div>

@@ -6,16 +6,19 @@ import FormInicioExamen from './form-inicio-examen'
 import PropTypes from 'prop-types'
 import FormFinalExamen from './form-final-examen'
 import { tiposExamen } from '../../../../lib/globales'
+import { useLanguage } from '../../../../../context/useLanguaje'
 
 const FormAjustesExamen = ({ form, examen, archivos, setArchivos }) => {
   const tipo_examen = Form.useWatch('tipo_examen', form)
   const [fechaInicio, setFechaInicio] = useState(null)
+  const { t } = useLanguage()
+
   return (
     <div className='grid grid-cols-2 gap-4'>
       <div className='col-span-1 flex flex-col gap-4'>
         <div className='flex gap-2 items-center'>
           <div className='font-semibold text-nowrap text-2xl'>
-            Peso del Examen:
+            {t.createExam.settings.examWeight}
           </div>
           <Form.Item className='mb-0' hasFeedback name='peso'>
             <InputNumber
@@ -23,7 +26,7 @@ const FormAjustesExamen = ({ form, examen, archivos, setArchivos }) => {
               type='number'
               precision={0}
               controls={false}
-              placeholder='1 por Defecto'
+              placeholder={t.createExam.settings.defaultWeight}
               min={1}
               max={100}
             />
@@ -76,12 +79,12 @@ const FormAjustesExamen = ({ form, examen, archivos, setArchivos }) => {
             <div className='flex flex-col gap-2 justify-center items-center'>
               <FaImage size={80} className='text-gray-500' />
               <div className='flex flex-col text-slate-400 font-semibold text-lg'>
-                <div className='-mb-2'>Subir</div>
-                <div>Imagen / Audio / Video</div>
+                <div className='-mb-2'>{t.createExam.settings.upload}</div>
+                <div>{t.createExam.settings.mediaType}</div>
               </div>
             </div>
             <div className='text-gray-400'>
-              Puede arrastrar la imagen, audio o video aquí
+              {t.createExam.questions.uploadDrag}
             </div>
           </Upload.Dragger>
         </Form.Item>

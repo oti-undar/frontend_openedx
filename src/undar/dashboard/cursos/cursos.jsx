@@ -3,16 +3,18 @@ import TableTitle from '../../components/tables/table-title'
 import TableCursos from './components/table/table-cursos'
 import TableDetallesAlumnoCurso from './components/table/table-detalles-alumno-curso'
 import { exportAGGridDataToJSON } from '../../utils/ag-grid'
+import { useLanguage } from '../../../context/useLanguaje'
 
 const Cursos = () => {
   const cursosRef = useRef()
   const detallesAlumnoRef = useRef()
+  const { t } = useLanguage()
 
   const exportarCursos = () =>
-    exportAGGridDataToJSON(cursosRef.current, 'Cursos')
+    exportAGGridDataToJSON(cursosRef.current, t.courses.title)
 
   const exportarDetallesAlumno = () =>
-    exportAGGridDataToJSON(detallesAlumnoRef.current, 'Detalles de Alumnos')
+    exportAGGridDataToJSON(detallesAlumnoRef.current, t.courses.studentDetails)
 
   const [cursoSeleccionado, setCursoSeleccionado] = useState()
 
@@ -20,7 +22,7 @@ const Cursos = () => {
     <div className='flex flex-col gap-8 h-full'>
       <div className='grid grid-cols-3 gap-8 h-full'>
         <TableTitle
-          title='Cursos'
+          title={t.courses.title}
           className='col-span-1'
           onExport={exportarCursos}
         >
@@ -30,7 +32,7 @@ const Cursos = () => {
           />
         </TableTitle>
         <TableTitle
-          title='Detalles'
+          title={t.courses.details}
           className='col-span-2'
           onExport={exportarDetallesAlumno}
         >

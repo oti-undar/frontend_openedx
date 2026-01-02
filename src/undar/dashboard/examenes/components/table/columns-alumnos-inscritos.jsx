@@ -6,6 +6,7 @@ import { SiTestcafe } from 'react-icons/si'
 import { tiposExamen } from '../../../../lib/globales'
 import { useNavigate } from 'react-router'
 import { FaFilePdf } from 'react-icons/fa6'
+import { useLanguage } from '../../../../../context/useLanguaje'
 
 export function getTotalObtenido({ preguntas_resueltas }) {
   return (
@@ -21,7 +22,7 @@ export function getTotalObtenido({ preguntas_resueltas }) {
 }
 
 export function getNivelPorNotaEnRango({ nota, niveles }) {
-  const rango = niveles.find(r => {
+  const rango = niveles.find((r) => {
     const [min, max] = r.nota.split('-').map(Number)
     return nota >= min && nota <= max
   })
@@ -34,6 +35,7 @@ const useColumnsAlumnosInscritos = ({
   setOpen,
 }) => {
   const navigate = useNavigate()
+  const { t } = useLanguage()
   const isAnalitica = !!examenSeleccionado?.rubrica_analitica
   const total_puntos =
     examenSeleccionado?.preguntas?.reduce(
@@ -45,24 +47,24 @@ const useColumnsAlumnosInscritos = ({
 
   if (isAnalitica) {
     columnas_extra = examenSeleccionado?.rubrica_analitica.indicadores.map(
-      indicador => ({
+      (indicador) => ({
         headerName: indicador.name,
         field: `preguntas_resueltas`,
         minWidth: 110,
         filter: 'agNumberColumnFilter',
         valueFormatter: ({ value }) => {
-          const preguntas_del_indicador = value.filter(item =>
+          const preguntas_del_indicador = value.filter((item) =>
             item.pregunta.indicadores
-              .map(indic => indic.id)
+              .map((indic) => indic.id)
               .includes(indicador.id)
           )
           if (!preguntas_del_indicador.length)
-            return 'Ninguna pregunta pertenece a este indicador'
+            return t.exams.enrolledTable.noQuestionInIndicator
           const total_puntos_local =
             examenSeleccionado?.preguntas
-              .filter(item =>
+              .filter((item) =>
                 preguntas_del_indicador
-                  .map(pregunta_resuelta => pregunta_resuelta.pregunta.id)
+                  .map((pregunta_resuelta) => pregunta_resuelta.pregunta.id)
                   .includes(item.id)
               )
               ?.reduce((acc, item) => acc + item.puntos, 0) ?? 1
@@ -83,7 +85,7 @@ const useColumnsAlumnosInscritos = ({
   } else {
     columnas_extra = [
       {
-        headerName: 'Nivel de Competencia',
+        headerName: t.exams.enrolledTable.competencyLevel,
         field: 'preguntas_resueltas',
         minWidth: 110,
         filter: true,
@@ -104,7 +106,7 @@ const useColumnsAlumnosInscritos = ({
   }
   return [
     {
-      headerName: 'Nombres y Apellidos',
+      headerName: t.exams.enrolledTable.names,
       field: 'user',
       minWidth: 200,
       filter: true,
@@ -115,7 +117,7 @@ const useColumnsAlumnosInscritos = ({
       flex: 2,
     },
     {
-      headerName: 'Nota',
+      headerName: t.exams.enrolledTable.grade,
       field: 'preguntas_resueltas',
       minWidth: 110,
       filter: 'agNumberColumnFilter',
@@ -127,17 +129,17 @@ const useColumnsAlumnosInscritos = ({
     },
     ...columnas_extra,
     {
-      headerName: 'Acciones',
+      headerName: t.dashboard.columns.actions,
       cellRenderer: ({ data }) => (
         <div className='flex gap-2 items-center h-full'>
-          <Tooltip title='Seleccionar'>
+          <Tooltip title={t.dashboard.tooltips.select}>
             <GrRadialSelected
               onClick={() => setAlumnoSeleccionado(data)}
               size={15}
               className='text-yellow-500 hover:scale-125 transition-all cursor-pointer'
             />
           </Tooltip>
-          <Tooltip title='Reporte'>
+          <Tooltip title={t.exams.enrolledTable.report}>
             <FaFilePdf
               onClick={() => {
                 setAlumnoSeleccionado(data)
@@ -149,7 +151,7 @@ const useColumnsAlumnosInscritos = ({
           </Tooltip>
           {examenSeleccionado.tipo_examen === tiposExamen.Solo &&
             !data.fin_examen && (
-              <Tooltip title='Calificar (Solo Docente)'>
+              <Tooltip title={t.exams.enrolledTable.gradeTeacher}>
                 <SiTestcafe
                   onClick={() => {
                     navigate(

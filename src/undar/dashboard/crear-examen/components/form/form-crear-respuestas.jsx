@@ -4,6 +4,7 @@ import { FaCircleXmark } from 'react-icons/fa6'
 import PropTypes from 'prop-types'
 import { beforeUpload, normFile, toUploadFile } from '../../../../utils/upload'
 import { tiposExamen } from '../../../../lib/globales'
+import { useLanguage } from '../../../../../context/useLanguaje'
 
 const FormCrearRespuestas = ({
   pregunta,
@@ -11,6 +12,8 @@ const FormCrearRespuestas = ({
   archivo_pregunta,
   tipo_examen,
 }) => {
+  const { t } = useLanguage()
+
   return (
     <Form.List name={[pregunta, 'respuestas']}>
       {(respuestas, { add, remove }) => (
@@ -38,7 +41,7 @@ const FormCrearRespuestas = ({
                       rules={[
                         {
                           required: true,
-                          message: 'Por favor ingrese la alternativa',
+                          message: t.createExam.answers.error,
                         },
                       ]}
                     >
@@ -51,8 +54,8 @@ const FormCrearRespuestas = ({
                         allowClear
                         placeholder={
                           respuesta.name === 0
-                            ? 'Respuesta correcta'
-                            : `Ingrese una alternativa`
+                            ? t.createExam.answers.correctAnswer
+                            : t.createExam.answers.placeholder
                         }
                         readOnly={
                           tipo_examen === tiposExamen.Solo ||
@@ -81,7 +84,7 @@ const FormCrearRespuestas = ({
                               : ''
                           }`}
                           allowClear
-                          placeholder='Retroalimentación (opcional)'
+                          placeholder={t.createExam.answers.feedback}
                           readOnly={
                             tipo_examen === tiposExamen.Solo ||
                             tipo_examen === tiposExamen.Alumno
@@ -197,7 +200,7 @@ const FormCrearRespuestas = ({
                           icon={'+'}
                           className='font-semibold text-xs text-gray-500'
                         >
-                          Subir archivo
+                          {t.createExam.answers.uploadFile}
                         </Button>
                       </Upload>
                     </Form.Item>
@@ -222,7 +225,7 @@ const FormCrearRespuestas = ({
                 onClick={() => add()}
                 block
               >
-                + Agregar Alternativa
+                {t.createExam.answers.addAnswer}
               </Button>
             )}
         </div>

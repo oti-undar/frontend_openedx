@@ -8,10 +8,12 @@ import { getUserAuth } from '../../utils/api-openEdx.js'
 import Loader from '../../components/layout/components/loader.jsx'
 import Bloqueado from '../../components/layout/components/bloqueado.jsx'
 import { useNavigate, useParams } from 'react-router'
+import { useLanguage } from '../../../context/useLanguaje.js'
 
 const TestearExamen = () => {
   const { id: examen_id } = useParams()
   const navigate = useNavigate()
+  const { t } = useLanguage()
 
   const user_id = getUserAuth().userId
 
@@ -33,8 +35,8 @@ const TestearExamen = () => {
       url: `${API_URL()}/examen/${examen_id}?filters=${encodeURIComponent(
         JSON.stringify({ user_id })
       )}`,
-      onSuccess: data => {
-        setExamenActual(prev => ({
+      onSuccess: (data) => {
+        setExamenActual((prev) => ({
           ...prev,
           preguntas: data.preguntas,
         }))
@@ -46,8 +48,8 @@ const TestearExamen = () => {
   if (!examen_id)
     return (
       <Bloqueado
-        description='Examen no encontrado'
-        textButton='Volver al dashboard'
+        description={t.testExam.notFound}
+        textButton={t.testExam.backToDashboard}
         onClick={() => navigate('/dashboard')}
       />
     )
@@ -55,8 +57,8 @@ const TestearExamen = () => {
   if (!test)
     return (
       <Bloqueado
-        description='Examen no encontrado'
-        textButton='Volver al dashboard'
+        description={t.testExam.notFound}
+        textButton={t.testExam.backToDashboard}
         onClick={() => navigate('/dashboard')}
       />
     )

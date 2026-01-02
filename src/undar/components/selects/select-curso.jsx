@@ -4,9 +4,11 @@ import useFetchData from '../../hooks/useFetchData'
 import { API_URL } from '../../lib/globales'
 import qs from 'qs'
 import { getUserAuth } from '../../utils/api-openEdx'
+import { useLanguage } from '../../../context/useLanguaje'
 
 const SelectCurso = () => {
   const { response, fetchData } = useFetchData()
+  const { t } = useLanguage()
 
   const user_id = getUserAuth().userId
 
@@ -27,7 +29,7 @@ const SelectCurso = () => {
       rules={[
         {
           required: true,
-          message: 'Por favor ingrese el curso al que pertenece el examen',
+          message: t.components.selectCourse.error,
         },
       ]}
     >
@@ -35,8 +37,8 @@ const SelectCurso = () => {
         className='min-w-96'
         showSearch
         size='large'
-        placeholder='Curso al que pertenece el examen'
-        options={(response ?? []).map(curso => ({
+        placeholder={t.components.selectCourse.placeholder}
+        options={(response ?? []).map((curso) => ({
           value: curso.id,
           label: curso.name,
         }))}

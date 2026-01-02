@@ -10,28 +10,30 @@ import { FaChartSimple } from 'react-icons/fa6'
 import { useActualizarData } from '../../../../hooks/use-actualizar-data'
 import ButtonPrimary from '../../../../components/buttons/button-primary'
 import AvatarMenu from '../../../realizar-examen/components/avatar-menu'
-
-const links = [
-  {
-    title: 'Dashboard',
-    path: '/dashboard',
-    icon: <MdSpaceDashboard className='text-sky-600/60 text-xl' />,
-  },
-  {
-    title: 'Exámenes',
-    path: '/examenes',
-    icon: <IoDocumentText className='text-lime-600/60 text-xl' />,
-  },
-  {
-    title: 'Cursos',
-    path: '/cursos',
-    icon: <FaBook className='text-orange-600/60 text-xl' />,
-  },
-]
+import { useLanguage } from '../../../../../context/useLanguaje'
 
 const Sidenav = () => {
   const navigate = useNavigate()
   const { actualizarData, isloading } = useActualizarData()
+  const { t } = useLanguage()
+
+  const links = [
+    {
+      title: t.sidenav.dashboard,
+      path: '/dashboard',
+      icon: <MdSpaceDashboard className='text-sky-600/60 text-xl' />,
+    },
+    {
+      title: t.sidenav.exams,
+      path: '/examenes',
+      icon: <IoDocumentText className='text-lime-600/60 text-xl' />,
+    },
+    {
+      title: t.sidenav.courses,
+      path: '/cursos',
+      icon: <FaBook className='text-orange-600/60 text-xl' />,
+    },
+  ]
 
   return (
     <div className='h-full flex flex-col justify-between items-center gap-20 p-8 pr-2 relative animate-fade-right animate-ease-in-out'>
@@ -45,19 +47,19 @@ const Sidenav = () => {
             showBorder
             className='px-5 py-1 shadow-md text-sm font-semibold cursor-pointer'
           >
-            Crear Examen
+            {t.sidenav.createExam}
           </GradientText>
         </div>
         <ButtonSidenav path='/rubricas' className='text-nowrap'>
           <FaChartSimple className='text-purple-600/60 text-xl' />
-          Crear Rúbricas
+          {t.sidenav.rubrics}
         </ButtonSidenav>
         <ButtonPrimary
           disabled={isloading}
           size='small'
           onClick={actualizarData}
         >
-          {isloading ? 'Sincronizando...' : 'Sincronizar'}
+          {isloading ? t.sidenav.syncing : t.sidenav.sync}
         </ButtonPrimary>
       </div>
       <div className='mt-8'></div>
@@ -75,7 +77,7 @@ const Sidenav = () => {
           size='small'
           onClick={() => (window.location.href = '/')}
         >
-          Volver a Open EDX
+          {t.sidenav.backToEdx}
         </ButtonPrimary>
       </div>
     </div>

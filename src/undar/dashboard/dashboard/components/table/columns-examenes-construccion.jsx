@@ -8,37 +8,38 @@ import PropTypes from 'prop-types'
 import { useRemoveExamen } from '../../hooks/use-remove-examen'
 import { useNavigate } from 'react-router-dom'
 import { GrTest } from 'react-icons/gr'
-import { IoDocumentText } from 'react-icons/io5'
+import { useLanguage } from '../../../../../context/useLanguaje'
 
 const useColumnsExamenesConstruccion = ({ setReFetchExamenes }) => {
   const { fetchData } = useFetchData()
   const navigate = useNavigate()
+  const { t } = useLanguage()
   const { removeExamen } = useRemoveExamen({
-    onSuccess: () => setReFetchExamenes(prev => prev + 1),
+    onSuccess: () => setReFetchExamenes((prev) => prev + 1),
   })
 
   return [
     {
-      headerName: 'Título',
+      headerName: t.dashboard.columns.title,
       field: 'title',
       minWidth: 200,
       filter: true,
       flex: 2,
     },
     {
-      headerName: 'N° Preguntas',
+      headerName: t.dashboard.columns.questions,
       field: 'preguntas',
       minWidth: 80,
       filter: 'agNumberColumnFilter',
-      valueFormatter: params => params.value.length ?? 0,
+      valueFormatter: (params) => params.value.length ?? 0,
       flex: 1,
     },
     {
-      headerName: 'Acciones',
+      headerName: t.dashboard.columns.actions,
       cellRenderer: ({ data }) => {
         return (
           <div className='flex gap-2 items-center h-full'>
-            <Tooltip title='Dar comienzo al Examen'>
+            <Tooltip title={t.dashboard.tooltips.startExam}>
               <FaFlag
                 onClick={() => {
                   fetchData({
@@ -52,9 +53,9 @@ const useColumnsExamenesConstruccion = ({ setReFetchExamenes }) => {
                       },
                       inicio_examen: new Date(),
                     },
-                    msgSuccess: 'Examen iniciado correctamente',
+                    msgSuccess: t.dashboard.messages.examStarted,
                     onSuccess: () => {
-                      setReFetchExamenes(prev => prev + 1)
+                      setReFetchExamenes((prev) => prev + 1)
                       if (data.tipo_examen === tiposExamen.Sync)
                         navigate(`/ranking-tiempo-real/${data.id}`)
                     },
@@ -64,19 +65,19 @@ const useColumnsExamenesConstruccion = ({ setReFetchExamenes }) => {
                 className='text-emerald-500 hover:scale-125 transition-all cursor-pointer'
               />
             </Tooltip>
-            <Tooltip title='Editar'>
+            <Tooltip title={t.dashboard.tooltips.edit}>
               <FaEdit
                 onClick={() => navigate(`/editar-examen/${data.id}`)}
                 size={15}
                 className='text-yellow-500 hover:scale-125 transition-all cursor-pointer'
               />
             </Tooltip>
-            <Tooltip title='Eliminar'>
+            <Tooltip title={t.dashboard.tooltips.delete}>
               <FaTrash
                 onClick={() =>
                   Modal.confirm({
-                    title: 'Eliminar Examen',
-                    content: '¿Estas seguro de eliminar este examen?',
+                    title: t.dashboard.messages.deleteTitle,
+                    content: t.dashboard.messages.deleteConfirm,
                     onOk: () => removeExamen({ examen_id: data.id }),
                   })
                 }
@@ -84,7 +85,7 @@ const useColumnsExamenesConstruccion = ({ setReFetchExamenes }) => {
                 className='text-red-500 hover:scale-125 transition-all cursor-pointer'
               />
             </Tooltip>
-            <Tooltip title='Testear'>
+            <Tooltip title={t.dashboard.tooltips.test}>
               <GrTest
                 onClick={() => navigate(`/testear-examen/${data.id}`)}
                 size={15}

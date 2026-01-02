@@ -5,6 +5,7 @@ import { FaCircleXmark, FaImage } from 'react-icons/fa6'
 import FormCrearRespuestas from './form-crear-respuestas'
 import PropTypes from 'prop-types'
 import { tiposExamen } from '../../../../lib/globales'
+import { useLanguage } from '../../../../../context/useLanguaje'
 
 const FormCrearPreguntas = ({
   rubrica,
@@ -12,6 +13,8 @@ const FormCrearPreguntas = ({
   setArchivos,
   tipo_examen,
 }) => {
+  const { t } = useLanguage()
+
   return (
     <Form.List name='preguntas'>
       {(preguntas, { add, remove }) => (
@@ -36,14 +39,14 @@ const FormCrearPreguntas = ({
                     rules={[
                       {
                         required: true,
-                        message: 'Por favor ingrese el título de la pregunta',
+                        message: t.createExam.questions.titleError,
                       },
                     ]}
                   >
                     <Input
                       size='large'
                       allowClear
-                      placeholder='Ingrese el título de la pregunta'
+                      placeholder={t.createExam.questions.titlePlaceholder}
                     />
                   </Form.Item>
                   {pregunta.name !== 0 && (
@@ -58,7 +61,7 @@ const FormCrearPreguntas = ({
                   {rubrica?.indicadores?.length && (
                     <div>
                       <div className='font-semibold text-nowrap'>
-                        Indicadores:
+                        {t.createExam.questions.indicators}
                       </div>
                       <Form.Item
                         hasFeedback
@@ -67,15 +70,16 @@ const FormCrearPreguntas = ({
                         rules={[
                           {
                             required: true,
-                            message:
-                              'Por favor ingrese los indicadores de la pregunta',
+                            message: t.createExam.questions.indicatorsError,
                           },
                         ]}
                       >
                         <Select
                           mode='multiple'
                           showSearch
-                          placeholder='Indicadores'
+                          placeholder={
+                            t.createExam.questions.indicatorsPlaceholder
+                          }
                           options={(rubrica?.indicadores ?? []).map(
                             (indicador) => ({
                               value: indicador.id,
@@ -89,7 +93,7 @@ const FormCrearPreguntas = ({
                   <div className='flex gap-4 items-center mb-6'>
                     <div className='flex flex-col'>
                       <div className='font-semibold text-nowrap'>
-                        Puntos equivalentes:
+                        {t.createExam.questions.points}
                       </div>
                       <Form.Item
                         className='mb-2'
@@ -109,7 +113,7 @@ const FormCrearPreguntas = ({
                         tipo_examen !== tiposExamen.Alumno && (
                           <>
                             <div className='font-semibold text-nowrap'>
-                              Duración (minutos):
+                              {t.createExam.questions.duration}
                             </div>
                             <Form.Item
                               className='mb-0'
@@ -120,7 +124,7 @@ const FormCrearPreguntas = ({
                                 type='number'
                                 className='w-24'
                                 controls={false}
-                                placeholder='Indefinido'
+                                placeholder={t.createExam.questions.undefined}
                                 min={0}
                               />
                             </Form.Item>
@@ -182,7 +186,7 @@ const FormCrearPreguntas = ({
                         <div className='flex gap-2 justify-center items-center'>
                           <FaImage size={50} className='text-gray-500' />
                           <div className='text-base text-gray-400 font-semibold text-balance leading-5 -mr-4 max-w-52 '>
-                            Puede arrastrar la imagen, audio o video aquí
+                            {t.createExam.questions.uploadDrag}
                           </div>
                         </div>
                       </Upload.Dragger>
@@ -214,7 +218,7 @@ const FormCrearPreguntas = ({
             }
             block
           >
-            + Agregar Pregunta
+            {t.createExam.questions.addQuestion}
           </Button>
         </div>
       )}

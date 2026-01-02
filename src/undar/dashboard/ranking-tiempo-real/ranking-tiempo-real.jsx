@@ -11,11 +11,13 @@ import useUpdateExamen from './hooks/use-update-examen'
 import { getUserAuth } from '../../utils/api-openEdx'
 import { states } from '../../lib/globales'
 import { useSocket } from '../../hooks/use-socket'
+import { useLanguage } from '../../../context/useLanguaje'
 
 const RankingTiempoReal = () => {
   const { id: examen_id } = useParams()
   const navigate = useNavigate()
   const socket = useSocket()
+  const { t } = useLanguage()
 
   const user_id = getUserAuth().userId
 
@@ -112,8 +114,8 @@ const RankingTiempoReal = () => {
   if (!examen_id)
     return (
       <Bloqueado
-        description='Examen no encontrado'
-        textButton='Volver al inicio'
+        description={t.studentExam.notFound}
+        textButton={t.studentExam.backToHome}
         onClick={() => (window.location.href = '/')}
       />
     )
@@ -121,8 +123,8 @@ const RankingTiempoReal = () => {
   if (!examenActual)
     return (
       <Bloqueado
-        description='Examen no encontrado'
-        textButton='Volver al inicio'
+        description={t.studentExam.notFound}
+        textButton={t.studentExam.backToHome}
         onClick={() => (window.location.href = '/')}
       />
     )
@@ -173,7 +175,7 @@ const RankingTiempoReal = () => {
                   }}
                 >
                   <FaCircleChevronRight />
-                  Siguiente Pregunta
+                  {t.studentExam.nextQuestion}
                 </ButtonPrimary>
               ) : (
                 <ButtonPrimary
@@ -213,7 +215,7 @@ const RankingTiempoReal = () => {
                   }}
                 >
                   <FaFlag />
-                  Finalizar Examen
+                  {t.studentExam.finishExam}
                 </ButtonPrimary>
               )}
             </>
@@ -241,7 +243,7 @@ const RankingTiempoReal = () => {
               }}
             >
               <FaCircleChevronRight />
-              Iniciar Examen
+              {t.studentExam.startExam}
             </ButtonPrimary>
           )}
         </div>
@@ -249,13 +251,13 @@ const RankingTiempoReal = () => {
       {examenActual?.pregunta_actual_sync_id && (
         <div className='flex flex-col'>
           <div className='flex font-medium text-gray-700 mt-1 gap-4 text-xl'>
-            <div className=''>Pregunta Actual:</div>
+            <div className=''>{t.studentExam.currentQuestion}</div>
             <div className='font-bold'>
               {examenActual?.pregunta_actual_sync?.title}
             </div>
           </div>
           <div className='text-sm'>
-            {examenActual?.pregunta_actual_sync?.description}Hola
+            {examenActual?.pregunta_actual_sync?.description}
           </div>
         </div>
       )}

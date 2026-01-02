@@ -5,9 +5,11 @@ import { API_URL } from '../../lib/globales'
 import qs from 'qs'
 import PropTypes from 'prop-types'
 import { getUserAuth } from '../../utils/api-openEdx'
+import { useLanguage } from '../../../context/useLanguaje'
 
 const SelectRubrica = ({ tipoRubrica, onChange, rubrica }) => {
   const { response, fetchData } = useFetchData()
+  const { t } = useLanguage()
 
   const user_id = getUserAuth().userId
 
@@ -25,13 +27,13 @@ const SelectRubrica = ({ tipoRubrica, onChange, rubrica }) => {
     <Select
       className='min-w-96'
       showSearch
-      placeholder='Rubrica'
-      options={(response ?? []).map(rubrica => ({
+      placeholder={t.components.selectRubric.placeholder}
+      options={(response ?? []).map((rubrica) => ({
         value: rubrica.id,
         label: rubrica.name,
       }))}
-      onChange={value =>
-        onChange(response.find(rubrica => rubrica.id === value))
+      onChange={(value) =>
+        onChange(response.find((rubrica) => rubrica.id === value))
       }
       value={rubrica?.id}
     />
